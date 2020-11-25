@@ -1,7 +1,7 @@
-import Head from 'next/head'
+
 import styles from '../styles/Home.module.css'
 import firebase from '../components/firebase';
-
+import HeadFrontEnd from '../components/head';
 
 
 export default function Home() {
@@ -36,10 +36,7 @@ export default function Home() {
   cosa(); */
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <HeadFrontEnd/>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
