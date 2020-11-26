@@ -12,8 +12,6 @@ const firebaseConfig = {
 };
 if (typeof window !== 'undefined' && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  
-
   if ('measurementId' in firebaseConfig)
     firebase.analytics();
 }

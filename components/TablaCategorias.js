@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import firebase from './firebase';
-
+import categoria from './Categoria';
+import Categoria from './Categoria';
 const TablaCategorias = () =>{
     const [consulta, setconsulta] = useState(false);
     const [loading, setloading] = useState(true);
@@ -15,7 +16,7 @@ const TablaCategorias = () =>{
                 console.log('La coleccion esta vacia');
             }
             snapshot.forEach(categoria =>{
-                tempCategorias.push(categoria.data());
+                tempCategorias.push(categoria);
             });
             setcategorias(tempCategorias);
             setloading(false);
@@ -25,10 +26,18 @@ const TablaCategorias = () =>{
     if (loading) {
         return null;
     }
-
-    console.log(categorias);    
+  
     return(
-        <h3>Hola</h3>
+        <div className="container">
+            <div id="small-categories" className="owl-carousel owl-carousel-icons2">
+                {categorias.map(categoria =>(
+                    <Categoria
+                        key= {categoria.id}
+                        categoria = {categoria}
+                    />
+                ))}
+            </div>
+        </div>
     );
 }
 
