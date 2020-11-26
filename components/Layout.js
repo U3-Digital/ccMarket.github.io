@@ -7,7 +7,7 @@ const Layout = ({children}) =>{
         <>
         <HeadFrontEnd/>
         <Menu/>
-        <div className="banner-1 cover-image sptb-2 sptb-tab bg-background2" data-image-src="../img/banners/banner1.jpg">
+        <div>
             {children}
         </div>
         <Footer/>

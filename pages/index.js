@@ -2,9 +2,15 @@
 import firebase from '../components/firebase';
 import React from 'react'
 import Layout from '../components/Layout';
-export default function Home() {
+import BarraBusqueda from '../components/BarraBusqueda';
+import TablaCategorias from '../components/TablaCategorias';
+
+export default function Home()  {
   // const database = firebase.database();
-  // const database2 = firebase.firestore().collection('negocios');
+  
+  //const database2 = firebase.firestore().collection('categorias');
+    // Add a new document with a generated id.
+  
 
   /* function randomString(length, chars) {
     var mask = '';
@@ -34,7 +40,8 @@ export default function Home() {
   cosa(); */
   return (
     <Layout>
-      <h3>Hola</h3>
+      <BarraBusqueda/>
+      <TablaCategorias/>
     </Layout>
   )
 }
