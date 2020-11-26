@@ -1,11 +1,10 @@
 
-import styles from '../styles/Home.module.css'
 import firebase from '../components/firebase';
 import HeadFrontEnd from '../components/head';
-
+import Menu from '../components/menu';
 
 export default function Home() {
-  const database = firebase.database();
+  // const database = firebase.database();
   // const database2 = firebase.firestore().collection('negocios');
 
   /* function randomString(length, chars) {
@@ -35,10 +34,11 @@ export default function Home() {
 
   cosa(); */
   return (
-    <div className={styles.container}>
+    <div>
       <HeadFrontEnd/>
+      <Menu/>
 
-      <main className={styles.main}>
+      {/* <main className={styles.main}>
         <h1 className={styles.title}>
           Welcome to <a href="https://u3digital.com.mx">CCMARKET!</a>
         </h1>
@@ -77,8 +77,8 @@ export default function Home() {
             </p>
           </a>
         </div>
-      </main>
-
+      </main> */}
+{/* 
       <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -88,7 +88,7 @@ export default function Home() {
           Powered by{' '}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
-      </footer>
+      </footer> */}
     </div>
   )
 }
