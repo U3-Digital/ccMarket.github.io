@@ -3,9 +3,6 @@ import firebase from './firebase';
 import categoria from './Categoria';
 import Categoria from './Categoria';
 
-import Carousel, { slidesToShowPlugin } from '@brainhubeu/react-carousel';
-import '@brainhubeu/react-carousel/lib/style.css';
-
 const TablaCategorias = () =>{
     const [consulta, setconsulta] = useState(false);
     const [loading, setloading] = useState(true);
@@ -41,23 +38,20 @@ const TablaCategorias = () =>{
                         /> */
 
     return(
-        <Carousel
-            plugins={[
-                'centered',
-                'infinite',
-                'arrows',
+        <div className="row justify-content-center" style={{transform: "translateY(-4em)"}}>
+            <div className="col-md-8 col-12">
+                <div className="row justify-content-center">
                 {
-                resolve: slidesToShowPlugin,
-                options: {
-                numberOfSlides: 2,
-                },
-                },
-            ]}   
-        >
-            <h3>Hola</h3>
-            <h3>Hola2</h3>
-            <h3>Hola3</h3>
-        </Carousel>
+                    categorias.map(categoria => (
+                        <Categoria
+                            key = {categoria.id}
+                            categoria = {categoria}
+                        />
+                    ))
+                }
+                </div>
+            </div> 
+        </div>
     );
 }
 

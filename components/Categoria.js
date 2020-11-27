@@ -5,7 +5,7 @@ const Categoria = ({categoria}) =>{
     const {nombre} = categoria.data();
 
     return(
-        <div className="item">
+        <div className="col-sm-4 col-md-3 col-lg-2">
             <div className="card mb-0">
                 <div className="card-body">
                     <div className="cat-item text-center">
