@@ -2,6 +2,8 @@ import React from 'react';
 
 const flecha = ({type, onClick, isEdge}) => {
 
+    const backgroundColor = isEdge ? '#EEEEEE' : 'white'
+
     const style = {
         color: '#ec296b',
         fontSize: '2em',
@@ -9,13 +11,12 @@ const flecha = ({type, onClick, isEdge}) => {
         height: '1.6em',
         width: '2em',
         outline: 'none',
-        backgroundColor: 'white',
+        backgroundColor: backgroundColor,
         border: 'none',
         margin: 'auto 1em',
-        padding: '0px',
+        paddingBottom: '1.2em',
         textAlign: 'center',
-        boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)'
-
+        boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
     }
     
     const pointer = (type === 'PREV') ? '‹' : '›';

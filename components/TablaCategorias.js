@@ -36,7 +36,10 @@ const TablaCategorias = () =>{
         );
     }
     return(
-        <Carousel
+        <div className="row justify-content-center">
+            <div className="col-md-8 col-12">
+            <Carousel
+            style = {{transform: 'translateY(-3.5em)'}}
             breakPoints = {[
                 { width: 1, itemsToShow: 1, pagination: false},
                 { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
@@ -59,6 +62,8 @@ const TablaCategorias = () =>{
                 ))
             }
         </Carousel>
+            </div>
+        </div>
     );
 }
 
