@@ -8,43 +8,38 @@ import React from 'react'
 					<div className="container">
 						<div className="row">
 							<div className="col-lg-3 col-md-12">
-								<h6>About</h6>
+								<h6>Sobre</h6>
 								<hr className="deep-purple  accent-2 mb-4 mt-0 d-inline-block mx-auto"/>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit amet numquam iure provident voluptate essequasi, veritatis totam voluptas nostrum.Lorem ipsum dolor sit amet, consectetur </p>
-                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum .</p>
+								<p>CC-Market es un servicio de directorio online dirigido a negocios de la zona noroeste del estado de Chihuahua </p>
+                                <p>U3 digital es ...... no se :'c</p>
 							</div>
 							<div className="col-lg-2 col-md-12">
-								<h6>Our Services</h6>
+								<h6>Más de U3 Digital</h6>
 								 <hr className="deep-purple text-primary accent-2 mb-4 mt-0 d-inline-block mx-auto"/>
 								<ul className="list-unstyled mb-0">
-									<li><a href="javascript:;">Our Team</a></li>
-									<li><a href="javascript:;">Contact US</a></li>
-									<li><a href="javascript:;">About</a></li>
-									<li><a href="javascript:;">Services</a></li>
-									<li><a href="javascript:;">Blog</a></li>
-									<li><a href="javascript:;">Terms and Services</a></li>
+									<li><a href="https://u3digital.com.mx/">U3 Digital</a></li>
+									<li><a href="javascript:;">U3 Citas</a></li>
+									<li><a href="javascript:;">U3 Restaurantes</a></li>
 								</ul>
 							</div>
 
 							<div className="col-lg-3 col-md-12">
-								<h6>Contact</h6>
+								<h6>Contacto</h6>
 								<hr className="deep-purple  text-primary accent-2 mb-4 mt-0 d-inline-block mx-auto"/>
 								<ul className="list-unstyled mb-0">
 									<li>
-										<a href="#"><i className="fa fa-home mr-3 text-primary"></i> New York, NY 10012, US</a>
+										<a href="#"><i className="fa fa-home mr-3 text-primary"></i>Rep. Colombia </a>
 									</li>
 									<li>
-										<a href="#"><i className="fa fa-envelope mr-3 text-primary"></i> info12323@example.com</a></li>
+										<a href="#"><i className="fa fa-envelope mr-3 text-primary"></i> info@u3digital.com</a></li>
 									<li>
-										<a href="#"><i className="fa fa-phone mr-3 text-primary"></i> + 01 234 567 88</a>
+										<a href="#"><i className="fa fa-phone mr-3 text-primary"></i> 625 122 14 38</a>
 									</li>
-									 <li>
-										<a href="#"><i className="fa fa-print mr-3 text-primary"></i> + 01 234 567 89</a>
-									</li>
+									
 								</ul>
 								<ul className="list-unstyled list-inline mt-3">
 									<li className="list-inline-item">
-									  <a className="btn-floating btn-sm rgba-white-slight mx-1 waves-effect waves-light">
+									  <a className="btn-floating btn-sm rgba-white-slight mx-1 waves-effect waves-light" href="https://www.facebook.com/u3digital">
 										<i className="fa fa-facebook bg-facebook"></i>
 									  </a>
 									</li>
@@ -93,7 +88,7 @@ import React from 'react'
 					<div className="container">
 						<div className="row d-flex">
 							<div className="col-lg-12 col-sm-12 mt-3 mb-3 text-center ">
-								Copyright © 2019 <a href="#" className="fs-14 text-primary">Claylist</a>. Designed by <a href="#" className="fs-14 text-primary">Spruko</a> All rights reserved.
+								Copyright © 2020 <a href="#" className="fs-14 text-primary">U3 Digital</a>. Derechos reservados.
 							</div>
 						</div>
 					</div>
