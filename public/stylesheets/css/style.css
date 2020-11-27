@@ -15731,7 +15731,7 @@ dd {
 
 .owl-carousel .owl-item {
     position: relative;
-    cursor: url(../images/other/cursor.png), move;
+    cursor: url(../../img/other/cursor.png), move;
     overflow: hidden;
 }
 

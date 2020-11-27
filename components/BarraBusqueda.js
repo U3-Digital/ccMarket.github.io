@@ -1,4 +1,5 @@
 import React from 'react';
+import TablaSelectCategorias from '../components/frontend/TablaSelectCategorias';
 
 const BarraBusqueda = () => {
     return(
@@ -22,15 +23,7 @@ const BarraBusqueda = () => {
                                 </div>
                                 <div className="form-group col-xl-3 col-lg-3 col-md-12 select2-lg  mb-0 bg-white">
                                     <select className="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
-                                        <optgroup label="Categorías">
-                                            <option value="1">Private</option>
-                                            <option value="2">Software</option>
-                                            <option value="3">Banking</option>
-                                            <option value="4">Finaces</option>
-                                            <option value="5">Corporate</option>
-                                            <option value="6">Driver</option>
-                                            <option value="7">Sales</option>
-                                        </optgroup>
+                                        <TablaSelectCategorias/>
                                     </select>
                                 </div>
                                 <div className="col-xl-2 col-lg-3 col-md-12 mb-0">

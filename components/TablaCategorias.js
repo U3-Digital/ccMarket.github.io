@@ -2,6 +2,10 @@ import React,{useState} from 'react'
 import firebase from './firebase';
 import categoria from './Categoria';
 import Categoria from './Categoria';
+
+import Carousel, { slidesToShowPlugin } from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
+
 const TablaCategorias = () =>{
     const [consulta, setconsulta] = useState(false);
     const [loading, setloading] = useState(true);
@@ -24,20 +28,36 @@ const TablaCategorias = () =>{
         });
     }
     if (loading) {
-        return null;
-    }
-  
-    return(
-        <div className="container">
-            <div id="small-categories" className="owl-carousel owl-carousel-icons2">
-                {categorias.map(categoria =>(
-                    <Categoria
-                        key= {categoria.id}
-                        categoria = {categoria}
-                    />
-                ))}
+        return (
+            <div className="row">
+                <div className="col-12 text-center">Cargando</div>
             </div>
-        </div>
+        );
+    }
+
+    /* <Categoria
+                            key = {categoria.id}
+                            categoria = {categoria}
+                        /> */
+
+    return(
+        <Carousel
+            plugins={[
+                'centered',
+                'infinite',
+                'arrows',
+                {
+                resolve: slidesToShowPlugin,
+                options: {
+                numberOfSlides: 2,
+                },
+                },
+            ]}   
+        >
+            <h3>Hola</h3>
+            <h3>Hola2</h3>
+            <h3>Hola3</h3>
+        </Carousel>
     );
 }
 
