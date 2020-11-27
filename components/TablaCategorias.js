@@ -1,7 +1,11 @@
 import React,{useState} from 'react'
 import firebase from './firebase';
-import categoria from './Categoria';
 import Categoria from './Categoria';
+import Flecha from '../components/frontend/Flecha';
+
+/* Carousel */
+
+import Carousel from 'react-elastic-carousel';
 
 const TablaCategorias = () =>{
     const [consulta, setconsulta] = useState(false);
@@ -31,27 +35,30 @@ const TablaCategorias = () =>{
             </div>
         );
     }
-
-    /* <Categoria
-                            key = {categoria.id}
-                            categoria = {categoria}
-                        /> */
-
     return(
-        <div className="row justify-content-center" style={{transform: "translateY(-4em)"}}>
-            <div className="col-md-8 col-12">
-                <div className="row justify-content-center">
-                {
-                    categorias.map(categoria => (
-                        <Categoria
-                            key = {categoria.id}
-                            categoria = {categoria}
-                        />
-                    ))
-                }
-                </div>
-            </div> 
-        </div>
+        <Carousel
+            breakPoints = {[
+                { width: 1, itemsToShow: 1, pagination: false},
+                { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
+                { width: 850, itemsToShow: 3, pagination: false },
+                { width: 1150, itemsToShow: 4, itemsToScroll: 2, pagination: false},
+                { width: 1450, itemsToShow: 5, pagination: false},
+                { width: 1750, itemsToShow: 6, pagination: false},
+            ]}
+            itemPadding = {[0, 0]}
+            enableAutoPlay 
+            autoPlaySpeed={1500}
+            renderArrow = {Flecha}
+            renderPagination = {false}>
+            {
+                categorias.map(categoria => (
+                    <Categoria
+                    key = {categoria.id}
+                    categoria = {categoria}/>
+                    
+                ))
+            }
+        </Carousel>
     );
 }
 
