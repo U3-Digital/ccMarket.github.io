@@ -47,10 +47,10 @@ const TablaNegocios = () => {
 				</div>
 			</div>
 			<div className="row justify-content-center">
-				<div className="col-10">
+				<div className="col-12">
 					<Carousel
 						breakPoints = {[
-							{ width: 1, itemsToShow: 2, pagination: false},
+							{ width: 1, itemsToShow: 1, pagination: false},
 							{ width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
 							{ width: 850, itemsToShow: 3, pagination: false },
 							{ width: 1150, itemsToShow: 4, itemsToScroll: 2, pagination: false},

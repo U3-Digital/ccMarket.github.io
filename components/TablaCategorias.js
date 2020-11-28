@@ -49,7 +49,7 @@ const TablaCategorias = () =>{
                     { width: 1450, itemsToShow: 5, pagination: false},
                     { width: 1750, itemsToShow: 6, pagination: false},
                 ]}
-                itemPadding = {[0, 0]}
+                itemPadding = {[0, 10]}
                 enableAutoPlay 
                 autoPlaySpeed={1500}
                 renderArrow = {Flecha}>

@@ -28,8 +28,6 @@ const TablaSelectCategorias = () => {
    if (loading){
        return null;
    }
-   console.log(categorias);
-
     return(
         <optgroup label="Categorías">
             {categorias.map(categoria => (

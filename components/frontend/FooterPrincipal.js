@@ -18,8 +18,8 @@ import React from 'react'
 								 <hr className="deep-purple text-primary accent-2 mb-4 mt-0 d-inline-block mx-auto"/>
 								<ul className="list-unstyled mb-0">
 									<li><a href="https://u3digital.com.mx/">U3 Digital</a></li>
-									<li><a href="javascript:;">U3 Citas</a></li>
-									<li><a href="javascript:;">U3 Restaurantes</a></li>
+									<li><a>U3 Citas</a></li>
+									<li><a>U3 Restaurantes</a></li>
 								</ul>
 							</div>
 
@@ -74,11 +74,11 @@ import React from 'react'
 								<hr className="deep-purple  text-primary accent-2 mb-2 mt-3 d-inline-block mx-auto"/>
 								<div className="clearfix"></div>
 								<ul className="footer-payments">
-									<li className="pl-0"><a href="javascript:;"><i className="fa fa-cc-amex text-muted" aria-hidden="true"></i></a></li>
-									<li><a href="javascript:;"><i className="fa fa-cc-visa text-muted" aria-hidden="true"></i></a></li>
-									<li><a href="javascript:;"><i className="fa fa-credit-card-alt text-muted" aria-hidden="true"></i></a></li>
-									<li><a href="javascript:;"><i className="fa fa-cc-mastercard text-muted" aria-hidden="true"></i></a></li>
-									<li><a href="javascript:;"><i className="fa fa-cc-paypal text-muted" aria-hidden="true"></i></a></li>
+									<li className="pl-0"><a><i className="fa fa-cc-amex text-muted" aria-hidden="true"></i></a></li>
+									<li><a><i className="fa fa-cc-visa text-muted" aria-hidden="true"></i></a></li>
+									<li><a><i className="fa fa-credit-card-alt text-muted" aria-hidden="true"></i></a></li>
+									<li><a><i className="fa fa-cc-mastercard text-muted" aria-hidden="true"></i></a></li>
+									<li><a><i className="fa fa-cc-paypal text-muted" aria-hidden="true"></i></a></li>
 								</ul>
 							</div>
 						</div>

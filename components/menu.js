@@ -1,7 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
+import firebase from './firebase';
+//password
+//google.com
+const Menu = () => {
+	const [logeado, setlogeado] = useState(false);
+	const [nombre,setnombre] = useState(null);
+	const database = firebase.firestore().collection('usuarios')
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			if (user.providerData[0].providerId == "google.com") {
+				const { displayName } = user;
+				setnombre(displayName);
+			} else {
+				const { uid } = user;
+				database.doc(uid).get().then((snapshot) => {
+					setnombre(snapshot.data().nombre);
+				});
+			}
+			setlogeado(true);
+		} else {
+		  console.log('No hay usuario brodersonia');
+		}
+	});
+	  
+	function logout() {
+		firebase.auth().signOut().then(function() {
+			setlogeado(false)
+		}).catch(function(error) {
+			// An error happened.
+		});
+	}
 
-const 
-Menu = () => {
     return(
 		<div>
 			<div id="global-loader">
@@ -12,7 +41,7 @@ Menu = () => {
 					<div className="container">
 						<a id="horizontal-navtoggle" className="animated-arrow"><span></span></a>
 						<span className="smllogo"><img src="../img/brand/logo.png" width="120" alt=""/></span>
-						<a href="tel:245-6325-3256" className="callusbtn"><i className="fa fa-phone" aria-hidden="true"></i></a>
+						<a href="tel:245-6325-3256" className="callusbtn"><i className="fa fa-phone"  ></i></a>
 					</div>
 				</div>
 				
@@ -43,18 +72,19 @@ Menu = () => {
 								<li aria-haspopup="false"><a href="about.html">Acerca de</a></li>
 							</ul>
 							<ul className="mb-0">
-								<li aria-haspopup="false" className="mt-5 d-none d-lg-block ">
-									<span><a className="btn btn-orange ad-post " href="ad-posts.html">Anúnciate aquí</a></span>
-								</li>
+								{(logeado) ? (<li aria-haspopup="false" className="mt-5 d-none d-lg-block">
+										<span><a className="btn">{nombre}&nbsp;&nbsp;<button style={{padding: '0', color: 'white', background: 'none', outline: 'none', border: 'none'}} className="icon icon-logout" onClick={() => logout()}></button></a></span>
+									</li>) : (
+									<li aria-haspopup="false" className="mt-5 d-none d-lg-block ">
+										<span><a className="btn btn-orange ad-post " href="login">Inicia Sesión</a></span>
+									</li>
+								)}
 							</ul>
 						</nav>
 					</div>
 				</div>
 			</div>
-		</div>
-		
-
-		
+		</div>		
     );
 };
 
