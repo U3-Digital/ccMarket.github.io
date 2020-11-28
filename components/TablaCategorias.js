@@ -1,11 +1,12 @@
 import React,{useState} from 'react'
 import firebase from './firebase';
 import Categoria from './Categoria';
-import Flecha from '../components/frontend/Flecha';
 
 /* Carousel */
 
 import Carousel from 'react-elastic-carousel';
+import Flecha from '../components/frontend/Flecha';
+
 
 const TablaCategorias = () =>{
     const [consulta, setconsulta] = useState(false);
@@ -39,29 +40,27 @@ const TablaCategorias = () =>{
         <div className="row justify-content-center">
             <div className="col-md-8 col-12">
             <Carousel
-            style = {{transform: 'translateY(-3.5em)'}}
-            breakPoints = {[
-                { width: 1, itemsToShow: 1, pagination: false},
-                { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
-                { width: 850, itemsToShow: 3, pagination: false },
-                { width: 1150, itemsToShow: 4, itemsToScroll: 2, pagination: false},
-                { width: 1450, itemsToShow: 5, pagination: false},
-                { width: 1750, itemsToShow: 6, pagination: false},
-            ]}
-            itemPadding = {[0, 0]}
-            enableAutoPlay 
-            autoPlaySpeed={1500}
-            renderArrow = {Flecha}
-            renderPagination = {false}>
-            {
-                categorias.map(categoria => (
-                    <Categoria
-                    key = {categoria.id}
-                    categoria = {categoria}/>
-                    
-                ))
-            }
-        </Carousel>
+                style = {{transform: 'translateY(-3.5em)'}}
+                breakPoints = {[
+                    { width: 1, itemsToShow: 1, pagination: false},
+                    { width: 550, itemsToShow: 2, itemsToScroll: 2, pagination: false },
+                    { width: 850, itemsToShow: 3, pagination: false },
+                    { width: 1150, itemsToShow: 4, itemsToScroll: 2, pagination: false},
+                    { width: 1450, itemsToShow: 5, pagination: false},
+                    { width: 1750, itemsToShow: 6, pagination: false},
+                ]}
+                itemPadding = {[0, 0]}
+                enableAutoPlay 
+                autoPlaySpeed={1500}
+                renderArrow = {Flecha}>
+                {
+                    categorias.map(categoria => (
+                        <Categoria
+                            key = {categoria.id}
+                            categoria = {categoria}/>
+                    ))
+                }
+            </Carousel>
             </div>
         </div>
     );

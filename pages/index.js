@@ -1,10 +1,10 @@
-
-import firebase from '../components/firebase';
 import React from 'react'
 import Layout from '../components/Layout';
 import BarraBusqueda from '../components/BarraBusqueda';
 import TablaCategorias from '../components/TablaCategorias';
-
+import TablaNegocios from '../components/TablaNegocios';
+import Estadisticas from '../components/Estadisticas';
+import IndexPrincipal from '../components/frontEnd/IndexPrincipal';
 export default function Home()  {
   // const database = firebase.database();
   
@@ -41,7 +41,7 @@ export default function Home()  {
   return (
     <Layout>
       <BarraBusqueda/>
-      <TablaCategorias/>
+      <IndexPrincipal/>
     </Layout>
   )
 }

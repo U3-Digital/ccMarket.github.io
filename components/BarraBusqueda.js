@@ -1,7 +1,30 @@
 import React from 'react';
 import TablaSelectCategorias from '../components/frontend/TablaSelectCategorias';
+import firebase from '../components/firebase';
 
 const BarraBusqueda = () => {
+    const database = firebase.database();
+    const firestore = firebase.firestore().collection("negocios");
+    
+    const generarEstadisticas = async() =>{
+        console.log("hey")
+        /*var contador = 0;
+        await firestore.get().then(snapshot => {
+            if (snapshot.empty){
+                console.log('La coleccion esta vacia');
+            }
+            snapshot.forEach(categoria =>{
+                contador = contador+1
+            });
+        });
+
+        await database.ref('estadisticas').set({
+            visitas: 5,
+            negocios: contador,
+
+        });*/
+    }
+
     return(
     <div className="banner-1 cover-image sptb-2 sptb-tab bg-background2" data-image-src="../img/banners/banner1.jpg">
         <div className="header-text mb-0">
@@ -27,7 +50,7 @@ const BarraBusqueda = () => {
                                     </select>
                                 </div>
                                 <div className="col-xl-2 col-lg-3 col-md-12 mb-0">
-                                    <a href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0">Buscar</a>
+                                    <a onClick={generarEstadisticas} href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0">Buscar</a>
                                 </div>
                             </div>
                         </div>
