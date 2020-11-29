@@ -1,29 +1,28 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import TablaSelectCategorias from '../components/frontend/TablaSelectCategorias';
 import firebase from '../components/firebase';
-
+import BusquedaContext from '../context/busqueda/BusquedaContext';
 const BarraBusqueda = () => {
+    const [nombre,setnombre] = useState("");
+    const [direccion,setdireccion] = useState("");
+    const [categoria,setcategoria] = useState("");
+    const busquedaContext = useContext(BusquedaContext);
+    const {modificabusqueda} = busquedaContext;
+
+
     const database = firebase.database();
     const firestore = firebase.firestore().collection("negocios");
     
-    const generarEstadisticas = async() =>{
-        console.log("hey")
-        /*var contador = 0;
-        await firestore.get().then(snapshot => {
-            if (snapshot.empty){
-                console.log('La coleccion esta vacia');
-            }
-            snapshot.forEach(categoria =>{
-                contador = contador+1
-            });
-        });
-
-        await database.ref('estadisticas').set({
-            visitas: 5,
-            negocios: contador,
-
-        });*/
+    const buscar = () =>{
+        const datos = {
+            nombre: nombre,
+            direccion: direccion,
+            categoria: categoria,
+            busqueda: true
+        }
+        modificabusqueda(datos);
     }
+    
 
     return(
     <div className="banner-1 cover-image sptb-2 sptb-tab bg-background2" data-image-src="../img/banners/banner1.jpg">
@@ -38,19 +37,19 @@ const BarraBusqueda = () => {
                         <div className="search-background bg-transparent">
                             <div className="form row no-gutters ">
                                 <div className="form-group col-xl-4 col-lg-3 col-md-12 mb-0 bg-white">
-                                    <input type="text" className="form-control input-lg br-tr-md-0 br-br-md-0" id="text4" placeholder="Busque algo"/>
+                                    <input onChange= {value => {setnombre(value.target.value)}} type="text" className="form-control input-lg br-tr-md-0 br-br-md-0" id="text4" placeholder="Busque algo"/>
                                 </div>
                                 <div className="form-group col-xl-3 col-lg-3 col-md-12 mb-0 bg-white">
-                                    <input type="text" className="form-control input-lg br-md-0" id="text5" placeholder="Localización"/>
+                                    <input onChange={value =>{setdireccion(value.target.value)}} type="text" className="form-control input-lg br-md-0" id="text5" placeholder="Localización"/>
                                     <span><i className="fa fa-map-marker location-gps mr-1"></i></span>
                                 </div>
                                 <div className="form-group col-xl-3 col-lg-3 col-md-12 select2-lg  mb-0 bg-white">
-                                    <select className="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
+                                    <select onChange = {value => {setcategoria(value.target.value)}} className="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
                                         <TablaSelectCategorias/>
                                     </select>
                                 </div>
                                 <div className="col-xl-2 col-lg-3 col-md-12 mb-0">
-                                    <a onClick={generarEstadisticas} href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0">Buscar</a>
+                                    <a onClick={()=> buscar()} href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0">Buscar</a>
                                 </div>
                             </div>
                         </div>

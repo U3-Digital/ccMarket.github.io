@@ -1,8 +1,8 @@
 import React from 'react';
 
 const Resultado = ({ negocio }) => {
-
-    const { nombre, categoria } = negocio;
+    const { id } = negocio;
+    const { nombre, categoria } = negocio.data();
 
     return (
         <div className="card overflow-hidden">

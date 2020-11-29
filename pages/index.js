@@ -1,11 +1,15 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import Layout from '../components/Layout';
 import BarraBusqueda from '../components/BarraBusqueda';
 import TablaCategorias from '../components/TablaCategorias';
 import TablaNegocios from '../components/TablaNegocios';
 import Estadisticas from '../components/Estadisticas';
 import IndexPrincipal from '../components/frontEnd/IndexPrincipal';
+import Busquedas from '../components/frontend/Busquedas';
+import BusquedaContext from '../context/busqueda/BusquedaContext';
 export default function Home()  {
+  const busquedaContext = useContext(BusquedaContext);
+  const {nombre,busqueda,direccion,categoria} = busquedaContext;
   // const database = firebase.database();
   
   //const database2 = firebase.firestore().collection('categorias');
@@ -41,7 +45,8 @@ export default function Home()  {
   return (
     <Layout>
       <BarraBusqueda/>
-      <IndexPrincipal/>
+      {!busqueda ? (<IndexPrincipal/>) : (<Busquedas/>)}
+      
     </Layout>
   )
 }
