@@ -1,10 +1,11 @@
 import React from 'react';
-
 const Negocio = ({ negocio }) => {
-
+    const {id} = negocio;
     const { nombre } = negocio.data();
 /*                 <div className="power-ribbon power-ribbon-top-left text-warning"><span className="bg-warning"><i className="fa fa-bolt"></i></span></div>
  */
+    
+    
     return (
         <div className="item">
             <div className="card mb-0">
