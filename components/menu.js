@@ -26,7 +26,7 @@ const Menu = () => {
 	function logout() {
 		firebase.auth().signOut().then(function() {
 			setlogeado(false)
-		}).catch(function(error) {
+		}).catch(function(error) {	
 			// An error happened.
 		});
 	}

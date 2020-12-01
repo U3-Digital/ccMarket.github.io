@@ -5,7 +5,7 @@ import {
     MODIFICAR_DATOS
 } from '../../types';
 
-export default (state, action) => {
+const BusquedaReducer = (state, action) => {
     switch(action.type){
         case MODIFICAR_DATOS:
             console.log(action.payload);
@@ -19,4 +19,6 @@ export default (state, action) => {
         default:
             return state;
     }
-}
+};
+
+export default BusquedaReducer;

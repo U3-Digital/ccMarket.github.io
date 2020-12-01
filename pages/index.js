@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React, { useContext } from 'react'
 import Layout from '../components/Layout';
 import BarraBusqueda from '../components/BarraBusqueda';
 import TablaCategorias from '../components/TablaCategorias';
@@ -9,7 +9,7 @@ import Busquedas from '../components/frontend/Busquedas';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
 export default function Home()  {
   const busquedaContext = useContext(BusquedaContext);
-  const {nombre,busqueda,direccion,categoria} = busquedaContext;
+  const {nombre, busqueda, direccion, categoria} = busquedaContext;
   // const database = firebase.database();
   
   //const database2 = firebase.firestore().collection('categorias');
