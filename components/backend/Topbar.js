@@ -3,228 +3,179 @@ import React from 'react';
 
 const Topbar = () => {
     return (
-        <div className="app-header1 header py-1 d-flex">
-            <div className="container-fluid">
-                <div className="d-flex">
-                    <a className="header-brand" href="index.html">
-                        <img src="../img/brand/logo.png" className="header-brand-img" alt="Claylist logo"/>
-                    </a>
-                    <a aria-label="Hide Sidebar" className="app-sidebar__toggle" data-toggle="sidebar" href="#"></a>
-                    <div className="header-navicon">
-                        <a href="#" data-toggle="search" className="nav-link d-lg-none navsearch-icon">
-                            <i className="fa fa-search"></i>
-                        </a>
-                    </div>
-                    <div className="header-navsearch">
-                        <a href="#" className=" "></a>
-                        <form className="form-inline mr-auto">
-                            <div className="nav-search">
-                                <input type="search" className="form-control header-search" placeholder="Search…" aria-label="Search"/>
-                                <button className="btn btn-primary" type="submit"><i className="fa fa-search"></i></button>
+        <div className="page-main-header">
+            <div className="main-header-right row m-0">
+                <form className="form-inline search-full" action="#" method="get">
+                    <div className="form-group w-100">
+                        <div className="Typeahead Typeahead--twitterUsers">
+                            <div className="u-posRelative">
+                                <input className="demo-input Typeahead-input form-control-plaintext w-100" type="text" placeholder="Search Cuba .." name="q" title="" autoFocus />
+                                <div className="spinner-border Typeahead-spinner" role="status"><span className="sr-only">Loading...</span></div><i className="close-search" data-feather="x"></i>
                             </div>
-                        </form>
-                    </div>
-                    <div className="d-flex order-lg-2 ml-auto">
-                        <div className="dropdown d-none d-md-flex" >
-                            <a  className="nav-link icon full-screen-link">
-                                <i className="fe fe-maximize-2"  id="fullscreen-button"></i>
-                            </a>
-                        </div>
-                        <div className="dropdown d-none d-md-flex country-selector">
-                            <a href="#" className="d-flex nav-link leading-none" data-toggle="dropdown">
-                                <img src="../img/us_flag.jpg" alt="img" className="avatar avatar-xs mr-1 align-self-center"/>
-                                <div>
-                                    <strong className="text-dark">English</strong>
-                                </div>
-                            </a>
-                            <div className="language-width dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/french_flag.jpg"  alt="flag-img" className="avatar  mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>French</strong>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/germany_flag.jpg"  alt="flag-img" className="avatar  mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Germany</strong>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/italy_flag.jpg"  alt="flag-img" className="avatar  mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Italy</strong>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/russia_flag.jpg"  alt="flag-img" className="avatar  mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Russia</strong>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/spain_flag.jpg"  alt="flag-img" className="avatar  mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Spain</strong>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="dropdown d-none d-md-flex">
-                            <a className="nav-link icon" data-toggle="dropdown">
-                                <i className="fa fa-bell-o"></i>
-                                <span className=" nav-unread badge badge-danger  badge-pill">4</span>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a href="#" className="dropdown-item text-center">You have 4 notification</a>
-                                <div className="dropdown-divider"></div>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <div className="notifyimg">
-                                        <i className="fa fa-envelope-o"></i>
-                                    </div>
-                                    <div>
-                                        <strong>2 new Messages</strong>
-                                        <div className="small text-muted">17:50 Pm</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <div className="notifyimg">
-                                        <i className="fa fa-calendar"></i>
-                                    </div>
-                                    <div>
-                                        <strong> 1 Event Soon</strong>
-                                        <div className="small text-muted">19-10-2019</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <div className="notifyimg">
-                                        <i className="fa fa-comment-o"></i>
-                                    </div>
-                                    <div>
-                                        <strong> 3 new Comments</strong>
-                                        <div className="small text-muted">05:34 Am</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <div className="notifyimg">
-                                        <i className="fa fa-exclamation-triangle"></i>
-                                    </div>
-                                    <div>
-                                        <strong> Application Error</strong>
-                                        <div className="small text-muted">13:45 Pm</div>
-                                    </div>
-                                </a>
-                                <div className="dropdown-divider"></div>
-                                <a href="#" className="dropdown-item text-center">See all Notification</a>
-                            </div>
-                        </div>
-                        <div className="dropdown d-none d-md-flex">
-                            <a className="nav-link icon" data-toggle="dropdown">
-                                <i className="fa fa-envelope-o"></i>
-                                <span className=" nav-unread badge badge-warning  badge-pill">3</span>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/faces/male/41.jpg" alt="avatar-img" className="avatar brround mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Blake</strong> I've finished it! See you so.......
-                                        <div className="small text-muted">30 mins ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/faces/female/1.jpg" alt="avatar-img" className="avatar brround mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Caroline</strong> Just see the my Admin....
-                                        <div className="small text-muted">12 mins ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/faces/male/18.jpg" alt="avatar-img" className="avatar brround mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Jonathan</strong> Hi! I'am singer......
-                                        <div className="small text-muted">1 hour ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" className="dropdown-item d-flex pb-3">
-                                    <img src="../img/faces/female/18.jpg" alt="avatar-img" className="avatar brround mr-3 align-self-center"/>
-                                    <div>
-                                        <strong>Emily</strong> Just a reminder that you have.....
-                                        <div className="small text-muted">45 mins ago</div>
-                                    </div>
-                                </a>
-                                <div className="dropdown-divider"></div>
-                                <a href="#" className="dropdown-item text-center">View all Messages</a>
-                            </div>
-                        </div>
-                        <div className="dropdown d-none d-md-flex">
-                            <a className="nav-link icon" data-toggle="dropdown">
-                                <i className="fe fe-grid"></i>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow  app-selector">
-                                <ul className="drop-icon-wrap">
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-speech text-dark"></i>
-                                            <span className="block"> E-mail</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-map text-dark"></i>
-                                            <span className="block">map</span>
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-bubbles text-dark"></i>
-                                            <span className="block">Messages</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-user-follow text-dark"></i>
-                                            <span className="block">Followers</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-picture text-dark"></i>
-                                            <span className="block">Photos</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="drop-icon-item">
-                                            <i className="icon icon-settings text-dark"></i>
-                                            <span className="block">Settings</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div className="dropdown-divider"></div>
-                                <a href="#" className="dropdown-item text-center">View all</a>
-                            </div>
-                        </div>
-                        <div className="dropdown ">
-                            <a href="#" className="nav-link pr-0 leading-none user-img" data-toggle="dropdown">
-                                <img src="../img/faces/male/25.jpg" alt="profile-img" className="avatar avatar-md brround"/>
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow ">
-                                <a className="dropdown-item" href="profile.html">
-                                    <i className="dropdown-icon icon icon-user"></i> My Profile
-                                </a>
-                                <a className="dropdown-item" href="emailservices.html">
-                                    <i className="dropdown-icon icon icon-speech"></i> Inbox
-                                </a>
-                                <a className="dropdown-item" href="editprofile.html">
-                                    <i className="dropdown-icon  icon icon-settings"></i> Account Settings
-                                </a>
-                                <a className="dropdown-item" href="login.html">
-                                    <i className="dropdown-icon icon icon-power"></i> Log out
-                                </a>
-                            </div>
+                            <div className="Typeahead-menu"></div>
                         </div>
                     </div>
+                </form>
+                <div className="main-header-left">
+                    <div className="logo-wrapper"><a href="index.html"><img className="img-fluid" src="../backend/assets/images/logo/logo.png" alt="" /></a></div>
+                    <div className="toggle-sidebar"><i className="status_toggle middle" data-feather="grid" id="sidebar-toggle"> </i></div>
                 </div>
+                <div className="left-menu-header col horizontal-wrapper pl-0">
+                    
+                </div>
+                <div className="nav-right col-8 pull-right right-menu">
+                    <ul className="nav-menus">
+                        <li className="language-nav">
+                            <div className="translate_wrapper">
+                                <div className="current_lang">
+                                    <div className="lang"><i className="flag-icon flag-icon-us"></i><span className="lang-txt">EN                               </span></div>
+                                </div>
+                                <div className="more_lang">
+                                    <div className="lang selected" data-value="en"><i className="flag-icon flag-icon-us"></i><span className="lang-txt">English<span> (US)</span></span></div>
+                                    <div className="lang" data-value="de"><i className="flag-icon flag-icon-de"></i><span className="lang-txt">Deutsch</span></div>
+                                    <div className="lang" data-value="es"><i className="flag-icon flag-icon-es"></i><span className="lang-txt">Español</span></div>
+                                    <div className="lang" data-value="fr"><i className="flag-icon flag-icon-fr"></i><span className="lang-txt">Français</span></div>
+                                    <div className="lang" data-value="pt"><i className="flag-icon flag-icon-pt"></i><span className="lang-txt">Português<span> (BR)</span></span></div>
+                                    <div className="lang" data-value="cn"><i className="flag-icon flag-icon-cn"></i><span className="lang-txt">简体中文</span></div>
+                                    <div className="lang" data-value="ae"><i className="flag-icon flag-icon-ae"></i><span className="lang-txt">لعربية <span> (ae)</span></span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>                         <span className="header-search"><i data-feather="search"></i></span></li>
+                        <li className="onhover-dropdown">
+                            <div className="notification-box"><i data-feather="bell"></i><span className="badge badge-pill badge-secondary">4</span></div>
+                            <ul className="notification-dropdown onhover-show-div">
+                                <li className="bg-primary">
+                                    <h6 className="f-18 mb-0">Notitication</h6>
+                                    <p className="mb-0">You have 4 new notification</p>
+                                </li>
+                                <li>
+                                    <p className="mb-0"><i className="fa fa-circle-o mr-3 font-primary"> </i>Delivery processing <span className="pull-right">10 min.</span></p>
+                                </li>
+                                <li>
+                                    <p className="mb-0"><i className="fa fa-circle-o mr-3 font-success"></i>Order Complete<span className="pull-right">1 hr</span></p>
+                                </li>
+                                <li>
+                                    <p className="mb-0"><i className="fa fa-circle-o mr-3 font-info"></i>Tickets Generated<span className="pull-right">3 hr</span></p>
+                                </li>
+                                <li>
+                                    <p className="mb-0"><i className="fa fa-circle-o mr-3 font-danger"></i>Delivery Complete<span className="pull-right">6 hr</span></p>
+                                </li>
+                                <li><a className="btn btn-primary" href="#">Check all notification</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div className="mode"><i className="fa fa-moon-o"></i></div>
+                        </li>
+                        <li className="cart-nav onhover-dropdown">
+                            <div className="cart-box"><i data-feather="shopping-cart"></i><span className="badge badge-pill badge-primary">2</span></div>
+                            <ul className="cart-dropdown chat-dropdown onhover-show-div">
+                                <li className="bg-primary text-center">
+                                    <h6 className="f-18">Shoping cart</h6>
+                                    <p className="mb-0">You have 3 items in your cart  </p>
+                                </li>
+                                <li className="mt-0">
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3 img-60" src="../backend/assets/images/ecommerce/01.jpg" alt="" />
+                                        <div className="media-body"><span>Boy's T-shirt</span>
+                                            <p>It is a long established fact that a reader</p>
+                                            <h6 className="f-12 light-font">1 x $ 299.00</h6>
+                                        </div>
+                                        <div className="close-circle"><a href="#"><i data-feather="x"></i></a></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3 img-60" src="../backend/assets/images/ecommerce/02.jpg" alt="" />
+                                        <div className="media-body"><span>Girls's T-shirt</span>
+                                            <p>It is a long established fact that a reader</p>
+                                            <h6 className="f-12 light-font">1 x $ 199.00</h6>
+                                        </div>
+                                        <div className="close-circle"><a href="#"><i data-feather="x"></i></a></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3 img-60" src="../backend/assets/images/ecommerce/08.jpg" alt="" />
+                                        <div className="media-body"><span>Girls's T-shirt</span>
+                                            <p>It is a long established fact that a reader</p>
+                                            <h6 className="f-12 light-font">2 x $ 199.00</h6>
+                                        </div>
+                                        <div className="close-circle"><a href="#"><i data-feather="x"></i></a></div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="total">
+                                        <h6 className="mb-0 mt-1">Subtotal : <span className="f-right">$799.00</span></h6>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="buttons">
+                                        <h6 className="mb-0"><a className="view-cart" href="cart.html">View Cart</a><a className="checkout f-right" href="#">Checkout</a></h6>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li className="onhover-dropdown"><i data-feather="message-square"></i>
+                            <ul className="chat-dropdown onhover-show-div">
+                                <li className="bg-primary text-center">
+                                    <h6 className="f-18 mb-0">Message Box</h6>
+                                    <p className="mb-0">You have 3 new messages </p>
+                                </li>
+                                <li>
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3" src="../backend/assets/images/user/1.jpg" alt="" />
+                                        <div className="status-circle online"></div>
+                                        <div className="media-body"><span>Erica Hughes</span>
+                                            <p>Lorem Ipsum is simply dummy...</p>
+                                        </div>
+                                        <p className="f-12 font-success">58 mins ago</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3" src="../backend/assets/images/user/2.jpg" alt="" />
+                                        <div className="status-circle online"></div>
+                                        <div className="media-body"><span>Kori Thomas</span>
+                                            <p>Lorem Ipsum is simply dummy...</p>
+                                        </div>
+                                        <p className="f-12 font-success">1 hr ago</p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="media"><img className="img-fluid rounded-circle mr-3" src="../backend/assets/images/user/4.jpg" alt="" />
+                                        <div className="status-circle offline"></div>
+                                        <div className="media-body"><span>Ain Chavez</span>
+                                            <p>Lorem Ipsum is simply dummy...</p>
+                                        </div>
+                                        <p className="f-12 font-danger">32 mins ago</p>
+                                    </div>
+                                </li>
+                                <li className="text-center"> <a className="btn btn-primary" href="#">View All     </a></li>
+                            </ul>
+                        </li>
+                        <li className="maximize"><a className="text-dark" href="#!" /* onClick="javascript:toggleFullScreen()" */><i data-feather="maximize"></i></a></li>
+                        <li className="profile-nav onhover-dropdown p-0">
+                            <div className="media profile-media"><img className="b-r-10" src="../backend/assets/images/dashboard/profile.jpg" alt="" />
+                                <div className="media-body"><span>Emay Walter</span>
+                                    <p className="mb-0 font-roboto">Admin <i className="middle fa fa-angle-down"></i></p>
+                                </div>
+                            </div>
+                            <ul className="profile-dropdown onhover-show-div">
+                                <li><i data-feather="user"></i><span>Account </span></li>
+                                <li><i data-feather="mail"></i><span>Inbox</span></li>
+                                <li><i data-feather="file-text"></i><span>Taskboard</span></li>
+                                <li><i data-feather="settings"></i><span>Settings</span></li>
+                                <li><i data-feather="log-in"> </i><span>Log in</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <script id="result-template" type="text/x-handlebars-template">
+                    <div className="ProfileCard u-cf">
+                        <div className="ProfileCard-avatar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-airplay m-0"><path d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1"></path><polygon points="12 15 17 21 7 21 12 15"></polygon></svg></div>
+                        <div className="ProfileCard-details">
+                            <div className="ProfileCard-realName"></div>
+                        </div>
+                    </div>
+                </script>
+                <script id="empty-template" type="text/x-handlebars-template"><div className="EmptyMessage">Your search turned up 0 results. This most likely means the backend is down, yikes!</div></script>
             </div>
         </div>
     );

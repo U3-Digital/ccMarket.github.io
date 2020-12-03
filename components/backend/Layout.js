@@ -9,14 +9,17 @@ const Layout = ({children}) =>{
     return(
         <>
             <Header/>
-            {router.pathname !== '/controlPanel' ? (<Topbar/>) : (null)}
-            {router.pathname !== '/controlPanel' ? (<Menu/>): (null)}
-            <div>
-                {children}
+            <div className="page-wrapper compact-wrapper" id="pageWrapper">
+                {router.pathname !== '/controlPanel' ? (<Topbar/>) : (null)}
+                <div className="page-body-wrapper sidebar-icon">
+                    {router.pathname !== '/controlPanel' ? (<Menu/>): (null)}
+                    {children}
+
+                </div>
             </div>
             <Footer/>
         </>
     );  
 }
 
-export default Layout;
+export default Layout;/*  */
