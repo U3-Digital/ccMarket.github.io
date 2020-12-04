@@ -55,7 +55,7 @@ const index = () => {
 
     const mostrarMensaje = () => {
         return (
-            <div className="alert alert-warning" role="alert">
+            <div className="alert alert-secondary mt-3 p-2 text-center" role="alert">
                 {mensaje}
             </div>
         );
@@ -78,7 +78,7 @@ const index = () => {
                                         <input className="form-control" type="email" id="email" name="email" onChange={formikLogin.handleChange} onBlur={formikLogin.handleBlur} value={formikLogin.values.email}/>
                                         {
                                             formikLogin.touched.email && formikLogin.errors.email ? (
-                                                <div className="alert alert-warning mt-3 p-2" role="alert">
+                                                <div className="alert alert-secondary mt-3 p-2" role="alert">
                                                     {formikLogin.errors.email}
                                                 </div>
                                             ) : null
@@ -89,7 +89,7 @@ const index = () => {
                                         <input className="form-control" type="password" id="password" name="password" onChange={formikLogin.handleChange} onBlur={formikLogin.handleBlur} value={formikLogin.values.password}/>
                                         {
                                             formikLogin.touched.password && formikLogin.errors.password ? (
-                                                <div className="alert alert-warning mt-3 p-2" role="alert">
+                                                <div className="alert alert-secondary mt-3 p-2" role="alert">
                                                     {formikLogin.errors.password}
                                                 </div>
                                             ) : null

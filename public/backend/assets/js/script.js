@@ -181,7 +181,7 @@ $(document).ready(function(){
 });
 
 function translate(tnum){
-  $('.lan-1').text(trans[0][tnum]);
+ /*  $('.lan-1').text(trans[0][tnum]);
   $('.lan-2').text(trans[1][tnum]);
   $('.lan-3').text(trans[2][tnum]);
   $('.lan-4').text(trans[3][tnum]);
@@ -189,7 +189,7 @@ function translate(tnum){
   $('.lan-6').text(trans[5][tnum]);
   $('.lan-7').text(trans[6][tnum]);
   $('.lan-8').text(trans[7][tnum]);
-  $('.lan-9').text(trans[8][tnum]);
+  $('.lan-9').text(trans[8][tnum]); */
 }
 
 var trans = [ 

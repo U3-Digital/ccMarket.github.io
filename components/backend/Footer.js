@@ -26,10 +26,10 @@ const Footer = () => {
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.js');
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.en.js');
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.custom.js');
-		useScript('../backend/assets/js/typeahead/handlebars.js');
-		useScript('../backend/assets/js/typeahead/typeahead.bundle.js');
-		useScript('../backend/assets/js/typeahead/typeahead.custom.js');
-		useScript('../backend/assets/js/typeahead-search/typeahead-custom.js');
+		// useScript('../backend/assets/js/typeahead/handlebars.js');
+		// useScript('../backend/assets/js/typeahead/typeahead.bundle.js');
+		// useScript('../backend/assets/js/typeahead/typeahead.custom.js');
+		// useScript('../backend/assets/js/typeahead-search/typeahead-custom.js');
 		useScript('../backend/assets/js/tooltip-init.js');
 		useScript('../backend/assets/js/script.js');
 		// useScript('../backend/assets/js/dashboard/default.js');

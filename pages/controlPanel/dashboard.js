@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../../components/backend/Layout';
+import NuevoAdmin from '../../components/backend/NuevoAdmin';
 import firebase from '../../components/firebase';
 
 const dashboard = () => {
@@ -32,7 +33,9 @@ const dashboard = () => {
 
     return (
         <Layout>
-            <div className="page-body"><h3>asda</h3></div>
+            <div className="page-body">
+                <NuevoAdmin/>
+            </div>
         </Layout>
     );
 }

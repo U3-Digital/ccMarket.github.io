@@ -26,22 +26,12 @@ const Topbar = () => {
                 <div className="nav-right col-8 pull-right right-menu">
                     <ul className="nav-menus">
                         <li className="language-nav">
-                            <div className="translate_wrapper">
-                                <div className="current_lang">
-                                    <div className="lang"><i className="flag-icon flag-icon-us"></i><span className="lang-txt">EN                               </span></div>
-                                </div>
-                                <div className="more_lang">
-                                    <div className="lang selected" data-value="en"><i className="flag-icon flag-icon-us"></i><span className="lang-txt">English<span> (US)</span></span></div>
-                                    <div className="lang" data-value="de"><i className="flag-icon flag-icon-de"></i><span className="lang-txt">Deutsch</span></div>
-                                    <div className="lang" data-value="es"><i className="flag-icon flag-icon-es"></i><span className="lang-txt">Español</span></div>
-                                    <div className="lang" data-value="fr"><i className="flag-icon flag-icon-fr"></i><span className="lang-txt">Français</span></div>
-                                    <div className="lang" data-value="pt"><i className="flag-icon flag-icon-pt"></i><span className="lang-txt">Português<span> (BR)</span></span></div>
-                                    <div className="lang" data-value="cn"><i className="flag-icon flag-icon-cn"></i><span className="lang-txt">简体中文</span></div>
-                                    <div className="lang" data-value="ae"><i className="flag-icon flag-icon-ae"></i><span className="lang-txt">لعربية <span> (ae)</span></span></div>
-                                </div>
-                            </div>
                         </li>
-                        <li>                         <span className="header-search"><i data-feather="search"></i></span></li>
+                        <li>
+                            <span className="header-search">
+                                <i data-feather="search"></i>
+                            </span>
+                        </li>
                         <li className="onhover-dropdown">
                             <div className="notification-box"><i data-feather="bell"></i><span className="badge badge-pill badge-secondary">4</span></div>
                             <ul className="notification-dropdown onhover-show-div">
@@ -150,7 +140,6 @@ const Topbar = () => {
                                 <li className="text-center"> <a className="btn btn-primary" href="#">View All     </a></li>
                             </ul>
                         </li>
-                        <li className="maximize"><a className="text-dark" href="#!" /* onClick="javascript:toggleFullScreen()" */><i data-feather="maximize"></i></a></li>
                         <li className="profile-nav onhover-dropdown p-0">
                             <div className="media profile-media"><img className="b-r-10" src="../backend/assets/images/dashboard/profile.jpg" alt="" />
                                 <div className="media-body"><span>Emay Walter</span>
