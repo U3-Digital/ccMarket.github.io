@@ -27,7 +27,7 @@ const Menu = () => {
                                 <li className="dropdown"><a className="nav-link menu-title"><i data-feather="user"></i><span className="lan-3">Administradores</span>
                                     {/* <label className="badge badge-success">2</label> */}</a>
                                     <ul className="nav-submenu menu-content">
-                                        <li><a className="lan-4" href="index.html">Nuevo usuario</a></li>
+                                        <li><a className="lan-4" href="newAdmin">Nuevo usuario</a></li>
                                         <li><a className="lan-5" href="dashboard-02.html">Listado de usuarios</a></li>
                                     </ul>
                                 </li>
