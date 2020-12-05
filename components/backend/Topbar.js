@@ -1,7 +1,25 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import firebase from '../firebase';
 
 const Topbar = () => {
+
+    const usuario = firebase.auth().currentUser;
+    const usuarios = firebase.firestore().collection('usuarios');
+
+    const [nombre, setNombre] = useState(null);
+
+    usuarios.doc(usuario.uid).get().then((snapshot) => {
+        setNombre(snapshot.data().nombre);
+    }).catch((error) => {
+        console.log(error);
+    });
+
+    function toggleMode() {
+        document.getElementById('moon').classList.toggle('fa-moon-o');
+        document.getElementById('moon').classList.toggle('fa-lightbulb-o');
+        document.getElementsByTagName('body')[0].classList.toggle('dark-only');
+    }
+
     return (
         <div className="page-main-header">
             <div className="main-header-right row m-0">
@@ -56,7 +74,7 @@ const Topbar = () => {
                             </ul>
                         </li>
                         <li>
-                            <div className="mode"><i className="fa fa-moon-o"></i></div>
+                            <div id="toggleMode" className="mode" onClick={() => toggleMode()}><i id="moon" className="fa fa-moon-o"></i></div>
                         </li>
                         <li className="cart-nav onhover-dropdown">
                             <div className="cart-box"><i data-feather="shopping-cart"></i><span className="badge badge-pill badge-primary">2</span></div>
@@ -142,7 +160,7 @@ const Topbar = () => {
                         </li>
                         <li className="profile-nav onhover-dropdown p-0">
                             <div className="media profile-media"><img className="b-r-10" src="../backend/assets/images/dashboard/profile.jpg" alt="" />
-                                <div className="media-body"><span>Emay Walter</span>
+                                <div className="media-body"><span>{nombre}</span>
                                     <p className="mb-0 font-roboto">Admin <i className="middle fa fa-angle-down"></i></p>
                                 </div>
                             </div>

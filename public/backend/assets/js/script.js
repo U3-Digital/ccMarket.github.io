@@ -62,16 +62,6 @@
         }
     });
 
-     $(".mode").on("click", function () {
-        $('.mode i').toggleClass("fa-moon-o").toggleClass("fa-lightbulb-o");
-        $('body').toggleClass("dark-only");
-    });       
-     
-    // $(".search-full input").focus(function(e){
-    //     $("body").addClass("offcanvas");
-    // });
-
-
 
 })(jQuery);
 
