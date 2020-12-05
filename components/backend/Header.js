@@ -28,6 +28,9 @@ const Header = () => {
             <link rel="stylesheet" type="text/css" href="../backend/assets/css/style.css"/>
             <link id="color" rel="stylesheet" href="../backend/assets/css/color-1.css" media="screen"/>
             <link rel="stylesheet" type="text/css" href="../backend/assets/css/responsive.css"/>
+
+            <link rel="stylesheet" type="text/css" href="../backend/assets/css/timepicker.css"/>
+
         </Head>
     );
 }

@@ -6,7 +6,7 @@ const Topbar = () => {
     const usuario = firebase.auth().currentUser;
     const usuarios = firebase.firestore().collection('usuarios');
 
-    const [nombre, setNombre] = useState(null);
+    const [nombre, setNombre] = useState('Pedic');
 
     usuarios.doc(usuario.uid).get().then((snapshot) => {
         setNombre(snapshot.data().nombre);

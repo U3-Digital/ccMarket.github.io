@@ -31,28 +31,22 @@ const Menu = () => {
                                         <li><a className="lan-5" href="dashboard-02.html">Listado de usuarios</a></li>
                                     </ul>
                                 </li>
-                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="users"></i><span className="lan-6">Usuarios comunes</span></a>
-                                    <ul className="nav-submenu menu-content">
-                                        <li><a href="general-widget.html">Nuevo usuario</a></li>
-                                        <li><a href="chart-widget.html">Listado de usuarios</a></li>
-                                    </ul>
-                                </li>
                                 <li className="sidebar-title">
                                     <div>
                                         <h6 className="lan-8">Negocios</h6>
                                         <p className="lan-9">Manejo de negocios</p>
                                     </div>
                                 </li>
-                                <li className="dropdown"><a className="nav-link menu-title" href="#"><i data-feather="box"></i><span>Project
-                        <label className="badge badge-danger">New</label></span></a>
+                                <li className="dropdown"><a className="nav-link menu-title" href="#"><i data-feather="box"></i><span>Negocios
+                                    </span></a>
                                     <ul className="nav-submenu menu-content">
-                                        <li><a href="projects.html">Project List</a></li>
-                                        <li><a href="projectcreate.html">Create new</a></li>
+                                        <li><a href="projects.html">Nuevo negocio</a></li>
+                                        <li><a href="projectcreate.html">Listado de negocios</a></li>
                                     </ul>
                                 </li>
                                 <li className="dropdown"><a className="nav-link menu-title link-nav" href="file-manager.html"><i data-feather="git-pull-request"> </i><span>File manager</span></a></li>
                                 <li className="dropdown">               <a className="nav-link menu-title link-nav" href="kanban.html"><i data-feather="monitor"> </i><span>kanban Board
-                        <label className="badge badge-primary">Latest</label></span></a></li>
+                                <label className="badge badge-primary">Latest</label></span></a></li>
                                 <li className="dropdown"><a className="nav-link menu-title" href="#"><i data-feather="shopping-bag"></i><span>Ecommerce</span></a>
                                     <ul className="nav-submenu menu-content">
                                         <li><a href="product.html">Product</a></li>

@@ -1,51 +1,31 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import firebase from '../firebase';
 
-const NuevoAdmin = () => {
+const EditAdmin = () => {
 
     const [mensaje, setMensaje] = useState(null);
-    const database = firebase.firestore().collection('usuarios');
-
-    const formikNuevoAdmin = useFormik({
+    
+    const formikEditAdmin = useFormik({
         initialValues: {
-            name: '',
-            email: '',
+            name: 'pedic',
+            email: 'pedic@pedic.com',
             password: '',
             confirmPassword: ''
         },
         validationSchema: Yup.object({
             name: Yup.string().required('El nombre es necesario'),
             email: Yup.string().email('El correo no es válido').required('El correo es necesario'),
-            password: Yup.string().required('La contraseña es necesaria'),
-            confirmPassword: Yup.string().required('Es necesario que confirme la contraseña')
+            password: Yup.string(),
+            confirmPassword: Yup.string()
         }),
         onSubmit: async valores => {
             const { name, email, password, confirmPassword } = valores;
 
             if (password === confirmPassword) {
-                
-                firebase.auth().createUserWithEmailAndPassword(email, password).then( async (result) => {
-                    const { uid } = result.user;
-                    await database.doc(uid).set({
-                        nombre: name,
-                        admin: true
-                    }).then(() => {
-                        console.log('Todo perron');
-                    })
-                }).catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
 
-                        setMensaje(errorMessage);
-                        setTimeout(() => {
-                            setMensaje(null);
-                        }, 5000);
-                });
-
-            } else {
-                setMensaje('Las contraseñas deben de coincidir');
+            } else if (password || confirmPassword) {
+                setMensaje('Introduzca una contraseña y confírmela');
                 setTimeout(() => {
                     setMensaje(null);
                 }, 5000);
@@ -61,16 +41,18 @@ const NuevoAdmin = () => {
         )
     };
 
-    return (
+    return(
         <>
             <div className="container-fluid">
                 <div className="page-header">
                     <div className="row">
                         <div className="col-6">
-                            <h3>Nuevo administrador</h3>
+                            <h3>Editar administrador</h3>
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="dashboard"><i data-feather="home"></i></a></li>
-                                <li className="breadcrumb-item">Administradores</li>
+                                <li className="breadcrumb-item">
+                                    <a href="dashboard"><i data-feather="home"></i></a>
+                                </li>
+                                <li className="breadcrumb-item">Editar administrador</li>
                             </ol>
                         </div>
                     </div>
@@ -80,21 +62,20 @@ const NuevoAdmin = () => {
                 <div className="edit-profile">
                     <div className="row">
                         <div className="col-12">
-                            <form className="card" id="newAdmin" onSubmit={formikNuevoAdmin.handleSubmit}>
+                            <form className="card" id="editAdmin" onSubmit={formikEditAdmin.handleSubmit}>
                                 <div className="card-header">
-                                    <h4 className="card-title mb-0">Añadir un nuevo administrador</h4>
-                                    <div className="card-options"><a className="card-options-collapse" href="#" data-toggle="card-collapse"><i className="fe fe-chevron-up"></i></a><a className="card-options-remove" href="#" data-toggle="card-remove"><i className="fe fe-x"></i></a></div>
+                                    <h4 className="card-title mb-0">Editar un administrador</h4>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-md-6 col-lg-6 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Nombre</label>
-                                                <input id="name" name="name" className="form-control" type="text" placeholder="Juan Pérez" onChange={formikNuevoAdmin.handleChange} onBlur={formikNuevoAdmin.handleBlur} value={formikNuevoAdmin.values.name}/>
+                                                <input id="name" name="name" className="form-control" type="text" placeholder="Juan Pérez" onChange={formikEditAdmin.handleChange} onBlur={formikEditAdmin.handleBlur} value={formikEditAdmin.values.name}/>
                                                 {
-                                                    formikNuevoAdmin.touched.name && formikNuevoAdmin.errors.name ? (
+                                                    formikEditAdmin.touched.name && formikEditAdmin.errors.name ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                            {formikNuevoAdmin.errors.name}
+                                                            {formikEditAdmin.errors.name}
                                                         </div>
                                                     ) : null
                                                 }
@@ -103,11 +84,11 @@ const NuevoAdmin = () => {
                                         <div className="col-md-6 col-lg-6 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Correo electrónico</label>
-                                                <input id="email" name="email" className="form-control" type="email" placeholder="ejemplo@ejemplo.com" onChange={formikNuevoAdmin.handleChange} onBlur={formikNuevoAdmin.handleBlur} value={formikNuevoAdmin.values.email}/>
+                                                <input id="email" name="email" className="form-control" type="email" placeholder="ejemplo@ejemplo.com" onChange={formikEditAdmin.handleChange} onBlur={formikEditAdmin.handleBlur} value={formikEditAdmin.values.email}/>
                                                 {
-                                                    formikNuevoAdmin.touched.email && formikNuevoAdmin.errors.email ? (
+                                                    formikEditAdmin.touched.email && formikEditAdmin.errors.email ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                            {formikNuevoAdmin.errors.email}
+                                                            {formikEditAdmin.errors.email}
                                                         </div>
                                                     ) : null
                                                 }
@@ -118,11 +99,11 @@ const NuevoAdmin = () => {
                                         <div className="col-md-6 col-lg-6 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Contraseña</label>
-                                                <input id="password" name="password" className="form-control" type="password" onChange={formikNuevoAdmin.handleChange} onBlur={formikNuevoAdmin.handleBlur} value={formikNuevoAdmin.values.password}/>
+                                                <input id="password" name="password" className="form-control" type="password" onChange={formikEditAdmin.handleChange} onBlur={formikEditAdmin.handleBlur} value={formikEditAdmin.values.password}/>
                                                 {
-                                                    formikNuevoAdmin.touched.password && formikNuevoAdmin.errors.password ? (
+                                                    formikEditAdmin.touched.password && formikEditAdmin.errors.password ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                            {formikNuevoAdmin.errors.password}
+                                                            {formikEditAdmin.errors.password}
                                                         </div>
                                                     ) : null
                                                 }
@@ -131,11 +112,11 @@ const NuevoAdmin = () => {
                                         <div className="col-md-6 col-lg-6 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Confirmar contraseña</label>
-                                                <input id="confirmPassword" name="confirmPassword" className="form-control" type="password" onChange={formikNuevoAdmin.handleChange} onBlur={formikNuevoAdmin.handleBlur} value={formikNuevoAdmin.values.confirmPassword}/>
+                                                <input id="confirmPassword" name="confirmPassword" className="form-control" type="password" onChange={formikEditAdmin.handleChange} onBlur={formikEditAdmin.handleBlur} value={formikEditAdmin.values.confirmPassword}/>
                                                 {
-                                                    formikNuevoAdmin.touched.confirmPassword && formikNuevoAdmin.errors.confirmPassword ? (
+                                                    formikEditAdmin.touched.confirmPassword && formikEditAdmin.errors.confirmPassword ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                            {formikNuevoAdmin.errors.confirmPassword}
+                                                            {formikEditAdmin.errors.confirmPassword}
                                                         </div>
                                                     ) : null
                                                 }
@@ -147,7 +128,7 @@ const NuevoAdmin = () => {
                                 <div className="card-footer">
                                     <div className="row justify-content-center">
                                         <div className="col-md-4 col-lg-4 col-10">
-                                            <button className="btn btn-primary btn-block" type="submit">Guardar usuario</button>
+                                            <button className="btn btn-primary btn-block" type="submit">Guardar cambios</button>
                                         </div>
                                     </div>
                                 </div>
@@ -160,4 +141,4 @@ const NuevoAdmin = () => {
     );
 };
 
-export default NuevoAdmin;
+export default EditAdmin;

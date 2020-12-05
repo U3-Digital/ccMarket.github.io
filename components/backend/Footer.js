@@ -22,7 +22,13 @@ const Footer = () => {
 		useScript('../backend/assets/js/chart/apex-chart/apex-chart.js');
 		useScript('../backend/assets/js/chart/apex-chart/stock-prices.js');
 		useScript('../backend/assets/js/notify/bootstrap-notify.min.js');
-		useScript('../backend/assets/js/notify/index.js');
+        useScript('../backend/assets/js/notify/index.js');
+
+        useScript('../backend/assets/js/time-picker/jquery-clockpicker.min.js');
+        useScript('../backend/assets/js/time-picker/highlight.min.js');
+        useScript('../backend/assets/js/time-picker/clockpicker.js');
+
+        useScript('../backend/assets/js/tooltip-init.js');
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.js');
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.en.js');
 		useScript('../backend/assets/js/datepicker/date-picker/datepicker.custom.js');
@@ -30,7 +36,6 @@ const Footer = () => {
 		// useScript('../backend/assets/js/typeahead/typeahead.bundle.js');
 		// useScript('../backend/assets/js/typeahead/typeahead.custom.js');
 		// useScript('../backend/assets/js/typeahead-search/typeahead-custom.js');
-		useScript('../backend/assets/js/tooltip-init.js');
 		useScript('../backend/assets/js/script.js');
 		// useScript('../backend/assets/js/dashboard/default.js');
 		useScript('../backend/assets/js/typeahead-search/handlebars.js');
