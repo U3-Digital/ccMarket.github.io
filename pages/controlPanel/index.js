@@ -8,6 +8,19 @@ const index = () => {
     const database = firebase.firestore().collection('usuarios');
 
     const [mensaje, setMensaje] = useState(null);
+    firebase.auth().onAuthStateChanged(function (user) {
+        if(user){
+            if(user.providerData[0].providerId !== "google.com"){
+                const { uid } = user;
+                database.doc(uid).get().then((snapshot) => {
+                    if (snapshot.data().admin) {
+                        window.location.href = "/controlPanel/dashboard"
+                    }
+                })
+            }
+            console.log(user);
+        }
+    })
 
     const formikLogin = useFormik({
         initialValues: {
@@ -23,7 +36,6 @@ const index = () => {
             await firebase.auth().signInWithEmailAndPassword(email, password).then((param) => {
                 const uid = param.user.uid;
                 database.doc(uid).get().then((snapshot) => {
-
                     if (snapshot.empty) {
                         mostrarMensaje('Hubo un pedote');
                     } else {

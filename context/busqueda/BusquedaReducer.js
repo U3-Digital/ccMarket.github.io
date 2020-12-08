@@ -8,7 +8,6 @@ import {
 const BusquedaReducer = (state, action) => {
     switch(action.type){
         case MODIFICAR_DATOS:
-            console.log(action.payload);
             return{
                 nombre: action.payload.nombre,
                 direccion: action.payload.direccion,

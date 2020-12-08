@@ -10,23 +10,25 @@ const ListaAdmins = () => {
 
     const tempAdmins = [];
 
-   /*  const usuariosFirestore = firebase.firestore().collection('usuarios');
-
-    usuariosFirestore.where('admin', '==', true).get().then((snapshot) => {
-        if (snapshot.empty) {
-            console.log('No se encontraron administradores');
-            return;
-        }
-
-        snapshot.forEach((administrador) => {
-            const { id } = administrador;
-            firebase.auth().get
+    const usuariosFirestore = firebase.firestore().collection('usuarios');
+    if (loading){
+        usuariosFirestore.where('admin', '==', true).get().then((snapshot) => {
+            if (snapshot.empty) {
+                console.log('No se encontraron administradores');
+                return;
+            }
+            snapshot.forEach((administrador) => {
+                const { id } = administrador;
+                tempAdmins.push(administrador);
+                
+            });
+            setAdmins(tempAdmins);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+        }); 
+    }
     
-            console.log(administrador.id, administrador.data());
-        });
-    }).catch((error) => {
-        console.log(error);
-    }); */
 
 
     /* const usuarios = firebase.auth().getUsers().then((result) => {
@@ -40,32 +42,7 @@ const ListaAdmins = () => {
         console.log(error);
     }); */
 
-    const adminsa = [
-        {
-            id: 1,
-            nombre: 'Eric Aguilar',
-            correo: 'eric.aguimar@gmail.com',
-            estado: true
-        },
-        {
-            id: 2,
-            nombre: 'Alejandro Marcial',
-            correo: 'a338855@uach.mx',
-            estado: false
-        },
-        {
-            id: 3,
-            nombre: 'Raymundo Paz',
-            correo: 'paz_2001_6@hotmail.com',
-            estado: true
-        },
-        {
-            id: 4,
-            nombre: 'Ricky Urbina',
-            correo: 'rickyurbina@gmail.com',
-            estado: true
-        },
-    ];
+   
 
     return (
         <div className="container-fluid">
@@ -87,7 +64,7 @@ const ListaAdmins = () => {
                                             </thead>
                                             <tbody>
                                                 {
-                                                    adminsa.map((admin) => (
+                                                    admins.map((admin) => (
                                                         <RowAdmin
                                                             key = {admin.id}
                                                             admin = {admin}/>

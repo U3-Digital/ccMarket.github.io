@@ -20,6 +20,14 @@ const Topbar = () => {
         document.getElementsByTagName('body')[0].classList.toggle('dark-only');
     }
 
+    const logout = () =>{
+        firebase.auth().signOut().then(function() {
+			window.location.href = 'controlPanel/'
+		}).catch(function(error) {	
+			// An error happened.
+		});
+    }   
+
     return (
         <div className="page-main-header">
             <div className="main-header-right row m-0">
@@ -169,7 +177,7 @@ const Topbar = () => {
                                 <li><i data-feather="mail"></i><span>Inbox</span></li>
                                 <li><i data-feather="file-text"></i><span>Taskboard</span></li>
                                 <li><i data-feather="settings"></i><span>Settings</span></li>
-                                <li><i data-feather="log-in"> </i><span>Log in</span></li>
+                                <li onClick={() => logout()}><i data-feather="log-in"> </i><span>Log in</span></li>
                             </ul>
                         </li>
                     </ul>

@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Layout from '../../components/backend/Layout';
 import NuevoNegocio from '../../components/backend/NuevoNegocio';
-// import NuevoAdmin from '../../components/backend/NuevoAdmin';
+import NuevoAdmin from '../../components/backend/NuevoAdmin'
+import ListaAdmins from '../../components/backend/ListaAdmins'; 
 import firebase from '../../components/firebase';
-
+import BackEndContext from '../../context/backend/BackEndContext'
+import EditAdmin from '../../components/backend/EditarAdmin';
+import Dashboard from '../../components/backend/Dashboard';
 const dashboard = () => {
     const [loading, setloading] = useState(false);
+    const backendContext = useContext(BackEndContext);
+    const {nombre} = backendContext;
+
+
     const database = firebase.firestore().collection('usuarios');
 
     firebase.auth().onAuthStateChanged(function (user) {
@@ -35,7 +42,11 @@ const dashboard = () => {
     return (
         <Layout>
             <div className="page-body">
-                <NuevoNegocio/>
+                {nombre === "Dashboard" ? (<Dashboard/>) : null}
+                {nombre === "NuevoAdmin" ? (<NuevoAdmin/>) : null}
+                {nombre === "NuevoNegocio" ? (<NuevoNegocio/>) : null}
+                {nombre === "ListaAdmins" ? (<ListaAdmins/>) : null}
+                {nombre === "EditAdmin" ? (<EditAdmin/>) : null}
             </div>
         </Layout>
     );

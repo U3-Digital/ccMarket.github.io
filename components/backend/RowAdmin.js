@@ -1,7 +1,18 @@
-import React from 'react';
-
+import React,{useContext} from 'react';
+import BackEndContext from '../../context/backend/BackEndContext';
 const RowAdmin = ({ admin }) => {
-    const { id, nombre, correo, estado } = admin;
+    const backendContext = useContext(BackEndContext);
+    const {editaPantalla} = backendContext
+    const {nombre, correo, estado } = admin.data();
+    const id  = admin.id
+
+    const cambio = () =>{
+        const valores = {
+            nombre: "EditAdmin",
+            id: id
+        }
+        editaPantalla(valores);
+    }
 
     return (
         <tr>
@@ -18,7 +29,7 @@ const RowAdmin = ({ admin }) => {
             <td className="text-right"><i className="fa fa-check-circle"></i>{estado ? ('Activo') : ('Inactivo')}</td>
             <td className="text-right">
                 <div>
-                    <button className="btn btn-primary p-0 mr-2" style={{width: '3em'}}><i className="fa fa-pencil"></i></button>
+                    <button onClick={()=> cambio()} className="btn btn-primary p-0 mr-2" style={{width: '3em'}}><i className="fa fa-pencil"></i></button>
                     <button className="btn btn-danger p-0" style={{width: '3em'}}><i className="fa fa-trash"></i></button>
                 </div>
             </td>

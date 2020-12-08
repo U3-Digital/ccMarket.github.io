@@ -1,9 +1,12 @@
 import '../styles/globals.css';
 import BusquedaState from '../context/busqueda/BusquedaState';
+import BackEndState from '../context/backend/BackEndState';
 function MyApp({ Component, pageProps }) {
   return(
-    <BusquedaState>   
-      <Component {...pageProps} />
+    <BusquedaState>
+      <BackEndState>   
+          <Component {...pageProps} />
+      </BackEndState>
     </BusquedaState>
   ) 
 }

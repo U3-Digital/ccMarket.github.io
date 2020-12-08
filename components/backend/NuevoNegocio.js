@@ -1,6 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Label from './Label';
 
 const NuevoNegocio = () => {
+
+    const [categorias, setCategorias] = useState([]);
+    const [palabras, setPalabras] = useState([]);
+
+    let tempCategorias = [];
+    let tempPalabras = [];
+
+    const agregarCategoria = (event) => {
+        const categoria = event.target.value;
+        tempCategorias = categorias.slice();
+        if (categoria) {
+            tempCategorias.push(categoria);
+        }
+
+        setCategorias(tempCategorias);
+    };
+
+    const agregarPalabra = (event) => {
+        if (event.key === ' ' || event.key === ',' || event.key === 'Enter') {
+            let palabra = event.target.value;
+            tempPalabras = palabras.slice();
+            if (palabra.indexOf(',') !== -1) {
+                palabra = palabra.replace(',', '');
+            }
+
+            if (palabra.trim()) {
+                tempPalabras.push(palabra);
+            }
+            setPalabras(tempPalabras);
+            event.target.value = '';
+        }
+        
+    };
+
     return (
         <>
             <div className="container-fluid">
@@ -50,7 +85,7 @@ const NuevoNegocio = () => {
                                     <div className="col-md-4 col-lg-4 col-12">
                                         <div className="form-group mb-3">
                                             <label className="form-label">Número del responsable</label>
-                                            <input id="numberResponsable" name="numberResponsable" className="form-control" type="text" placeholder="Juan Pérez"/>
+                                            <input id="numberResponsable" name="numberResponsable" className="form-control" type="text" placeholder="625-123-1234"/>
                                         </div>
                                     </div>
                                     <div className="col-md-4 col-lg-4 col-12">
@@ -64,24 +99,36 @@ const NuevoNegocio = () => {
                                     <div className="col-md-3 col-lg-3 col-12">
                                         <div className="form-group mb-3">
                                             <label className="form-label">Categoría</label>
-                                            <select className="form-control">
-                                                <option>Seleccione una categoría</option>
-                                                <option>ah</option>
-                                                <option>ah</option>
+                                            <select className="form-control" onChange={() => agregarCategoria(event)}>
+                                                <option value="">Seleccione una categoría</option>
+                                                <option value="ah">ah</option>
+                                                <option value="aha">aha</option>
                                             </select>
                                         </div>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
+                                        <div>
+                                            {
+                                                categorias.map((categoria) => (
+                                                    <Label
+                                                        key={Math.random()}
+                                                        texto={categoria}/>
+                                                    ))
+                                            }
+                                        </div>
                                     </div>
                                     <div className="col-md-3 col-lg-3 col-12">
                                         <div className="form-group mb-3">
                                             <label className="form-label">Palabras clave</label>
-                                            <input id="palabrasClave" name="palabrasClave" type="text" className="form-control"/>
+                                            <input id="palabrasClave" name="palabrasClave" type="text" className="form-control" onKeyUp={() => agregarPalabra(event)}/>
                                         </div>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
-                                        <label className="badge badge-pill badge-light">Cosas</label>
+                                        <div>
+                                            {
+                                                palabras.map((palabra) => (
+                                                    <Label
+                                                        key={Math.random()}
+                                                        texto={palabra}/>
+                                                ))
+                                            }
+                                        </div>
                                     </div>
                                     <div className="col-md-3 col-lg-3 col-12">
                                         <div className="form-group mb-3">
@@ -98,6 +145,13 @@ const NuevoNegocio = () => {
                                                 <input className="form-control" type="text"/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-footer">
+                                <div className="row justify-content-center">
+                                    <div className="col-md-4 col-lg-4 col-10">
+                                        <button className="btn btn-primary btn-block" type="button">Guardar cambios</button>
                                     </div>
                                 </div>
                             </div>
