@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import Resultado from './Resultado';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
@@ -9,33 +9,27 @@ const ResultadosBusqueda = () => {
     const busquedaContext = useContext(BusquedaContext);
     const database = firebase.firestore().collection('negocios');
     const databaserealtime = firebase.database();
-    const {nombre,direccion,categoria,negocios} = busquedaContext;
+    const {nombre,direccion,categoria,negocios,status,cambiaStatus} = busquedaContext;
     const tempneg = [];
+
     if (!consulta) {
-        negocios.filter(doc => doc.nombre.toLowerCase().includes(nombre.toLowerCase()) && doc.direccion.toLowerCase().includes(direccion.toLowerCase())).map(filteredName => {
-            tempneg.push(filteredName);
-        })
-        setnegociosfiltrados(tempneg);
-        setloading(false);
-        setconsulta(true);
-
         
-
-        /*const query = database.where("nombre","==",nombre).get().then(snapshot =>{
-            if(snapshot.empty) {
-                console.log("no se encontró algun resultado");
-                return;
-            }
-            snapshot.forEach(doc => {
-                tempneg.push(doc);
-            })
-            setnegocios(tempneg)
-            setloading(false);
-            setconsulta(true);
-        }).catch(err => {
-            console.log('Error getting documents', err);
-        });*/
+        
     }
+
+    useEffect(() => {
+        if (status === false){
+            setloading(true)
+            negocios.filter(doc => doc.nombre.toLowerCase().includes(nombre.toLowerCase()) && doc.direccion.toLowerCase().includes(direccion.toLowerCase())).map(filteredName => {
+                tempneg.push(filteredName);
+            })
+            setnegociosfiltrados(tempneg);
+            setloading(false);
+            setconsulta(true)
+            cambiaStatus(true)
+        }
+    }, [status])
+
 
     /*database.get().then(snapshot =>{
         snapshot.forEach(doc =>{

@@ -44,7 +44,7 @@ const BarraBusqueda = () => {
                                     <span><i className="fa fa-map-marker location-gps mr-1"></i></span>
                                 </div>
                                 <div className="form-group col-xl-3 col-lg-3 col-md-12 select2-lg  mb-0 bg-white">
-                                    <select onChange = {() => console.log("hola")} className="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
+                                    <select onChange = {selecctedOption => console.log(selecctedOption)} className="form-control select2-show-search  border-bottom-0" data-placeholder="Select Category">
                                         <TablaSelectCategorias/>
                                     </select>
                                 </div>

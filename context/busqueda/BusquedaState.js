@@ -8,7 +8,8 @@ import {
     MODIFICAR_DIRECCION,
     MODIFICAR_CATEGORIA,
     MODIFICAR_DATOS,
-    CARGAR_EMPRESAS
+    CARGAR_EMPRESAS,
+    SET_STATUS
 } from '../../types';
 
 const BusquedaState = ({children}) =>{
@@ -18,6 +19,7 @@ const BusquedaState = ({children}) =>{
         direccion: "",
         categoria: "",
         busqueda: false,
+        status: false,
         negocios: null
     }
 
@@ -38,6 +40,13 @@ const BusquedaState = ({children}) =>{
         })
     }
 
+    const cambiaStatus = status =>{
+        dispatch({
+            type:SET_STATUS,
+            payload:status
+        })
+    }
+
     return(
         <BusquedaContext.Provider
             value = {{
@@ -46,8 +55,10 @@ const BusquedaState = ({children}) =>{
                 categoria: state.categoria,
                 busqueda: state.busqueda,
                 negocios: state.negocios,
+                status: state.status,
                 modificabusqueda,
-                cargarNegocios
+                cargarNegocios,
+                cambiaStatus
             }}
         >
             {children}
