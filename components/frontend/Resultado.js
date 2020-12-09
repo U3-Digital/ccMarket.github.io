@@ -2,7 +2,7 @@ import React from 'react';
 
 const Resultado = ({ negocio }) => {
     const { id } = negocio;
-    const { nombre, categoria } = negocio.data();
+    const { nombre, categoria,direccion } = negocio;
 
     return (
         <div className="card overflow-hidden">
@@ -21,7 +21,7 @@ const Resultado = ({ negocio }) => {
                         <div className="item-card9">
                             <a href="classified.html">{categoria}</a>
                             <a href="classified.html" className="text-dark"><h4 className="font-weight-semibold mt-1">{nombre}</h4></a>
-                            <p className="mb-0 leading-tight">Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit</p>
+                            <p className="mb-0 leading-tight">{direccion}</p>
                         </div>
                     </div>
                     <div className="card-footer pt-4 pb-4">

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext , useState} from 'react'
 import Layout from '../components/Layout';
 import BarraBusqueda from '../components/BarraBusqueda';
 import TablaCategorias from '../components/TablaCategorias';
@@ -7,9 +7,23 @@ import Estadisticas from '../components/Estadisticas';
 import IndexPrincipal from '../components/frontEnd/IndexPrincipal';
 import Busquedas from '../components/frontend/Busquedas';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
+import firebase from '../components/firebase';
 export default function Home()  {
   const busquedaContext = useContext(BusquedaContext);
-  const {nombre, busqueda, direccion, categoria} = busquedaContext;
+  const {nombre, busqueda, direccion, categoria,cargarNegocios} = busquedaContext;
+  const [loading,setloading] = useState(false);
+  const database = firebase.database();
+  if (!loading){
+    const negoTemp = [];
+    const negocios = database.ref('negocios2');
+    negocios.once('value').then((snapshot) => {
+        snapshot.forEach(doc => {
+          negoTemp.push(doc.val());
+        })
+        cargarNegocios(negoTemp);
+        setloading(true)
+    });
+  }
   // const database = firebase.database();
   
   //const database2 = firebase.firestore().collection('categorias');

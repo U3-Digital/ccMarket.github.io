@@ -4,7 +4,7 @@ const CategoriaMenu = ({categoria}) => {
     const { id } = categoria;
     const { nombre } = categoria.data();
     return(
-        <option value={id}>{nombre}</option>
+        <option value={nombre}>{nombre}</option>
     );
 }
 

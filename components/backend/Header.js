@@ -31,6 +31,9 @@ const Header = () => {
 
             <link rel="stylesheet" type="text/css" href="../backend/assets/css/timepicker.css"/>
 
+            <link rel="stylesheet" type="text/css" href="../backend/assets/css/dropzone.css"/>
+
+
         </Head>
     );
 }

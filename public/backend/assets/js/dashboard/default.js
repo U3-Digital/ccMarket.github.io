@@ -1,7 +1,7 @@
 // greeting
 var today = new Date()
 var curHr = today.getHours()
-
+/* 
 if (curHr >= 0 && curHr < 4) {
     document.getElementById("greeting").innerHTML = 'Good Night';
 } else if (curHr >= 4 && curHr < 12) {
@@ -10,7 +10,7 @@ if (curHr >= 0 && curHr < 4) {
     document.getElementById("greeting").innerHTML = 'Good Afternoon';
 } else {
     document.getElementById("greeting").innerHTML = 'Good Evening';
-}
+} */
 // time 
 function startTime() {
     var today = new Date();

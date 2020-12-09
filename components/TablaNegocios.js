@@ -60,7 +60,7 @@ const TablaNegocios = () => {
 						itemPadding = {[10, 10]}
 						renderArrow = {Flecha}
 						enableAutoPlay 
-						autoPlaySpeed={3000}>
+						autoPlaySpeed={10000}>
 						{
 							negocios.map(negocio => (
 								<Negocio

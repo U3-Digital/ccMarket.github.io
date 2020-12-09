@@ -40,7 +40,10 @@ const Footer = () => {
 		// useScript('../backend/assets/js/dashboard/default.js');
         useScript('../backend/assets/js/typeahead-search/handlebars.js');
         
-        useScript('../backend/assets/js/dashboard/default.js')
+		useScript('../backend/assets/js/dashboard/default.js');
+		
+		useScript('../backend/assets/js/dropzone/dropzone.js');
+		useScript('../backend/assets/js/dropzone/dropzone-script.js');
 	}
     return(
         <></>
@@ -48,6 +51,8 @@ const Footer = () => {
 };
 
 /*
+<script src="../assets/js/dropzone/dropzone.js"></script>
+    <script src="../assets/js/dropzone/dropzone-script.js"></script>
 */
 
 export default Footer;

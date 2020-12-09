@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import firebase from './firebase';
+import BusquedaContext from '../context/busqueda/BusquedaContext';
 //password
 //google.com
 const Menu = () => {
 	const [logeado, setlogeado] = useState(false);
 	const [nombre,setnombre] = useState(null);
+	const busquedaContext = useContext(BusquedaContext);
+    const {modificabusqueda} = busquedaContext;
 	const database = firebase.firestore().collection('usuarios')
 	firebase.auth().onAuthStateChanged(function(user) {
 		if (user) {
@@ -31,6 +34,16 @@ const Menu = () => {
 		});
 	}
 
+	const buscar = () =>{
+        const datos = {
+            nombre: "",
+            direccion: "",
+            categoria: "",
+            busqueda: false	
+        }
+        modificabusqueda(datos);
+    }
+
     return(
 		<div>
 			<div id="global-loader">
@@ -56,7 +69,7 @@ const Menu = () => {
 						
 						<nav className="horizontalMenu clearfix d-md-flex">
 							<ul className="horizontalMenu-list">
-								<li aria-haspopup="true"><a href="#" className="active">Inicio</a></li>
+								<li aria-haspopup="true"><a onClick={()=> buscar()} className="active">Inicio</a></li>
 								<li aria-haspopup="true"><a href="#">Categorías&nbsp;&nbsp;<span className="fa fa-caret-down m-0"></span></a>
 									<ul className="sub-menu">
 										<li aria-haspopup="true"><a href="classNameified.html">Categoría 1</a></li>
