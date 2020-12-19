@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Label from './Label';
+import firebase from '../firebase';
 
 const NuevoNegocio = () => {
 
@@ -19,6 +20,7 @@ const NuevoNegocio = () => {
         }
 
         setCategorias(tempCategorias);
+        insertIntoInput(tempCategorias, 'categorias');
     };
 
     const agregarPalabra = (event) => {
@@ -34,21 +36,22 @@ const NuevoNegocio = () => {
             }
             setPalabras(tempPalabras);
             event.target.value = '';
+            insertIntoInput(tempPalabras, 'palabras');
         }
         
     };
 
     const formikNuevoNegocio = useFormik({
         initialValues: {
-            nombreNegocio: '1',
-            direccionNegocio: '1',
-            nombreResponsable: '1',
-            numeroResponsable: '0123456789',
-            emailResponsable: 'correo@correo.com',
-            categorias: '1',
-            palabrasClave: '1',
-            horarioApertura: '1',
-            horarioCierre: '1'
+            nombreNegocio: '',
+            direccionNegocio: '',
+            nombreResponsable: '',
+            numeroResponsable: '',
+            emailResponsable: '',
+            categorias: '',
+            palabrasClave: '',
+            horarioApertura: '',
+            horarioCierre: ''
         },
         validationSchema: Yup.object({
             nombreNegocio: Yup.string().required('El nombre es necesario'),
@@ -65,6 +68,49 @@ const NuevoNegocio = () => {
             console.log(valores);
         }
     });
+
+    function insertIntoInput(array, element) {
+        let texto = '';
+
+        for (let i = 0; i < array.length; i++) {
+            texto += `${array[i]}-`;
+        }
+
+        console.log(texto);
+        
+        switch (element) {
+            case 'categorias':
+                formikNuevoNegocio.values.categorias = texto;
+                formikNuevoNegocio.touched.categorias = false;
+                break;
+            case 'palabras':
+                formikNuevoNegocio.values.palabrasClave = texto;
+                formikNuevoNegocio.touched.palabrasClave = false;
+                break;
+            default:
+                console.log('nada');
+                break;
+        }
+
+    }
+
+    function deleteCategoria(text) {
+        const index = categorias.indexOf(text);
+        tempCategorias = categorias.slice();
+        tempCategorias.splice(index, 1);
+
+        setCategorias(tempCategorias);
+        insertIntoInput(tempCategorias, 'categorias');
+    }
+    
+    function deletePalabra(text) {
+        const index = palabras.indexOf(text);
+        tempPalabras = palabras.slice();
+        tempPalabras.splice(index, 1);
+
+        setPalabras(tempPalabras);
+        insertIntoInput(tempPalabras, 'palabras');
+    }
 
     return (
         <>
@@ -171,49 +217,69 @@ const NuevoNegocio = () => {
                                                     <option value="aha">aha</option>
                                                 </select>
                                             </div>
+                                            {
+                                                formikNuevoNegocio.touched.categorias && formikNuevoNegocio.errors.categorias ? (
+                                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.categorias}</div>
+                                                ) : null
+                                            }
                                             <div>
                                                 {
                                                     categorias.map((categoria) => (
                                                         <Label
                                                             key={Math.random()}
                                                             texto={categoria}
-                                                            
-                                                            />
-                                                        ))
+                                                            click={deleteCategoria}/>
+                                                    ))
                                                 }
                                             </div>
-                                            <input id="categorias" name="categorias" type="text" hidden defaultValue="categorias"/>
+                                            <input style={{opacity: '0.0'}} id="categorias" name="categorias" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.categorias}/>
                                         </div>
                                         <div className="col-md-3 col-lg-3 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Palabras clave</label>
                                                 <input className="form-control" onKeyUp={() => agregarPalabra(event)}/>
                                             </div>
+                                            {
+                                                formikNuevoNegocio.touched.palabrasClave && formikNuevoNegocio.errors.palabrasClave ? (
+                                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.palabrasClave}</div>
+                                                ) : null
+                                            }
                                             <div>
                                                 {
                                                     palabras.map((palabra) => (
                                                         <Label
                                                             key={Math.random()}
-                                                            texto={palabra}/>
+                                                            texto={palabra}
+                                                            click={deletePalabra}/>
                                                     ))
                                                 }
                                             </div>
-                                            <input id="palabrasClave" name="palabrasClave" type="text" hidden defaultValue="4a"/>
+                                            <input style={{opacity: '0.0'}} id="palabrasClave" name="palabrasClave" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.palabrasClave}/>
                                         </div>
                                         <div className="col-md-3 col-lg-3 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de apertura</label>
                                                 <div className="input-group clockpicker">
-                                                    <input className="form-control" type="text"/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
+                                                    <input id="horarioApertura" name="horarioApertura" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
                                                 </div>
+                                                {
+                                                    formikNuevoNegocio.touched.horarioApertura && formikNuevoNegocio.errors.horarioApertura ? (
+                                                        <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.horarioApertura}</div>
+                                                    ) : null
+                                                }
                                             </div>
                                         </div>
                                         <div className="col-md-3 col-lg-3 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de cierre</label>
                                                 <div className="input-group clockpicker">
-                                                    <input className="form-control" type="text"/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
+                                                    <input id="horarioCierre" name="horarioCierre" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
                                                 </div>
+                                                {
+                                                    formikNuevoNegocio.touched.horarioCierre && formikNuevoNegocio.errors.horarioCierre ? (
+                                                        <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.horarioCierre}</div>
+                                                    ) : null
+                                                }
                                             </div>
                                         </div>
                                     </div>
