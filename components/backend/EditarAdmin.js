@@ -1,28 +1,41 @@
 import React, { useState,useContext } from 'react';
-import { Formik, useFormik } from 'formik';
+import { Formik, useFormik, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
+import Select from 'react-select';
+import Swal from 'sweetalert2';
 
 const EditAdmin = () => {
 
     const [mensaje, setMensaje] = useState(null);
     const [loading, setloading] = useState(true);
-    const [usuarioActual, setUsuario] = useState({name: '', email: '',password: '', confirmPassword:'' });
+    const [status, setStatus] = useState(null);
+    const [usuarioActual, setUsuario] = useState({nombre: '', estado: ''});
     const backendContext = useContext(BackEndContext);
-    const {idEdita} = backendContext;
+    const {idEdita,cambioPantalla} = backendContext;
     const db = firebase.firestore().collection('usuarios').doc(idEdita);
+
+
+    const options = [
+        { value: true , label: 'Activo' },
+        { value: false , label: 'No activo' }
+    ]
+
+
     if (loading){
         db.get().then(doc => {
             if (!doc.exists) {
               console.log('No such document!');
             } else {
-                console.log(doc.data().nombre);
               const usuarioobj ={
-                name: doc.data().nombre,
-                email:doc.data().correo,
-                password: '',
-                confirmPassword: ''
+                nombre: doc.data().nombre,
+                estado: doc.data().estado
+              }
+              if (doc.data().estado){
+                    setStatus({ value: true , label: 'Activo' });
+              }else{
+                    setStatus({ value: false , label: 'No activo' });
               }
               setUsuario(usuarioobj);
               setloading(false);
@@ -34,34 +47,23 @@ const EditAdmin = () => {
     }
 
     const schemaValidation = Yup.object({
-        name: Yup.string().required('El nombre es necesario'),
-        email: Yup.string().email('El correo no es válido').required('El correo es necesario'),
-        password: Yup.string(),
-        confirmPassword: Yup.string()    
+        nombre: Yup.string().required('El nombre es necesario'),
+        estado: Yup.string().required('El estado es necesario')  
     })
 
     const actualizaInfoAdmin = async (valores) =>{
-        const { name, email, password, confirmPassword } = valores;
+        const {nombre, estado} = valores;
+        console.log(`name: ${nombre} estado: ${estado}`);
 
-        if (password === confirmPassword) {
-            if(password === ""){
-                db.update({
-                    correo: email,
-                    nombre: name
-                  }).then(function() {
-                    console.log("Frank food updated");
-                  });
-            
-            }
-            if(email !== usuarioActual.email){
-                
-            }
-        } else {
-            setMensaje('Las contraseñas no coinciden');
-            setTimeout(() => {
-                setMensaje(null);
-            }, 5000);
-        }    
+
+        db.update({estado: estado, nombre: nombre}).then(async () => {
+            await Swal.fire(
+                'Listo',
+                'El usuario fue actualizado con exito',
+                'success'
+            )
+            cambioPantalla("ListaAdmins");
+        });  
     }
 
     const mostrarMensaje = () => {
@@ -116,11 +118,11 @@ const EditAdmin = () => {
                                                     <div className="col-md-6 col-lg-6 col-12">
                                                         <div className="form-group mb-3">
                                                             <label className="form-label">Nombre</label>
-                                                            <input id="name" name="name" className="form-control" type="text" placeholder="Juan Pérez" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.name}/>
+                                                            <input id="nombre" name="nombre" className="form-control" type="text" placeholder="Juan Pérez" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.nombre}/>
                                                             {
-                                                                props.touched.name && props.errors.name ? (
+                                                                props.touched.nombre && props.errors.nombre ? (
                                                                     <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                                        {props.errors.name}
+                                                                        {props.errors.nombre}
                                                                     </div>
                                                                 ) : null
                                                             }
@@ -129,39 +131,23 @@ const EditAdmin = () => {
                                                     <div className="col-md-6 col-lg-6 col-12">
                                                         <div className="form-group mb-3">
                                                             <label className="form-label">Correo electrónico</label>
-                                                            <input id="email" name="email" className="form-control" type="email" placeholder="ejemplo@ejemplo.com" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.email}/>
+                                                            <Select 
+                                                                id ="estado"
+                                                                name = "estado"
+                                                                options = {options}
+                                                                placeholder = "Estado del usuario"
+                                                                onChange = {selectedOption => {
+                                                                    console.log(selectedOption)
+                                                                    props.handleChange("estado")(selectedOption.value)
+                                                                    setStatus(selectedOption);
+                                                                }}
+                                                                value={status}
+                                                                onBlur={props.handleBlur}
+                                                            />
                                                             {
                                                                 props.touched.email && props.errors.email ? (
                                                                     <div className="alert alert-secondary mt-3 p-2" role="alert">
                                                                         {props.errors.email}
-                                                                    </div>
-                                                                ) : null
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="row">
-                                                    <div className="col-md-6 col-lg-6 col-12">
-                                                        <div className="form-group mb-3">
-                                                            <label className="form-label">Contraseña</label>
-                                                            <input id="password" name="password" className="form-control" type="password" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.password}/>
-                                                            {
-                                                                props.touched.password && props.errors.password ? (
-                                                                    <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                                        {props.errors.password}
-                                                                    </div>
-                                                                ) : null
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6 col-lg-6 col-12">
-                                                        <div className="form-group mb-3">
-                                                            <label className="form-label">Confirmar contraseña</label>
-                                                            <input id="confirmPassword" name="confirmPassword" className="form-control" type="password" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.confirmPassword}/>
-                                                            {
-                                                                props.touched.confirmPassword && props.errors.confirmPassword ? (
-                                                                    <div className="alert alert-secondary mt-3 p-2" role="alert">
-                                                                        {props.errors.confirmPassword}
                                                                     </div>
                                                                 ) : null
                                                             }
