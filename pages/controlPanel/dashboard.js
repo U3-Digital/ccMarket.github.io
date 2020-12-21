@@ -7,6 +7,8 @@ import firebase from '../../components/firebase';
 import BackEndContext from '../../context/backend/BackEndContext'
 import EditAdmin from '../../components/backend/EditarAdmin';
 import Dashboard from '../../components/backend/Dashboard';
+import ListaNegocios from '../../components/backend/ListaNegocios';
+
 const dashboard = () => {
     const [loading, setloading] = useState(false);
     const backendContext = useContext(BackEndContext);
@@ -47,6 +49,7 @@ const dashboard = () => {
                 {nombre === "NuevoNegocio" ? (<NuevoNegocio/>) : null}
                 {nombre === "ListaAdmins" ? (<ListaAdmins/>) : null}
                 {nombre === "EditAdmin" ? (<EditAdmin/>) : null}
+                {nombre === "ListaNegocios" ? (<ListaNegocios/>) : null}
             </div>
         </Layout>
     );

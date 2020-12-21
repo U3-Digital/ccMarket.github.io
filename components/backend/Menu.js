@@ -44,11 +44,11 @@ const Menu = () => {
                                         <p className="lan-9">Manejo de negocios</p>
                                     </div>
                                 </li>
-                                <li className="dropdown"><a className="nav-link menu-title" href="#"><i data-feather="box"></i><span>Negocios
+                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="box"></i><span>Negocios
                                     </span></a>
                                     <ul className="nav-submenu menu-content">
                                         <li><a onClick={() => cambio("NuevoNegocio")}>Nuevo negocio</a></li>
-                                        <li><a href="projectcreate.html">Listado de negocios</a></li>
+                                        <li><a onClick={() => cambio("ListaNegocios")}>Listado de negocios</a></li>
                                     </ul>
                                 </li>
                             </ul>

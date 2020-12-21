@@ -1,4 +1,4 @@
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import BackEndContext from '../../context/backend/BackEndContext';
 const RowAdmin = ({ admin }) => {
     const backendContext = useContext(BackEndContext);
@@ -29,12 +29,10 @@ const RowAdmin = ({ admin }) => {
             <td className="text-right"><i className="fa fa-check-circle"></i>{estado ? ('Activo') : ('Inactivo')}</td>
             <td className="text-right">
                 <div>
-                    <button onClick={()=> cambio()} className="btn btn-primary p-0 mr-2" style={{width: '3em'}}><i className="fa fa-pencil"></i></button>
-                    <button className="btn btn-danger p-0" style={{width: '3em'}}><i className="fa fa-trash"></i></button>
+                    <button onClick={()=> cambio()} className="btn btn-primary p-0 mr-2" style={{width: '3em'}}><i className="fas fa-pencil-alt"></i></button>
+                    <button className="btn btn-danger p-0" style={{width: '3em'}}><i className="fas fa-trash"></i></button>
                 </div>
             </td>
-            {/* <td> <span className="label">$5,08,652</span></td>
-            <td className="text-right"><i className="fa fa-check-circle"></i>Done</td> */}
         </tr>
     );
 };

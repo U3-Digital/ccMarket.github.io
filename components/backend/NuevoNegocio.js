@@ -6,6 +6,10 @@ import firebase from '../firebase';
 
 const NuevoNegocio = () => {
 
+    const database = firebase.firestore().collection('negocios');
+
+    const [mensaje, setMensaje] = useState(null);
+
     const [categorias, setCategorias] = useState([]);
     const [palabras, setPalabras] = useState([]);
 
@@ -64,10 +68,53 @@ const NuevoNegocio = () => {
             horarioApertura: Yup.string().required('El horario de apertura es necesario'),
             horarioCierre: Yup.string().required('El horario de cierre es necesario'),
         }),
-        onSubmit: valores => {
-            console.log(valores);
+        onSubmit: async valores => {
+            const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre } = valores;
+
+            await database.add({
+                nombreNegocio,
+                direccionNegocio,
+                nombreResponsable,
+                numeroResponsable,
+                emailResponsable,
+                categorias,
+                palabrasClave,
+                horarioApertura,
+                horarioCierre
+            }, { merge: false }).then((result) => {
+
+                formikNuevoNegocio.resetForm();
+
+                setCategorias([]);
+                insertIntoInput([], 'categorias');
+
+                setPalabras([]);
+                insertIntoInput([], 'palabras');
+
+                setMensaje('Negocio agregado exitosamente');
+                setTimeout(() => {
+                    setMensaje(null);
+                }, 5000);
+
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+
+                setMensaje(`${errorCode} - ${errorMessage}`);
+                setTimeout(() => {
+                    setMensaje(null);
+                }, 5000);
+            });
         }
     });
+
+    const mostrarMensaje = () => {
+        return (
+            <div className="alert alert-secondary mt-1 ml-5 mr-5 p-2 text-center" role="alert">
+                {mensaje}
+            </div>
+        )
+    };
 
     function insertIntoInput(array, element) {
         let texto = '';
@@ -187,7 +234,7 @@ const NuevoNegocio = () => {
                                         <div className="col-md-4 col-lg-4 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Número del responsable</label>
-                                                <input id="numeroResponsable" name="numeroResponsable" className="form-control" type="text" placeholder="625-123-1234" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.numeroResponsable}/>
+                                                <input id="numeroResponsable" name="numeroResponsable" className="form-control" type="text" placeholder="6251231234" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.numeroResponsable}/>
                                                 {
                                                     formikNuevoNegocio.touched.numeroResponsable && formikNuevoNegocio.errors.numeroResponsable ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.numeroResponsable}</div>
@@ -260,7 +307,7 @@ const NuevoNegocio = () => {
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de apertura</label>
                                                 <div className="input-group clockpicker">
-                                                    <input id="horarioApertura" name="horarioApertura" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
+                                                    <input id="horarioApertura" name="horarioApertura" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.horarioApertura}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
                                                 </div>
                                                 {
                                                     formikNuevoNegocio.touched.horarioApertura && formikNuevoNegocio.errors.horarioApertura ? (
@@ -273,7 +320,7 @@ const NuevoNegocio = () => {
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de cierre</label>
                                                 <div className="input-group clockpicker">
-                                                    <input id="horarioCierre" name="horarioCierre" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
+                                                    <input id="horarioCierre" name="horarioCierre" className="form-control" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.horarioCierre}/><span className="input-group-addon"><span className="glyphicon glyphicon-time"></span></span>
                                                 </div>
                                                 {
                                                     formikNuevoNegocio.touched.horarioCierre && formikNuevoNegocio.errors.horarioCierre ? (
@@ -283,6 +330,7 @@ const NuevoNegocio = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    {mensaje && mostrarMensaje()}
                                 </div>
                                 <div className="card-footer">
                                     <div className="row justify-content-center">
