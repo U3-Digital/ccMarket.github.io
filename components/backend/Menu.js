@@ -51,6 +51,19 @@ const Menu = () => {
                                         <li><a onClick={() => cambio("ListaNegocios")}>Listado de negocios</a></li>
                                     </ul>
                                 </li>
+                                <li className="sidebar-title">
+                                    <div>
+                                        <h6 className="lan-8">Categorias</h6>
+                                        <p className="lan-9">Manejo de categorias</p>
+                                    </div>
+                                </li>
+                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="box"></i><span>categorias
+                                    </span></a>
+                                    <ul className="nav-submenu menu-content">
+                                        <li><a onClick={() => cambio("NuevoNegocio")}>Nueva categoria</a></li>
+                                        <li><a onClick={() => cambio("ListaNegocios")}>Listado de categorias</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                         <div className="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

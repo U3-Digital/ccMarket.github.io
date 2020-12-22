@@ -5,16 +5,39 @@ import Label from './Label';
 import firebase from '../firebase';
 
 const NuevoNegocio = () => {
-
+    const [loading, setLoading] = useState(true);
+    const [categoriasPrincipales, setCategoriasPrincipales] = useState([]);
     const database = firebase.firestore().collection('negocios');
-
+    const categoriasDatabase = firebase.firestore().collection('categorias');
     const [mensaje, setMensaje] = useState(null);
 
     const [categorias, setCategorias] = useState([]);
     const [palabras, setPalabras] = useState([]);
 
     let tempCategorias = [];
+    let tempCategoriasPrincipales = [];
     let tempPalabras = [];
+
+    if(loading){
+        categoriasDatabase.get()
+        .then(snapshot => {
+          if (snapshot.empty) {
+            console.log('No matching documents.');
+            return;
+          }
+          snapshot.forEach(doc => {
+            tempCategoriasPrincipales.push(doc);
+          });
+          setCategoriasPrincipales(tempCategoriasPrincipales);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.log('Error getting documents', err);
+        });
+
+    }
+
+
 
     const agregarCategoria = (event) => {
         const categoria = event.target.value;
@@ -260,8 +283,11 @@ const NuevoNegocio = () => {
                                                 <label className="form-label">Categoría</label>
                                                 <select className="form-control" onChange={() => agregarCategoria(event)}>
                                                     <option value="">Seleccione una categoría</option>
-                                                    <option value="ah">ah</option>
-                                                    <option value="aha">aha</option>
+                                                    {
+                                                        categoriasPrincipales.map((categoria) => (
+                                                            <option key={categoria.id} value={categoria.data().nombre}>{categoria.data().nombre}</option>
+                                                        ))
+                                                    }
                                                 </select>
                                             </div>
                                             {

@@ -61,10 +61,10 @@ const Menu = () => {
 				<div className="horizontal-main bg-dark-transparent clearfix">
 					<div className="horizontal-mainwrapper container clearfix">
 						<div className="desktoplogo">
-							<a href="index.html"><img src="../img/brand/logo1.png" alt=""/></a>
+							<a onClick={()=> buscar()}><img src="../img/brand/logo1.png" alt=""/></a>
 						</div>
 						<div className="desktoplogo-1">
-							<a href="index.html"><img src="../img/brand/logo.png" alt=""/></a>
+							<a onClick={()=> buscar()}><img src="../img/brand/logo.png" alt=""/></a>
 						</div>
 						
 						<nav className="horizontalMenu clearfix d-md-flex">
