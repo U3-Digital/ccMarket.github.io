@@ -57,11 +57,11 @@ const Menu = () => {
                                         <p className="lan-9">Manejo de categorias</p>
                                     </div>
                                 </li>
-                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="box"></i><span>categorias
+                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="layers"></i><span>categorias
                                     </span></a>
                                     <ul className="nav-submenu menu-content">
-                                        <li><a onClick={() => cambio("NuevoNegocio")}>Nueva categoria</a></li>
-                                        <li><a onClick={() => cambio("ListaNegocios")}>Listado de categorias</a></li>
+                                        <li><a onClick={() => cambio("NuevaCategoria")}>Nueva categoria</a></li>
+                                        <li><a onClick={() => cambio("ListaCategoria")}>Listado de categorias</a></li>
                                     </ul>
                                 </li>
                             </ul>

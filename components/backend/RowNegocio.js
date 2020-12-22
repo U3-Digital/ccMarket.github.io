@@ -8,8 +8,17 @@ const RowNegocio = ({ negocio }) => {
     const negociosFirestore = firebase.firestore().collection('negocios');
 
     const backendContext = useContext(BackEndContext);
+    const { editaPantalla } = backendContext;
     const { id } = negocio;
     const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable } = negocio.data();
+
+    const cambio = () => {
+        const valores = {
+            nombre: 'EditarNegocio',
+            id: id
+        }
+        editaPantalla(valores);
+    };
 
     function borrarNegocio(id) {
         Swal.fire({
@@ -24,11 +33,11 @@ const RowNegocio = ({ negocio }) => {
             reverseButtons: true
         }).then((value) => {
             if (value.isConfirmed) {
-               negociosFirestore.doc(id).delete().then(() => {
-                   console.log('borrado');
-               }).catch((error) => {
-                   console.log(error);
-               });
+                negociosFirestore.doc(id).delete().then(() => {
+                    console.log('borrado');
+                }).catch((error) => {
+                    console.log(error);
+                });
             }
         });
     }
@@ -49,7 +58,7 @@ const RowNegocio = ({ negocio }) => {
             <td>{emailResponsable}</td>
             <td>
                 <div>
-                    <button className="btn btn-primary p-0 mr-2" style={{ width: '3em' }}><i className="fas fa-pencil-alt"></i></button>
+                    <button className="btn btn-primary p-0 mr-2" style={{ width: '3em' }} onClick={() => cambio()}><i className="fas fa-pencil-alt"></i></button>
                     <button className="btn btn-danger p-0" style={{ width: '3em' }} onClick={() => borrarNegocio(id)}><i className="fas fa-trash"></i></button>
                 </div>
             </td>

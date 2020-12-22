@@ -38,7 +38,7 @@ const ListaNegocios = () => {
                             <h3>Lista de negocios</h3>
                             <ol className="breadcrumb">
                                 <li className="breadcrumb-item">
-                                    <a href="dashboard"><i data-feather="home"></i></a>
+                                    <a href="dashboard"><i className="fas fa-home"></i></a>
                                 </li>
                                 <li className="breadcrumb-item">Lista de negocios</li>
                             </ol>

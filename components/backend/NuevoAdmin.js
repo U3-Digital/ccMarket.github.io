@@ -69,7 +69,7 @@ const NuevoAdmin = () => {
                         <div className="col-6">
                             <h3>Nuevo administrador</h3>
                             <ol className="breadcrumb">
-                                <li className="breadcrumb-item"><a href="dashboard"><i data-feather="home"></i></a></li>
+                                <li className="breadcrumb-item"><a href="dashboard"><i className="fas fa-home"></i></a></li>
                                 <li className="breadcrumb-item">Administradores</li>
                             </ol>
                         </div>
