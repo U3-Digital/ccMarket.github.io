@@ -1,13 +1,10 @@
 import React from 'react';
-import ResultadosBusqueda from './ResultadosBusqueda';
-import OtrosResultados from './OtrosResultados';
+import Resultados from './Resultados';
 
 const Busquedas = () => {
     return (
         <div>
-            <br/>
-            <ResultadosBusqueda/>
-            <OtrosResultados/>
+            <Resultados/>
         </div>
     );
 };

@@ -10,6 +10,8 @@ import Dashboard from '../../components/backend/Dashboard';
 import ListaNegocios from '../../components/backend/ListaNegocios';
 import EditarNegocio from '../../components/backend/EditarNegocio';
 import NuevaCategoria from '../../components/backend/NuevaCategoria';
+import ListaCategorias from '../../components/backend/ListaCategorias';
+import EditarCategoria from '../../components/backend/EditarCategoria';
 const dashboard = () => {
     const [loading, setloading] = useState(false);
     const backendContext = useContext(BackEndContext);
@@ -53,6 +55,8 @@ const dashboard = () => {
                 {nombre === "ListaNegocios" ? (<ListaNegocios />) : null}
                 {nombre === "EditarNegocio" ? (<EditarNegocio />) : null}
                 {nombre === "NuevaCategoria" ? (<NuevaCategoria/>) : null}
+                {nombre === "ListaCategoria" ? (<ListaCategorias/>): null}
+                {nombre === "EditCategoria" ? (<EditarCategoria/>): null}
             </div>
         </Layout>
     );
