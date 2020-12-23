@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
 
 const Resultado = ({ negocio }) => {
@@ -7,6 +8,8 @@ const Resultado = ({ negocio }) => {
   const [loadPhoto, setLoadPhoto] = useState(false);
   const [image, setImage] = useState('../img/products/products/f1.jpg');
   const storage = firebase.storage();
+  const busquedaContext = useContext(BusquedaContext);
+  const { detallesPantalla } = busquedaContext;
 
   console.log(negocio);
 
@@ -18,6 +21,16 @@ const Resultado = ({ negocio }) => {
       console.log(error.code);
     });
     setLoadPhoto(true);
+  }
+  
+  function mostrarDetalles () {
+
+    const valores = {
+      idDetalles: id,
+      nombrePantalla: 'detallesPantalla'
+    }
+
+    detallesPantalla(valores  );
   }
 
   return (
@@ -35,8 +48,8 @@ const Resultado = ({ negocio }) => {
         </div>
         <div className="card-body">
           <div className="item-card9">
-            <a href="classified.html">{categoria}</a>
-            <a href="classified.html" className="text-dark mt-2"><h4 className="font-weight-semibold mt-1">{nombre}</h4></a>
+            <a >{categoria}</a>
+            <a onClick={() => mostrarDetalles()} className="text-dark mt-2"><h4 className="font-weight-semibold mt-1">{nombre}</h4></a>
             <div className="item-card9-desc">
               <a className="mr-4"><span className=""><i className="fas fa-map-marker-alt text-muted mr-1"></i> {direccion}</span></a>
             </div>

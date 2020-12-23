@@ -22,8 +22,10 @@ const Estadisticas = () => {
 
   if (loading) {
     return (
-      <div className="row">
-        <div className="col-12 text-center">Cargando</div>
+      <div className="row m-5">
+        <div className="col-12 text-center">
+          <div className="spinner-border text-primary"></div>
+        </div>
       </div>
     );
   }

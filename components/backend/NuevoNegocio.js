@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Label from './Label';
 import firebase from '../firebase';
+import Categoria from '../Categoria';
+
+import Dropzone, { useDropzone } from 'react-dropzone';
 
 const NuevoNegocio = () => {
     const [loading, setLoading] = useState(true);
     const [categoriasPrincipales, setCategoriasPrincipales] = useState([]);
     const database = firebase.firestore().collection('negocios');
     const categoriasDatabase = firebase.firestore().collection('categorias');
+    const realbd = firebase.database().ref('negocios2');
+    const storageRef = firebase.storage().ref('negocios');
     const [mensaje, setMensaje] = useState(null);
 
     const [categorias, setCategorias] = useState([]);
@@ -18,7 +23,7 @@ const NuevoNegocio = () => {
     let tempCategoriasPrincipales = [];
     let tempPalabras = [];
 
-    if(loading){
+    if (loading) {
         categoriasDatabase.get()
         .then(snapshot => {
           if (snapshot.empty) {
@@ -36,8 +41,6 @@ const NuevoNegocio = () => {
         });
 
     }
-
-
 
     const agregarCategoria = (event) => {
         const categoria = event.target.value;
@@ -65,7 +68,7 @@ const NuevoNegocio = () => {
             event.target.value = '';
             insertIntoInput(tempPalabras, 'palabras');
         }
-        
+
     };
 
     const formikNuevoNegocio = useFormik({
@@ -104,15 +107,39 @@ const NuevoNegocio = () => {
                 palabrasClave,
                 horarioApertura,
                 horarioCierre
-            }, { merge: false }).then((result) => {
-
+            }, { merge: false }).then(async(result) => {
+                console.log(result.id);
+                let id = result.id
+                await realbd.child(result.id).set({
+                    nombre: nombreNegocio,
+                    cliente: true,
+                    direcicon: direccionNegocio,
+                    categoria: categorias,
+                    noValoraciones: 0,
+                    ubicacion: "corredor",
+                    valoracion: 5.0
+                })
                 formikNuevoNegocio.resetForm();
+
+                let i = 1;
+
+                files.forEach((file) => {
+                  storageRef.child(`${id}/${i}`).put(file).then((result) => {
+                    console.log('get subido');
+                  }).catch((error) => {
+                    console.log('gg jg diff');
+                    console.log(error);
+                  });
+                  i++;
+                });
 
                 setCategorias([]);
                 insertIntoInput([], 'categorias');
 
                 setPalabras([]);
                 insertIntoInput([], 'palabras');
+
+                setFiles([]);
 
                 setMensaje('Negocio agregado exitosamente');
                 setTimeout(() => {
@@ -147,7 +174,7 @@ const NuevoNegocio = () => {
         }
 
         console.log(texto);
-        
+
         switch (element) {
             case 'categorias':
                 formikNuevoNegocio.values.categorias = texto;
@@ -172,7 +199,7 @@ const NuevoNegocio = () => {
         setCategorias(tempCategorias);
         insertIntoInput(tempCategorias, 'categorias');
     }
-    
+
     function deletePalabra(text) {
         const index = palabras.indexOf(text);
         tempPalabras = palabras.slice();
@@ -181,6 +208,64 @@ const NuevoNegocio = () => {
         setPalabras(tempPalabras);
         insertIntoInput(tempPalabras, 'palabras');
     }
+
+    /* Estilo de los thumbnails */
+
+    const thumbnailsContainer = {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: '1em'
+    }
+    
+    const thumbnail = {
+      display: 'inline-flex',
+      borderRadius: 2,
+      border: '1px solid #eaeaea',
+      marginBottom: 8,
+      marginRight: 8,
+      width: 100,
+      height: 100,
+      padding: 4,
+      boxSizing: 'border-box'
+    };
+
+    const thumbnailInner = {
+      display: 'flex',
+      minWidth: 0,
+      overflow: 'hidden'
+    };
+
+    const img = {
+      display: 'block',
+      width: 'auto',
+      height: '100%'
+    };
+
+    
+    const [files, setFiles] = useState([]);
+
+    const {getRootProps, getInputProps} = useDropzone({
+      accept: 'image/*',
+      onDrop: (acceptedFiles) => {
+        console.log(acceptedFiles);
+        setFiles(acceptedFiles.map((file) => Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })));
+      }
+    });
+
+    const thumbnails = files.map((file) => (
+      <div style={thumbnail} key={file.name}>
+        <div style={thumbnailInner}>
+          <img style={img} src={file.preview}/>
+        </div>
+      </div>
+    ));
+
+    useEffect(() => () => {
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    }, [files]);
 
     return (
         <>
@@ -210,12 +295,32 @@ const NuevoNegocio = () => {
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-12">
-                                            {/* <form className="dropzone digits" id="singleFileUpload" action="/upload.php">
-                                                <div className="dz-message needsclick"><i className="icon-cloud-up"></i>
-                                                    <h6>Drop files here or click to upload.</h6><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
-                                                </div>
-                                            </form> */}
+                                          <section className="dropzone digits">
+                                            <div {...getRootProps({className: 'dz-message needsClick'})}>
+                                              <input {...getInputProps()}/>
+                                              <i className="fas fa-cloud-upload-alt mb-1"></i>
+                                              <h6>Arrastre las imágenes del negocio</h6><span className="note needsclick">(Máximo <strong>5</strong> imágenes.)</span>
+                                            </div>
+                                            
+                                          </section>
+
+                                              {/* {({ getRootProps, getInputProps }) => (
+                                                <section className="dropzone digits">
+                                                  <div className="dz-message needsClick" {...getRootProps()}>
+                                                    <input {...getInputProps()} />
+                                                    <i className="fas fa-cloud-upload-alt mb-1"></i>
+                                                    <h6>Arrastre las imágenes del negocio</h6><span className="note needsclick">(Máximo <strong>5</strong> imágenes.)</span>
+                                                  </div>
+                                                </section>
+                                              )} */}
                                         </div>
+                                    </div>
+                                    <div className="row">
+                                      <div className="col-12">
+                                        <aside style={thumbnailsContainer}>
+                                          {thumbnails}
+                                        </aside>
+                                      </div>
                                     </div>
                                     <br/>
                                     <div className="row">

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Resultado from './Resultado';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
+import OtroResultado from './OtroResultado';
 
 const Resultados = () => {
 
@@ -9,15 +10,22 @@ const Resultados = () => {
   const [loading, setLoading] = useState(true);
   const [negociosFiltrados, setNegociosFiltrados] = useState([]);
   const busquedaContext = useContext(BusquedaContext);
-  const { nombre, direccion, categoria, negocios, status, cambiaStatus } = busquedaContext;
+  const { nombre, direccion, categoria, negocios, status, cambiaStatus, detallesPantalla } = busquedaContext;
   const tempNegocios = [];
-
+  const tempNegociosnoCliente = [];
   useEffect(() => {
     if (status === false) {
       setLoading(true);
       negocios.filter((doc) => doc.nombre.toLowerCase().includes(nombre.toLowerCase())).map((filteredName) => {
-        tempNegocios.push(filteredName);
+        if (filteredName.cliente){
+          tempNegocios.push(filteredName);
+        }else{
+          tempNegociosnoCliente.push(filteredName);
+        }
       });
+      tempNegociosnoCliente.map((negocio) => {
+        tempNegocios.push(negocio);
+      })
       setNegociosFiltrados(tempNegocios);
       setLoading(false);
       setConsulta(true);
@@ -34,6 +42,8 @@ const Resultados = () => {
       </div>
     );
   }
+
+  
 
   return (
     <section className="sptb">
@@ -74,9 +84,16 @@ const Resultados = () => {
                       <div className="row">
                         {
                           negociosFiltrados.map((negocio) => (
-                            <Resultado
+                            negocio.cliente ? (
+                              <Resultado
                               key = {negocio.id}
                               negocio={negocio} />
+                            ) : (
+                              <OtroResultado
+                              key = {negocio.id}
+                              negocio={negocio} />
+                            )
+                            
                           ))
                         }
                       </div>

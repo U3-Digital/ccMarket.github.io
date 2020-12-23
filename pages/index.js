@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 import Layout from '../components/Layout';
 import BarraBusqueda from '../components/BarraBusqueda';
 import TablaCategorias from '../components/TablaCategorias';
@@ -8,32 +8,32 @@ import IndexPrincipal from '../components/frontEnd/IndexPrincipal';
 import Busquedas from '../components/frontend/Busquedas';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
 import firebase from '../components/firebase';
+import DetallesNegocio from '../components/frontend/DetallesNegocio';
 export default function Home() {
-  const busquedaContext = useContext(BusquedaContext);
-  const { nombre, busqueda, direccion, categoria, cargarNegocios } = busquedaContext;
-  const [loading, setloading] = useState(false);
-  const database = firebase.database();
-  if (!loading) {
-    const negoTemp = [];
-    const negocios = database.ref('negocios2');
-    negocios.once('value').then((snapshot) => {
-      snapshot.forEach(doc => {
-        const objNegocio = doc.val();
-        objNegocio.id = doc.key;
+	const busquedaContext = useContext(BusquedaContext);
+	const { nombre, busqueda, direccion, categoria, cargarNegocios, nombrePantalla } = busquedaContext;
+	const [ loading, setloading ] = useState(false);
+	const database = firebase.database();
+	if (!loading) {
+		const negoTemp = [];
+		const negocios = database.ref('negocios2');
+		negocios.once('value').then((snapshot) => {
+			snapshot.forEach((doc) => {
+				const objNegocio = doc.val();
+				objNegocio.id = doc.key;
 
-        negoTemp.push(objNegocio);
-      })
-      cargarNegocios(negoTemp);
-      setloading(true);
-    });
-  }
-  // const database = firebase.database();
+				negoTemp.push(objNegocio);
+			});
+			cargarNegocios(negoTemp);
+			setloading(true);
+		});
+	}
+	// const database = firebase.database();
 
-  //const database2 = firebase.firestore().collection('categorias');
-  // Add a new document with a generated id.
+	//const database2 = firebase.firestore().collection('categorias');
+	// Add a new document with a generated id.
 
-
-  /* function randomString(length, chars) {
+	/* function randomString(length, chars) {
     var mask = '';
     if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
     if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -59,11 +59,12 @@ export default function Home() {
   }
 
   cosa(); */
-  return (
-    <Layout>
-      <BarraBusqueda />
-      {!busqueda ? (<IndexPrincipal />) : (<Busquedas />)}
-
-    </Layout>
-  )
+	return (
+		<Layout>
+			<BarraBusqueda />
+			{nombrePantalla === 'index' ? <IndexPrincipal /> : null}
+			{nombrePantalla === 'busqueda' ? <Busquedas /> : null}
+			{nombrePantalla === 'detallesPantalla' ? <DetallesNegocio/> : null}
+		</Layout>
+	);
 }

@@ -54,7 +54,6 @@ const EditarCategoria = () => {
         if(changePhoto){
             await storageRef.put(image);
         }
-        formikNuevaCategoria.resetForm();
         Swal.fire(
             'Actualizado!',
             'La categoría se actualizó con exito',

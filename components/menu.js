@@ -39,7 +39,8 @@ const Menu = () => {
             nombre: "",
             direccion: "",
             categoria: "",
-            busqueda: false	
+			busqueda: false,
+			nombrePantalla: "index"	
         }
         modificabusqueda(datos);
     }
