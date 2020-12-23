@@ -7,7 +7,11 @@ const Login = () => {
 	provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
 	firebase.auth().languageCode = 'es';
 
-
+	firebase.auth().onAuthStateChanged(function (user) {
+        if(user){
+        	window.location.href = "/"
+		}   
+    })
 	const database = firebase.firestore().collection('usuarios');
 	const [mensaje, setmensaje] = useState(null);
 
@@ -159,7 +163,7 @@ const Login = () => {
 													<div className="text-center">
 														<div className="btn-group mt-2 mb-2">
 															<button className="btn brround" onClick={() => loginwithGooogle()}>
-																<span className="fa fa-google" style={{fontSize: '1.5em'}}></span>
+																<i className="fab fa-google" style={{fontSize: '1.5em'}}></i>
 															</button>
 														</div>
 													</div>
@@ -208,7 +212,7 @@ const Login = () => {
                                                     <div className="text-center">
 														<div className="btn-group mt-2 mb-2">
 															<a onClick={()=>loginwithGooogle()} className="btn btn-icon brround">
-																<span className="fa fa-google"></span>
+																<i className="fab fa-google"></i>
 															</a>
 														</div>
 													</div>

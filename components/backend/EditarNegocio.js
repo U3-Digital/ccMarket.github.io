@@ -1,10 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Formik, useFormik, yupToFormErrors } from 'formik';
 import * as Yup from 'yup';
 import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
 import Label from './Label';
 import Swal from 'sweetalert2';
+
+import Dropzone, { useDropzone } from 'react-dropzone';
 
 const EditarNegocio = () => {
 
@@ -17,6 +19,39 @@ const EditarNegocio = () => {
 
   const [categorias, setCategorias] = useState([]);
   const [palabras, setPalabras] = useState([]);
+  const [isCliente, setIsCliente] = useState(false);
+
+  const [imagesLoading, setImagesLoading] = useState(true);
+  const [files, setFiles] = useState([]);
+
+  const negocioQuery = firebase.firestore().collection('negocios').doc(idEdita);
+
+  const imagesRef = firebase.storage().ref(`negocios/${idEdita}`);
+  const [noImagenes, setNoImagenes] = useState(0);
+  
+  const tempImages = [];
+
+  if (imagesLoading) {
+    setImagesLoading(false);
+    negocioQuery.get().then( async (document) => {
+      if (!document.exists) {
+        console.log('Algo salió terriblemente mal porque tiene que existir para llegar a este punto');
+      } else {
+        for (let i = 1; i < document.data().noImagenes + 1; i++) {
+          await imagesRef.child(`${i}`).getDownloadURL().then((url) => {
+            tempImages.push({
+              name: i,
+              preview: url
+            });
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+        setNoImagenes(document.data().noImagenes);
+        setFiles(tempImages);
+      }
+    });
+  }
 
   let tempCategorias = [];
   let tempPalabras = [];
@@ -89,7 +124,6 @@ const EditarNegocio = () => {
     insertIntoInput(tempPalabras, 'palabras');
   }
 
-  const negocioQuery = firebase.firestore().collection('negocios').doc(idEdita);
 
   const schemaValidation = Yup.object({
     nombreNegocio: Yup.string().required('El nombre es necesario'),
@@ -100,7 +134,8 @@ const EditarNegocio = () => {
     categorias: Yup.string().required('Seleccione al menos una categoría'),
     palabrasClave: Yup.string().required('Introduzca al menos una palabra clave'),
     horarioApertura: Yup.string().required('El horario de apertura es necesario'),
-    horarioCierre: Yup.string().required('El horario de cierre es necesario')
+    horarioCierre: Yup.string().required('El horario de cierre es necesario'),
+    cliente: Yup.boolean()
   });
 
   if (loading) {
@@ -117,7 +152,8 @@ const EditarNegocio = () => {
           categorias: document.data().categorias,
           palabrasClave: document.data().palabrasClave,
           horarioApertura: document.data().horarioApertura,
-          horarioCierre: document.data().horarioCierre
+          horarioCierre: document.data().horarioCierre,
+          cliente: document.data().cliente
         };
 
         tempCategorias = document.data().categorias.split('-').filter((element) => element != ''.trim());
@@ -129,6 +165,7 @@ const EditarNegocio = () => {
         insertIntoInput(tempCategorias, 'categorias');
         insertIntoInput(tempPalabras, 'palabras');
 
+        setIsCliente(document.data().cliente);
 
         setNegocioActual(negocioObj);
         setLoading(false);
@@ -139,9 +176,8 @@ const EditarNegocio = () => {
   }
 
   function actualizarInfoNegocio(valores) {
-    console.log(valores);
-    const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre } = valores;
-    /* negocioQuery.set({
+    const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente } = valores;
+    negocioQuery.set({
       nombreNegocio,
       direccionNegocio,
       nombreResponsable,
@@ -150,8 +186,24 @@ const EditarNegocio = () => {
       categorias,
       palabrasClave,
       horarioApertura,
-      horarioCierre
-    }, { merge: false }).then((result) => {
+      horarioCierre,
+      cliente,
+      noImagenes: files.length
+    }, { merge: false }).then( async (result) => {
+      for (let i = 1; i < noImagenes + 1; i++) {
+        await imagesRef.child(`${i}`).delete();
+      }
+      let i = 1;
+      files.forEach((file) => {
+        imagesRef.child(`${i}`).put(file).then((result) => {
+          console.log('get subido');
+        }).catch((error) => {
+          console.log('gg jg diff');
+          console.log(error);
+        });
+        i++;
+      });
+
       Swal.fire({
         title: '¡Negocio actualizado exitosamente!',
         icon: 'success',
@@ -163,7 +215,7 @@ const EditarNegocio = () => {
       });
     }).catch((error) => {
       console.log(error);
-    }); */
+    });
   }
 
   function mostrarMensaje() {
@@ -173,6 +225,61 @@ const EditarNegocio = () => {
       </div>
     )
   }
+
+  /* Estilo de los thumbnails */
+
+  const thumbnailsContainer = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: '1em'
+  }
+  
+  const thumbnail = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    width: 100,
+    height: 100,
+    padding: 4,
+    boxSizing: 'border-box'
+  };
+
+  const thumbnailInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden'
+  };
+
+  const img = {
+    display: 'block',
+    width: 'auto',
+    height: '100%'
+  };
+
+  const {getRootProps, getInputProps} = useDropzone({
+    accept: 'image/*',
+    onDrop: (acceptedFiles) => {
+      console.log(acceptedFiles);
+      setFiles(acceptedFiles.map((file) => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+    }
+  });
+
+  const thubmnails = files.map((file) => (
+    <div style={thumbnail} key={file.name}>
+      <div style={thumbnailInner}>
+        <img style={img} src={file.preview}/>
+      </div>
+    </div>
+  ));
+
+  useEffect(() => () => {
+    files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [files]);
 
   if (loading) {
     return null;
@@ -217,11 +324,20 @@ const EditarNegocio = () => {
                         <div className="card-body">
                           <div className="row">
                             <div className="col-12">
-                              {/* <form className="dropzone digits" id="singleFileUpload" action="/upload.php">
-                                                                <div className="dz-message needsclick"><i className="icon-cloud-up"></i>
-                                                                    <h6>Drop files here or click to upload.</h6><span className="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
-                                                                </div>
-                                                            </form> */}
+                              <section className="dropzone digits">
+                                <div {...getRootProps({className: 'dz-message needsClick'})}>
+                                  <input {...getInputProps()}/>
+                                  <i className="fas fa-cloud-upload-alt mb-1"></i>
+                                  <h6>Arrastre las imágenes del negocio</h6><span className="note needsClick">(Máximo <strong>5</strong> imágenes)</span>
+                                </div>
+                              </section>
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-12">
+                              <aside style={thumbnailsContainer}>
+                                {thubmnails}
+                              </aside>
                             </div>
                           </div>
                           <br />
@@ -333,7 +449,7 @@ const EditarNegocio = () => {
                               </div>
                               <input style={{ opacity: '0.0' }} id="palabrasClave" name="palabrasClave" type="text" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.palabrasClave} />
                             </div>
-                            <div className="col-md-3 col-lg-3 col-12">
+                            <div className="col-md-2 col-lg-2 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Horario de apertura</label>
                                 <div className="input-group clockpicker">
@@ -346,7 +462,7 @@ const EditarNegocio = () => {
                                 }
                               </div>
                             </div>
-                            <div className="col-md-3 col-lg-3 col-12">
+                            <div className="col-md-2 col-lg-2 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Horario de cierre</label>
                                 <div className="input-group clockpicker">
@@ -357,6 +473,18 @@ const EditarNegocio = () => {
                                     <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.horarioCierre}</div>
                                   ) : null
                                 }
+                              </div>
+                            </div>
+                            <div className="col-md-2 col-lg-2 col-12">
+                              <div className="form-group mb-3">
+                                <div className="media" style={{marginTop: '1.8rem'}}>
+                                  <label className="col-form-label m-r-10">Cliente</label>
+                                  <div className="media-body text-right">
+                                    <label className="switch">
+                                        <input id="cliente" name="cliente" defaultChecked={isCliente} type="checkbox" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.cliente}/><span className="switch-state"></span>
+                                    </label>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

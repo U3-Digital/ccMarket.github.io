@@ -4,9 +4,11 @@ import * as Yup from 'yup';
 import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
 import Swal from 'sweetalert2';
+import ProgressBar from '@ramonak/react-progress-bar';
 const EditarCategoria = () => {
     const [mensaje, setMensaje] = useState(null);
     const [loading, setloading] = useState(true);
+    const [muestraProgressBar , setMuestraProgressBar] = useState(null)
     const [changePhoto, setchangePhoto] = useState(false);
     const [categoriaActual, setcategoriaActual] = useState({ nombre: ''});
     const backendContext = useContext(BackEndContext);
@@ -17,6 +19,7 @@ const EditarCategoria = () => {
     const storageRef = firebase.storage().ref(`categorias/${idEdita}`);
 
     if (loading) {
+        setloading(false);
         db.get().then(async doc => {
             if (!doc.exists) {
                 console.log('No such document!');
@@ -33,7 +36,6 @@ const EditarCategoria = () => {
                 }
                 
                 setcategoriaActual(ObjCategoria);
-                setloading(false);
             }
         })
             .catch(err => {
@@ -52,15 +54,52 @@ const EditarCategoria = () => {
         await db.update({nombre:name});
 
         if(changePhoto){
-            await storageRef.put(image);
+            let uploadTask = storageRef.put(image);
+            // Register three observers:
+            // 1. 'state_changed' observer, called any time the state changes
+            // 2. Error observer, called on failure
+            // 3. Completion observer, called on successful completion
+            uploadTask.on('state_changed', function(snapshot){
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                setMuestraProgressBar(progress);
+                switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.log('Upload is running');
+                    break;
+                }
+            }, function(error) {
+                // Handle unsuccessful uploads
+            }, function() {
+                    setMuestraProgressBar(null);
+                    Swal.fire(
+                        'Actualizado!',
+                        'La categoría se actualizó con exito',
+                        'success'
+                    );
+                    cambioPantalla("ListaCategoria");
+            });
+        }else{
+            Swal.fire(
+                'Actualizado!',
+                'La categoría se actualizó con exito',
+                'success'
+            );
+            cambioPantalla("ListaCategoria");
         }
-        Swal.fire(
-            'Actualizado!',
-            'La categoría se actualizó con exito',
-            'success'
-        );
-        cambioPantalla("ListaCategoria");
+    }
 
+    const mostrarProgressBar = () =>{
+        return(
+          <div className="form-group mb-3">
+              <label className="form-label">Cargando imagen</label>
+              <ProgressBar bgcolor="#7366FF" completed={Math.floor(muestraProgressBar)}/>
+          </div>
+        )
     }
 
     const imageHandler = (e) => {
@@ -161,6 +200,7 @@ const EditarCategoria = () => {
                                             </div>
                                             </div>
                                             {mensaje && mostrarMensaje()}
+                                            {muestraProgressBar && mostrarProgressBar()}
                                             <div className="card-footer">
                                                 <div className="row justify-content-center">
                                                     <div className="col-md-4 col-lg-4 col-10">

@@ -1,14 +1,22 @@
 import React, { useState, useContext } from 'react';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
+import NuevaResena from './reviews/NuevaResena';
 const DetallesNegocio = () => {
   const busquedaContext = useContext(BusquedaContext);
   const { idDetalles } = busquedaContext;
   const [negocioActual, setNegocioActual] = useState({ nombreNegocio: '', direccionNegocio: '', nombreResponsable: '', numeroResponsable: '', emailResponsable: '', categorias: '', palabrasClave: '', horarioApertura: '', horarioCierre: '' });
   const [loading, setLoading] = useState(true);
+  const [userActual, setUserActual] = useState(false)
 
   const negocioQuery = firebase.firestore().collection('negocios').doc(idDetalles);
-
+  	firebase.auth().onAuthStateChanged(function (user) {
+		if(user){
+			setUserActual(true);
+		}else{
+			setUserActual(false);
+		}
+	})
   if (loading) {
     negocioQuery.get().then((document) => {
       if (!document.exists) {
@@ -776,62 +784,7 @@ const DetallesNegocio = () => {
 							<div className="card-header">
 								<h3 className="card-title">Rating And Reviews</h3>
 							</div>
-							<div className="card-body">
-								<div className="row">
-									<div className="col-md-12">
-										<div className="mb-4">
-											<p className="mb-2">
-												<span className="fs-14 ml-2">
-													<i className="fa fa-star text-yellow mr-2" />5
-												</span>
-											</p>
-											<div className="progress progress-md mb-4 h-4">
-												<div className="progress-bar bg-success w-100">9,232</div>
-											</div>
-										</div>
-										<div className="mb-4">
-											<p className="mb-2">
-												<span className="fs-14 ml-2">
-													<i className="fa fa-star text-yellow mr-2" />4
-												</span>
-											</p>
-											<div className="progress progress-md mb-4 h-4">
-												<div className="progress-bar bg-info w-80">8,125</div>
-											</div>
-										</div>
-										<div className="mb-4">
-											<p className="mb-2">
-												<span className="fs-14 ml-2">
-													<i className="fa fa-star text-yellow mr-2" /> 3
-												</span>
-											</p>
-											<div className="progress progress-md mb-4 h-4">
-												<div className="progress-bar bg-primary w-60">6,263</div>
-											</div>
-										</div>
-										<div className="mb-4">
-											<p className="mb-2">
-												<span className="fs-14 ml-2">
-													<i className="fa fa-star text-yellow mr-2" /> 2
-												</span>
-											</p>
-											<div className="progress progress-md mb-4 h-4">
-												<div className="progress-bar bg-secondary w-30">3,463</div>
-											</div>
-										</div>
-										<div className="mb-5">
-											<p className="mb-2">
-												<span className="fs-14 ml-2">
-													<i className="fa fa-star text-yellow mr-2" /> 1
-												</span>
-											</p>
-											<div className="progress progress-md mb-4 h-4">
-												<div className="progress-bar bg-orange w-20">1,456</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							
 							<div className="card-body p-0">
 								<div className="media mt-0 p-5">
 									<div className="d-flex mr-3">
@@ -967,42 +920,7 @@ const DetallesNegocio = () => {
 								</div>
 							</div>
 						</div>
-						<div className="card mb-lg-0">
-							<div className="card-header">
-								<h3 className="card-title">Leave a reply</h3>
-							</div>
-							<div className="card-body">
-								<div>
-									<div className="form-group">
-										<input
-											type="text"
-											className="form-control"
-											id="name1"
-											placeholder="Your Name"
-										/>
-									</div>
-									<div className="form-group">
-										<input
-											type="email"
-											className="form-control"
-											id="email"
-											placeholder="Email Address"
-										/>
-									</div>
-									<div className="form-group">
-										<textarea
-											className="form-control"
-											name="example-textarea-input"
-											rows="6"
-											placeholder="Comment"
-										/>
-									</div>
-									<a href="#" className="btn btn-primary">
-										Send Reply
-									</a>
-								</div>
-							</div>
-						</div>
+						{userActual ? (<NuevaResena key={idDetalles} id= {idDetalles}/>) : null}
 					</div>
 
 					<div className="col-xl-4 col-lg-4 col-md-12">

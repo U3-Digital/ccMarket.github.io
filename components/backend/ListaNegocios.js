@@ -13,7 +13,7 @@ const ListaNegocios = () => {
     const negociosFirestore = firebase.firestore().collection('negocios');
 
     if (loading) {
-        const cosa = negociosFirestore.orderBy('nombreNegocio').limit(4).get().then((snapshot) => {
+        const cosa = negociosFirestore.orderBy('nombreNegocio').limit(10).get().then((snapshot) => {
             if (snapshot.empty) {
                 console.log('No hay resultados para los negocios');
                 return;

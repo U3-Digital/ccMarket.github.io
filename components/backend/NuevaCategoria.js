@@ -57,8 +57,8 @@ const NuevaCategoria = () => {
                     formikNuevaCategoria.resetForm();
                     setMuestraProgressBar(null);
                     Swal.fire(
-                        'Eliminado!',
-                        'La categoría se eliminó con exito',
+                        'Agregada!',
+                        'La categoría se agregó con exito',
                         'success'
                     );
                     cambioPantalla("ListaCategoria");
@@ -83,14 +83,16 @@ const NuevaCategoria = () => {
     
       const mostrarProgressBar = () =>{
           return(
-              <div className="">
-                  <ProgressBar completed={muestraProgressBar}/>
-              </div>
+            <div className="form-group mb-3">
+                <label className="form-label">Cargando imagen</label>
+                <ProgressBar bgcolor="#7366FF" completed={Math.floor(muestraProgressBar)}/>
+            </div>
           )
       }
 
     const mostrarMensaje = () => {
         return (
+            
             <div className="alert alert-secondary mt-1 ml-5 mr-5 p-2 text-center" role="alert">
                 {mensaje}
             </div>

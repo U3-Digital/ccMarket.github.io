@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import Label from './Label';
 import firebase from '../firebase';
 import Categoria from '../Categoria';
+import Swal from 'sweetalert2';
 
 import Dropzone, { useDropzone } from 'react-dropzone';
 
@@ -81,7 +82,8 @@ const NuevoNegocio = () => {
             categorias: '',
             palabrasClave: '',
             horarioApertura: '',
-            horarioCierre: ''
+            horarioCierre: '',
+            cliente: false
         },
         validationSchema: Yup.object({
             nombreNegocio: Yup.string().required('El nombre es necesario'),
@@ -93,10 +95,11 @@ const NuevoNegocio = () => {
             palabrasClave: Yup.string().required('Introduzca al menos una palabra clave'),
             horarioApertura: Yup.string().required('El horario de apertura es necesario'),
             horarioCierre: Yup.string().required('El horario de cierre es necesario'),
+            cliente: Yup.boolean()
         }),
         onSubmit: async valores => {
-            const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre } = valores;
-
+            const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente } = valores;
+            console.log(valores);
             await database.add({
                 nombreNegocio,
                 direccionNegocio,
@@ -106,13 +109,15 @@ const NuevoNegocio = () => {
                 categorias,
                 palabrasClave,
                 horarioApertura,
-                horarioCierre
+                horarioCierre,
+                cliente,
+                noImagenes: files.length
             }, { merge: false }).then(async(result) => {
                 console.log(result.id);
                 let id = result.id
                 await realbd.child(result.id).set({
                     nombre: nombreNegocio,
-                    cliente: true,
+                    cliente,
                     direcicon: direccionNegocio,
                     categoria: categorias,
                     noValoraciones: 0,
@@ -141,10 +146,13 @@ const NuevoNegocio = () => {
 
                 setFiles([]);
 
-                setMensaje('Negocio agregado exitosamente');
-                setTimeout(() => {
-                    setMensaje(null);
-                }, 5000);
+                Swal.fire({
+                    title: '¡Negocio agregado exitosamente!',
+                    icon: 'success',
+                    iconColor: '#7366FF',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#7366FF'
+                });
 
             }).catch((error) => {
                 const errorCode = error.code;
@@ -299,20 +307,9 @@ const NuevoNegocio = () => {
                                             <div {...getRootProps({className: 'dz-message needsClick'})}>
                                               <input {...getInputProps()}/>
                                               <i className="fas fa-cloud-upload-alt mb-1"></i>
-                                              <h6>Arrastre las imágenes del negocio</h6><span className="note needsclick">(Máximo <strong>5</strong> imágenes.)</span>
+                                              <h6>Arrastre las imágenes del negocio</h6><span className="note needsclick">(Máximo <strong>5</strong> imágenes)</span>
                                             </div>
-                                            
                                           </section>
-
-                                              {/* {({ getRootProps, getInputProps }) => (
-                                                <section className="dropzone digits">
-                                                  <div className="dz-message needsClick" {...getRootProps()}>
-                                                    <input {...getInputProps()} />
-                                                    <i className="fas fa-cloud-upload-alt mb-1"></i>
-                                                    <h6>Arrastre las imágenes del negocio</h6><span className="note needsclick">(Máximo <strong>5</strong> imágenes.)</span>
-                                                  </div>
-                                                </section>
-                                              )} */}
                                         </div>
                                     </div>
                                     <div className="row">
@@ -434,7 +431,7 @@ const NuevoNegocio = () => {
                                             </div>
                                             <input style={{opacity: '0.0'}} id="palabrasClave" name="palabrasClave" type="text" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.palabrasClave}/>
                                         </div>
-                                        <div className="col-md-3 col-lg-3 col-12">
+                                        <div className="col-md-2 col-lg-2 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de apertura</label>
                                                 <div className="input-group clockpicker">
@@ -447,7 +444,7 @@ const NuevoNegocio = () => {
                                                 }
                                             </div>
                                         </div>
-                                        <div className="col-md-3 col-lg-3 col-12">
+                                        <div className="col-md-2 col-lg-2 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Horario de cierre</label>
                                                 <div className="input-group clockpicker">
@@ -458,6 +455,18 @@ const NuevoNegocio = () => {
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.horarioCierre}</div>
                                                     ) : null
                                                 }
+                                            </div>
+                                        </div>
+                                        <div className="col-md-2 col-lg-2 col-12">
+                                            <div className="form-group mb-3">
+                                                <div className="media" style={{marginTop: '1.8rem'}}>
+                                                    <label className="col-form-label m-r-10">Cliente</label>
+                                                    <div className="media-body text-right">
+                                                    <label className="switch">
+                                                        <input id="cliente" name="cliente" type="checkbox" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.cliente}/><span className="switch-state"></span>
+                                                    </label>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
