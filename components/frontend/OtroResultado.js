@@ -8,7 +8,7 @@ const OtroResultado = ({ negocio }) => {
     const storage = firebase.storage();
 
     if (!loadPhoto) {
-        const storageRef = storage.ref(`negocios/${id}/1.png`);
+        const storageRef = storage.ref(`negocios/${id}/1`);
         storageRef.getDownloadURL().then((url) =>{
           setImage(url);
         }).catch((error) => {
@@ -18,14 +18,14 @@ const OtroResultado = ({ negocio }) => {
     }
 
     return (
-        <div class="col-lg-4 col-md-12">
-            <div class="card card-aside">
-                <div class="card-body ">
-                    <div class="card-item d-flex">
-                        <img src={image} alt="img" class="w-8 h-8"/>
-                        <div class="ml-4">
-                            <h6 class="font-weight-bold mt-2">{nombre}</h6>
-                            <a >{categoria}</a>
+        <div className="col-lg-4 col-md-12">
+            <div className="card card-aside">
+                <div className="card-body ">
+                    <div className="card-item d-flex">
+                        <img src={image} alt="img" className="w-8 h-8"/>
+                        <div className="ml-4">
+                            <h6 className="font-weight-bold mt-2">{nombre}</h6>
+                            <a >{categoria.substring(0, categoria.length - 1)}</a>
                         </div>
                     </div>
                 </div>

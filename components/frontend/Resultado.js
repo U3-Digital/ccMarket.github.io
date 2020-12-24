@@ -11,10 +11,9 @@ const Resultado = ({ negocio }) => {
   const busquedaContext = useContext(BusquedaContext);
   const { detallesPantalla } = busquedaContext;
 
-  console.log(negocio);
 
   if (!loadPhoto) {
-    const storageRef = storage.ref(`negocios/${id}/1.png`);
+    const storageRef = storage.ref(`negocios/${id}/1`);
     storageRef.getDownloadURL().then((url) =>{
       setImage(url);
     }).catch((error) => {
@@ -48,7 +47,7 @@ const Resultado = ({ negocio }) => {
         </div>
         <div className="card-body">
           <div className="item-card9">
-            <a >{categoria}</a>
+            <a >{categoria.substring(0, categoria.length - 1)}</a>
             <a onClick={() => mostrarDetalles()} className="text-dark mt-2"><h4 className="font-weight-semibold mt-1">{nombre}</h4></a>
             <div className="item-card9-desc">
               <a className="mr-4"><span className=""><i className="fas fa-map-marker-alt text-muted mr-1"></i> {direccion}</span></a>

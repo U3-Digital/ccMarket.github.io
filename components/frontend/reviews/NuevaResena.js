@@ -3,47 +3,55 @@ import StarRatings from 'react-star-ratings';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import firebase from '../../firebase';
+import Swal from 'sweetalert2';
+
 const NuevaResena = (id) => {
     const [star, setStar] = useState(1)
     const [mensaje, setmensaje] = useState(null);
     const [usuario, setUsuario] = useState({displayName: '', email: ''})
+    const [nombre, setnombre] = useState('');
+    const [email, setEmail] = useState('');
+    const [image, setImage] = useState(null);
     const db = firebase.firestore().collection('comentarios');
-    firebase.auth().onAuthStateChanged(function (user) {
-		if(user){
-			setUsuario(user)
-		}
-	})
+
+	const database = firebase.firestore().collection('usuarios')
+    firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			if (user.providerData[0].providerId == "google.com") {
+				const { displayName,photoURL } = user;
+                setnombre(displayName);
+                setImage(photoURL);
+			} else {
+				const { uid } = user;
+				database.doc(uid).get().then((snapshot) => {
+					setnombre(snapshot.data().nombre);
+				});
+			}
+			setEmail(user.email);
+		} 
+	});
 
     const formikResena = useFormik({
         initialValues: {
-            nameUsuario: usuario.displayName,
-            correoUsuario: usuario.email,
             comentarioUsuario: '' 
         },
         validationSchema: Yup.object({
-            nameUsuario: Yup.string().required('El nombre es necesario'),
-            correoUsuario: Yup.string().email('Se necesita un correo valido').required('El correo es necesario'),
             comentarioUsuario: Yup.string().required('El comentario es necesario')
         }),
         onSubmit: async valores => {
-            const {nameUsuario,correoUsuario,comentarioUsuario} = valores
+            const {comentarioUsuario} = valores
             const res = await db.add({
-                negocio: id,
-                nombre: nameUsuario,
-                correo: correoUsuario,
+                negocio: id.id,
+                nombre: nombre,
+                correo: email,
                 comentario: comentarioUsuario,
-                estrellas: star
+                estrellas: star,
+                photo: image
             });
-            console.log('Added document with ID: ', res.id);
+            setStar(1)
+            formikResena.resetForm();
         }
     })
-
-    firebase.auth().onAuthStateChanged(function (user) {
-		if(user){
-            formikResena.values.nameUsuario = user.displayName;
-            formikResena.values.correoUsuario = user.email;
-		}
-	})
 
     const mostrarMensaje = () =>{
 		return(
@@ -66,46 +74,11 @@ const NuevaResena = (id) => {
                                 rating={star}
                                 starRatedColor="#7366FF"
                                 starHoverColor = "#EC296B"
-                                starDimension="30px"
+                                starDimension="30px" 
                                 changeRating={( newRating, name ) => setStar(newRating)}
                                 numberOfStars={5}
                                 name='rating'
                             />
-                        </div>
-                        <div className="form-group">
-                            <input
-                                type="text"
-                                className="form-control"
-                                id="nameUsuario"
-                                name="nameUsuario"
-                                placeholder="Nombre"
-                                onChange={formikResena.handleChange}
-                                onBlur={formikResena.handleBlur}
-                                value={formikResena.values.nameUsuario}
-                            />
-                            {formikResena.touched.nameUsuario && formikResena.errors.nameUsuario ? (
-                                <div className="alert alert-warning" role="alert">
-                                    {formikResena.errors.nameUsuario}
-                                </div>
-                            ) : null}
-                        </div>
-                        <div className="form-group">
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="correoUsuario"
-                                name="correoUsuario"
-                                placeholder="Correo electrónico"
-                                disabled
-                                onChange={formikResena.handleChange}
-                                onBlur={formikResena.handleBlur}
-                                value={formikResena.values.correoUsuario}
-                            />
-                            {formikResena.touched.correoUsuario && formikResena.errors.correoUsuario ? (
-                                <div className="alert alert-warning" role="alert">
-                                    {formikResena.errors.correoUsuario}
-                                </div>
-                            ) : null}
                         </div>
                         <div className="form-group">
                             <textarea

@@ -2,64 +2,133 @@ import React, { useState, useContext } from 'react';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
 import NuevaResena from './reviews/NuevaResena';
-const DetallesNegocio = () => {
-  const busquedaContext = useContext(BusquedaContext);
-  const { idDetalles } = busquedaContext;
-  const [negocioActual, setNegocioActual] = useState({ nombreNegocio: '', direccionNegocio: '', nombreResponsable: '', numeroResponsable: '', emailResponsable: '', categorias: '', palabrasClave: '', horarioApertura: '', horarioCierre: '' });
-  const [loading, setLoading] = useState(true);
-  const [userActual, setUserActual] = useState(false)
+import TablaReviews from './reviews/TablaReviews';
+import SliderDetalles from './sliderdetalles/SliderDetalles';
 
-  const negocioQuery = firebase.firestore().collection('negocios').doc(idDetalles);
-  	firebase.auth().onAuthStateChanged(function (user) {
-		if(user){
+import StarRatings from 'react-star-ratings'; 
+
+const DetallesNegocio = () => {
+	const busquedaContext = useContext(BusquedaContext);
+	const { idDetalles } = busquedaContext;
+	const [ negocioActual, setNegocioActual ] = useState({
+		nombreNegocio: '',
+		direccionNegocio: '',
+		nombreResponsable: '',
+		numeroResponsable: '',
+		emailResponsable: '',
+		categorias: '',
+		palabrasClave: '',
+		horarioApertura: '',
+		horarioCierre: ''
+	});
+	const [ loading, setLoading ] = useState(true);
+	const [ userActual, setUserActual ] = useState(false);
+	const [ imagenes, setImagenes ] = useState([]);
+	const [ imagenActual, setImagenActual] = useState('');
+	const [ imagesLoading, setImagesLoading ] = useState(true);
+
+	const imagesRef = firebase.storage().ref(`negocios/${idDetalles}`);
+
+	const negocioQuery = firebase.firestore().collection('negocios').doc(idDetalles);
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
 			setUserActual(true);
-		}else{
+		} else {
 			setUserActual(false);
 		}
-	})
-  if (loading) {
-    negocioQuery.get().then((document) => {
-      if (!document.exists) {
-        console.log('No existe el documento con el id especificado');
-      } else {
-        console.log(document.data());
-        const negocio = {
-          nombreNegocio: document.data().nombreNegocio,
-          direccionNegocio: document.data().direccionNegocio,
-          nombreResponsable: document.data().nombreResponsable,
-          numeroResponsable: document.data().numeroResponsable,
-          emailResponsable: document.data().emailResponsable,
-          categorias: document.data().categorias,
-          palabrasClave: document.data().palabrasClave,
-          horarioApertura: document.data().horarioApertura,
-          horarioCierre: document.data().horarioCierre
-        }
+	});
 
-        setNegocioActual(negocio);
-        setLoading(false);
-      }
+	if (loading) {
+		negocioQuery
+			.get()
+			.then((document) => {
+				if (!document.exists) {
+					console.log('No existe el documento con el id especificado');
+				} else {
+					const negocio = {
+						nombreNegocio: document.data().nombreNegocio,
+						direccionNegocio: document.data().direccionNegocio,
+						nombreResponsable: document.data().nombreResponsable,
+						numeroResponsable: document.data().numeroResponsable,
+						emailResponsable: document.data().emailResponsable,
+						categorias: document.data().categorias,
+						palabrasClave: document.data().palabrasClave,
+						horarioApertura: document.data().horarioApertura,
+						horarioCierre: document.data().horarioCierre,
+						noImagenes: document.data().noImagenes
+					};
 
-    }).catch((error) => {
-      console.log(error);
-    });
-  }
+					setNegocioActual(negocio);
+					setLoading(false);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+	
+	const tempImagenes = [];
 
-  if (loading) {
-    return (
-      <div className="row m-5">
-        <div className="col-12 text-center">
-          <div className="spinner-border text-primary"></div>
-        </div>
-      </div>
-    );
-  }
+	if (imagesLoading) {
+		setImagesLoading(false);
+		negocioQuery.get().then( async (document) => {
+			if (!document.exists) {
+				console.log('Algo salió tremendamente mal porque tiene que existir el negocio para llegar a este punto');
+			} else {
+				for (let i = 1; i < document.data().noImagenes + 1; i++) {
+					await imagesRef.child(`${i}`).getDownloadURL().then((url) => {
+						if (i === 1) {
+							setImagenActual(url);
+						}
+						tempImagenes.push(url);
+					}).catch((error) => {
+						console.log(error);
+					});
+					console.log('get descargado');
+				}
+				setImagenes(tempImagenes);
+			}
+		});
+	}
+
+	function previewImage(index) {
+		setImagenActual(imagenes[index]);
+	}
+	/* let i = 0;
+	const slideImages = imagenes.map((imagen) => {
+		if (i === 0) {
+			i++;
+			return (
+				<div key={i}>
+					<img src={imagen} alt="img" style={{height: '40vh'}}/>
+				</div>
+			);
+		} else {
+			i++;
+			return (
+				<div key={i}>
+					<img src={imagen} alt="img" style={{height: '40vh'}}/>
+				</div>
+			);
+		}
+	}); */
+
+	if (loading) {
+		return (
+			<div className="row m-5">
+				<div className="col-12 text-center">
+					<div className="spinner-border text-primary" />
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<section className="sptb">
 			<div className="container">
 				<div className="row">
 					<div className="col-xl-8 col-lg-8 col-md-12">
-						<div className="card overflow-hidden">	
+						<div className="card overflow-hidden">
 							<div className="card-body h-100">
 								<div className="item-det mb-4">
 									<a href="#" className="text-dark">
@@ -69,42 +138,28 @@ const DetallesNegocio = () => {
 										<ul className="d-flex mb-0">
 											<li className="mr-5">
 												<a href="#" className="icons">
-													<i className="icon icon-briefcase text-muted mr-1" /> {negocioActual.categorias.split('-')[0]}
+													<i className="icon icon-briefcase text-muted mr-1" />{' '}
+													{negocioActual.categorias.split('-')[0]}
 												</a>
 											</li>
 											<li className="mr-5">
 												<a href="#" className="icons">
-													<i className="icon icon-location-pin text-muted mr-1" /> {negocioActual.direccionNegocio}
+													<i className="icon icon-location-pin text-muted mr-1" />{' '}
+													{negocioActual.direccionNegocio}
 												</a>
 											</li>
 										</ul>
 										<div className="rating-stars d-flex mr-5">
-											<input
-												type="number"
-												readOnly
-												className="rating-value star"
-												name="rating-stars-value"
-												id="rating-stars-value"
-												value="4"
+											<StarRatings
+												rating={2.35}
+												starRatedColor="brown"
+												numberOfStars={5}
+												starSpacing ={1}
+												name='rating'
+												starDimension="15px"
+												style={{marginTop: '-40px !important'}}
 											/>
-											<div className="rating-stars-container mr-2">
-												<div className="rating-star sm">
-													<i className="fa fa-star" />
-												</div>
-												<div className="rating-star sm">
-													<i className="fa fa-star" />
-												</div>
-												<div className="rating-star sm">
-													<i className="fa fa-star" />
-												</div>
-												<div className="rating-star sm">
-													<i className="fa fa-star" />
-												</div>
-												<div className="rating-star sm">
-													<i className="fa fa-star" />
-												</div>
-											</div>
-											4.0
+											2.35
 										</div>
 										<div className="rating-stars d-flex">
 											<div className="rating-stars-container mr-2">
@@ -116,113 +171,18 @@ const DetallesNegocio = () => {
 										</div>
 									</div>
 								</div>
-								<div className="product-slider">
-									<div id="carousel" className="carousel slide" data-ride="carousel">
-										<div className="arrow-ribbon2 bg-primary">$539</div>
-										<div className="carousel-inner">
-											<div className="carousel-item active">
-												<img src="img/products/products/v1.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v2.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v3.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v4.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v1.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v1.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v2.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v3.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v4.jpg" alt="img" />
-											</div>
-											<div className="carousel-item">
-												<img src="img/products/products/v1.jpg" alt="img" />
-											</div>
+								<div>
+									<div>
+										<div className="text-center">
+											<img src={imagenActual} style={{height: '40vh'}}/>
 										</div>
-										<a
-											className="carousel-control-prev"
-											href="#carousel"
-											role="button"
-											data-slide="prev"
-										>
-											<i className="fa fa-angle-left" aria-hidden="true" />
-										</a>
-										<a
-											className="carousel-control-next"
-											href="#carousel"
-											role="button"
-											data-slide="next"
-										>
-											<i className="fa fa-angle-right" aria-hidden="true" />
-										</a>
 									</div>
 									<div className="clearfix">
-										<div id="thumbcarousel" className="carousel slide" data-interval="false">
-											<div className="carousel-inner">
-												<div className="carousel-item active">
-													<div data-target="#carousel" data-slide-to="0" className="thumb">
-														<img src="img/products/v1.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="1" className="thumb">
-														<img src="img/products/v2.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="2" className="thumb">
-														<img src="img/products/v3.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="3" className="thumb">
-														<img src="img/products/v4.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="4" className="thumb">
-														<img src="img/products/v1.png" alt="img" />
-													</div>
-												</div>
-												<div className="carousel-item ">
-													<div data-target="#carousel" data-slide-to="0" className="thumb">
-														<img src="img/products/v1.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="1" className="thumb">
-														<img src="img/products/v2.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="2" className="thumb">
-														<img src="img/products/v3.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="3" className="thumb">
-														<img src="img/products/v4.png" alt="img" />
-													</div>
-													<div data-target="#carousel" data-slide-to="4" className="thumb">
-														<img src="img/products/v1.png" alt="img" />
-													</div>
-												</div>
-											</div>
-											<a
-												className="carousel-control-prev"
-												href="#thumbcarousel"
-												role="button"
-												data-slide="prev"
-											>
-												<i className="fa fa-angle-left" aria-hidden="true" />
-											</a>
-											<a
-												className="carousel-control-next"
-												href="#thumbcarousel"
-												role="button"
-												data-slide="next"
-											>
-												<i className="fa fa-angle-right" aria-hidden="true" />
-											</a>
-										</div>
+										<br/>
+										<br/>
+										<SliderDetalles
+											images={imagenes}
+											click={previewImage}/>
 									</div>
 								</div>
 							</div>
@@ -334,593 +294,10 @@ const DetallesNegocio = () => {
 								</div>
 							</div>
 						</div>
-						<h3 className="mb-5 mt-4">Related Posts</h3>
-						<div id="myCarousel5" className="owl-carousel owl-carousel-icons3">
-							<div className="item">
-								<div className="card">
-									<div className="ribbon ribbon-top-left text-danger">
-										<span className="bg-danger">Negotiable</span>
-									</div>
-									<div className="item-card7-imgs">
-										<a href="classified.html" />
-										<img src="img/products/products/ed1.jpg" alt="img" className="cover-image" />
-									</div>
-									<div className="item-card7-overlaytext">
-										<a href="classified.html" className="text-white">
-											Education
-										</a>
-										<h4 className="font-weight-semibold mb-0">$389</h4>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Record Writing</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="ribbon ribbon-top-left text-primary">
-										<span className="bg-primary">featured</span>
-									</div>
-									<div className="item-card7-imgs">
-										<a href="classified.html" />
-										<img src="img/products/products/v1.jpg" alt="img" className="cover-image" />
-									</div>
-									<div className="item-card7-overlaytext">
-										<a href="classified.html" className="text-white">
-											Cars
-										</a>
-										<h4 className=" mb-0">$854</h4>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Geep Automobiles</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/j1.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Furniture
-											</a>
-											<h4 className="font-weight-semibold mb-0">$786</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Marketing Executive</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="ribbon ribbon-top-left text-danger">
-										<span className="bg-danger">Collection</span>
-									</div>
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/f4.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Restaurant
-											</a>
-											<h4 className="font-weight-semibold mb-0">$539</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="rclassified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Houge Restaurant</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/pe1.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Pets & Animals
-											</a>
-											<h4 className="font-weight-semibold mb-0">$925</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Care Brohzm</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="ribbon ribbon-top-left text-success">
-										<span className="bg-success">Free Shipping</span>
-									</div>
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/h5.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Homes
-											</a>
-											<h4 className="font-weight-semibold mb-0">$925</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold"> Single Flat House</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/ed2.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Education
-											</a>
-											<h4 className="font-weight-semibold mb-0">$378</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Digital Marketing Training </h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div className="item">
-								<div className="card">
-									<div className="ribbon ribbon-top-left text-primary">
-										<span className="bg-primary">featured</span>
-									</div>
-									<div className="item-card7-img">
-										<div className="item-card7-imgs">
-											<a href="classified.html" />
-											<img
-												src="img/products/products/j3.jpg"
-												alt="img"
-												className="cover-image"
-											/>
-										</div>
-										<div className="item-card7-overlaytext">
-											<a href="classified.html" className="text-white">
-												Spa
-											</a>
-											<h4 className="font-weight-semibold mb-0">$836</h4>
-										</div>
-									</div>
-									<div className="card-body">
-										<div className="item-card7-desc">
-											<a href="classified.html" className="text-dark">
-												<h4 className="font-weight-semibold">Designers</h4>
-											</a>
-										</div>
-										<div className="item-card7-text">
-											<ul className="icon-card mb-0">
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-location-pin text-muted mr-1" /> Los
-														Angles
-													</a>
-												</li>
-												<li>
-													<a href="#" className="icons">
-														<i className="icon icon-event text-muted mr-1" /> 5 hours ago
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-user text-muted mr-1" /> Sally Peake
-													</a>
-												</li>
-												<li className="mb-0">
-													<a href="#" className="icons">
-														<i className="icon icon-phone text-muted mr-1" /> 5-67987608
-													</a>
-												</li>
-											</ul>
-											<p className="mb-0">
-												Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div className="card">
-							<div className="card-header">
-								<h3 className="card-title">Rating And Reviews</h3>
-							</div>
-							
-							<div className="card-body p-0">
-								<div className="media mt-0 p-5">
-									<div className="d-flex mr-3">
-										<a href="#">
-											<img
-												className="media-object brround"
-												alt="64x64"
-												src="img/faces/male/1.jpg"
-											/>
-										</a>
-									</div>
-									<div className="media-body">
-										<h5 className="mt-0 mb-1 font-weight-semibold">
-											Joanne Scott
-											<span
-												className="fs-14 ml-0"
-												data-toggle="tooltip"
-												data-placement="top"
-												title="verified"
-											>
-												<i className="fa fa-check-circle-o text-success" />
-											</span>
-											<span className="fs-14 ml-2">
-												4.5 <i className="fa fa-star text-yellow" />
-											</span>
-										</h5>
-										<small className="text-muted">
-											<i className="fa fa-calendar" /> Dec 21st{' '}
-											<i className=" ml-3 fa fa-clock-o" />
-											13.00 <i className=" ml-3 fa fa-map-marker" /> Brezil
-										</small>
-										<p className="font-13  mb-2 mt-2">
-											Ut enim ad minim veniam, quis Neque porro quisquam est, qui dolorem ipsum
-											quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
-											modi tempora incidunt ut labore et nostrud exercitation ullamco laboris
-											commodo consequat.
-										</p>
-										<a href="#" className="mr-2">
-											<span className="badge badge-primary">Helpful</span>
-										</a>
-										<a href="" className="mr-2" data-toggle="modal" data-target="#Comment">
-											<span>Comment</span>
-										</a>
-										<a href="" className="mr-2" data-toggle="modal" data-target="#report">
-											<span>Report</span>
-										</a>
-										<div className="media mt-5">
-											<div className="d-flex mr-3">
-												<a href="#">
-													<img
-														className="media-object brround"
-														alt="64x64"
-														src="img/faces/female/2.jpg"
-													/>
-												</a>
-											</div>
-											<div className="media-body">
-												<h5 className="mt-0 mb-1 font-weight-semibold">
-													Rose Slater
-													<span
-														className="fs-14 ml-0"
-														data-toggle="tooltip"
-														data-placement="top"
-														title="verified"
-													>
-														<i className="fa fa-check-circle-o text-success" />
-													</span>
-												</h5>
-												<small className="text-muted">
-													<i className="fa fa-calendar" /> Dec 22st
-													<i className=" ml-3 fa fa-clock-o" /> 6.00
-													<i className=" ml-3 fa fa-map-marker" /> Brezil
-												</small>
-												<p className="font-13  mb-2 mt-2">
-													Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-													commodo Ut enim ad minima veniam, quis nostrum exercitationem ullam
-													corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-													consequatur consequat.
-												</p>
-												<a href="" data-toggle="modal" data-target="#Comment">
-													<span className="badge badge-default">Comment</span>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className="media p-5 border-top mt-0">
-									<div className="d-flex mr-3">
-										<a href="#">
-											<img
-												className="media-object brround"
-												alt="64x64"
-												src="img/faces/male/3.jpg"
-											/>
-										</a>
-									</div>
-									<div className="media-body">
-										<h5 className="mt-0 mb-1 font-weight-semibold">
-											Edward
-											<span
-												className="fs-14 ml-0"
-												data-toggle="tooltip"
-												data-placement="top"
-												title="verified"
-											>
-												<i className="fa fa-check-circle-o text-success" />
-											</span>
-											<span className="fs-14 ml-2">
-												4 <i className="fa fa-star text-yellow" />
-											</span>
-										</h5>
-										<small className="text-muted">
-											<i className="fa fa-calendar" /> Dec 21st{' '}
-											<i className=" ml-3 fa fa-clock-o" />
-											16.35 <i className=" ml-3 fa fa-map-marker" /> UK
-										</small>
-										<p className="font-13  mb-2 mt-2">
-											Ut enim ad minim veniam, quis Neque porro quisquam est, qui dolorem ipsum
-											quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius
-											modi tempora incidunt ut labore et nostrud exercitation ullamco laboris
-											commodo consequat.
-										</p>
-										<a href="#" className="mr-2">
-											<span className="badge badge-primary">Helpful</span>
-										</a>
-										<a href="" className="mr-2" data-toggle="modal" data-target="#Comment">
-											<span>Comment</span>
-										</a>
-										<a href="" className="mr-2" data-toggle="modal" data-target="#report">
-											<span>Report</span>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						{userActual ? (<NuevaResena key={idDetalles} id= {idDetalles}/>) : null}
+						<h3 className="mb-5 mt-4">Reseñas</h3>
+						
+						<TablaReviews id={idDetalles}/>
+						{userActual ? <NuevaResena key={idDetalles} id={idDetalles} /> : null}
 					</div>
 
 					<div className="col-xl-4 col-lg-4 col-md-12">
@@ -976,15 +353,15 @@ const DetallesNegocio = () => {
 									<a href="#" className="facebook-bg mt-0">
 										<i className="fab fa-facebook-f" />
 									</a>
-                  {'  '}
+									{'  '}
 									<a href="#" className="twitter-bg">
 										<i className="fab fa-twitter" />
 									</a>
-                  {'  '}
+									{'  '}
 									<a href="#" className="google-bg">
 										<i className="fab fa-google" />
 									</a>
-                  {'  '}
+									{'  '}
 									<a href="#" className="dribbble-bg">
 										<i className="fab fa-dribbble" />
 									</a>
@@ -1110,11 +487,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/1.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/1.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Best New Model Watch</h5>
@@ -1130,11 +503,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/2.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/2.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Trending New Model Watches</h5>
@@ -1150,11 +519,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/3.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/3.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Best New Model Watch</h5>
@@ -1170,11 +535,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/4.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/4.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Trending New Model Watches</h5>
@@ -1190,11 +551,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/5.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/5.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Best New Model Watch</h5>
@@ -1210,11 +567,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/6.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/6.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Best New Model Shoes</h5>
@@ -1230,11 +583,7 @@ const DetallesNegocio = () => {
 										<table>
 											<tr>
 												<td>
-													<img
-														src="img/products/7.png"
-														alt="image"
-														className="w-8 border"
-													/>
+													<img src="img/products/7.png" alt="image" className="w-8 border" />
 												</td>
 												<td>
 													<h5 className="mb-1 ">Trending New Model Shoes</h5>
