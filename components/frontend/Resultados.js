@@ -16,13 +16,53 @@ const Resultados = () => {
   useEffect(() => {
     if (status === false) {
       setLoading(true);
-      negocios.filter((doc) => doc.nombre.toLowerCase().includes(nombre.toLowerCase())).map((filteredName) => {
+
+      negocios.filter((negocio) => {
+        if (negocio.nombre.toLowerCase().includes(nombre.toLowerCase())) {
+          return negocio;
+        }
+
+        else if (negocio.categoria) {
+          if (negocio.categoria.toLowerCase().includes(nombre.toLowerCase())) {
+            return negocio;
+          }
+        }
+
+      }).map((negocioFiltrado) => {
+          if (negocioFiltrado.cliente) {
+            tempNegocios.push(negocioFiltrado);
+          } else {
+            tempNegociosnoCliente.push(negocioFiltrado);
+          }
+      });
+
+
+/* .map((negocioFiltrado) => {
+          if (negocioFiltrado.cliente) {
+            tempNegocios.push(negocioFiltrado);
+          } else {
+            tempNegociosnoCliente.push(negocioFiltrado);
+          }
+        });
+        
+        negocio.categoria.toLowerCase().includes(categoria.toLowerCase()).map((negocioFiltrado) => {
+          if (negocioFiltrado.cliente) {
+            tempNegocios.push(negocioFiltrado);
+          } else {
+            tempNegociosnoCliente.push(negocioFiltrado);
+          }
+        });
+        
+        */
+
+      /* negocios.filter((doc) => doc.nombre.toLowerCase().includes(nombre.toLowerCase())).map((filteredName) => {
         if (filteredName.cliente){
           tempNegocios.push(filteredName);
         }else{
           tempNegociosnoCliente.push(filteredName);
         }
-      });
+      }); */
+
       tempNegociosnoCliente.map((negocio) => {
         tempNegocios.push(negocio);
       })

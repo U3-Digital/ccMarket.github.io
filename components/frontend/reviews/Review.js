@@ -27,7 +27,7 @@ const Review = ({comentario}) => {
                     <span className="fs-14 ml-2">
                         <StarRatings
                             rating={estrellas}
-                            starRatedColor="yellow"
+                            starRatedColor="#FFA22B"
                             numberOfStars={5}
                             starSpacing ={2}
                             name='rating'

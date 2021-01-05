@@ -24,10 +24,13 @@ const EditarNegocio = () => {
   const [imagesLoading, setImagesLoading] = useState(true);
   const [files, setFiles] = useState([]);
 
+  const realbd = firebase.database().ref('negocios2');
   const negocioQuery = firebase.firestore().collection('negocios').doc(idEdita);
 
   const imagesRef = firebase.storage().ref(`negocios/${idEdita}`);
   const [noImagenes, setNoImagenes] = useState(0);
+
+  const [imagesChanged, setImagesChanged] = useState(false);
   
   const tempImages = [];
 
@@ -128,6 +131,7 @@ const EditarNegocio = () => {
   const schemaValidation = Yup.object({
     nombreNegocio: Yup.string().required('El nombre es necesario'),
     direccionNegocio: Yup.string().required('La dirección es necesaria'),
+    telefonoNegocio: Yup.string().required('El número del negocio es necesario'),
     nombreResponsable: Yup.string().required('El nombre del responsable es necesario'),
     numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono es necesario'),
     emailResponsable: Yup.string().email('El correo no es válido').required('El correo es necesario'),
@@ -135,7 +139,8 @@ const EditarNegocio = () => {
     palabrasClave: Yup.string().required('Introduzca al menos una palabra clave'),
     horarioApertura: Yup.string().required('El horario de apertura es necesario'),
     horarioCierre: Yup.string().required('El horario de cierre es necesario'),
-    cliente: Yup.boolean()
+    cliente: Yup.boolean(),
+    descripcionNegocio: Yup.string().required('La descripción es necesaria')
   });
 
   if (loading) {
@@ -146,6 +151,7 @@ const EditarNegocio = () => {
         const negocioObj = {
           nombreNegocio: document.data().nombreNegocio,
           direccionNegocio: document.data().direccionNegocio,
+          telefonoNegocio: document.data().telefonoNegocio,
           nombreResponsable: document.data().nombreResponsable,
           numeroResponsable: document.data().numeroResponsable,
           emailResponsable: document.data().emailResponsable,
@@ -153,7 +159,8 @@ const EditarNegocio = () => {
           palabrasClave: document.data().palabrasClave,
           horarioApertura: document.data().horarioApertura,
           horarioCierre: document.data().horarioCierre,
-          cliente: document.data().cliente
+          cliente: document.data().cliente,
+          descripcionNegocio: document.data().descripcionNegocio
         };
 
         tempCategorias = document.data().categorias.split('-').filter((element) => element != ''.trim());
@@ -176,10 +183,11 @@ const EditarNegocio = () => {
   }
 
   function actualizarInfoNegocio(valores) {
-    const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente } = valores;
+    const { nombreNegocio, direccionNegocio, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcionNegocio } = valores;
     negocioQuery.set({
       nombreNegocio,
       direccionNegocio,
+      telefonoNegocio,
       nombreResponsable,
       numeroResponsable,
       emailResponsable,
@@ -188,21 +196,34 @@ const EditarNegocio = () => {
       horarioApertura,
       horarioCierre,
       cliente,
+      descripcionNegocio,
       noImagenes: files.length
     }, { merge: false }).then( async (result) => {
-      for (let i = 1; i < noImagenes + 1; i++) {
-        await imagesRef.child(`${i}`).delete();
-      }
-      let i = 1;
-      files.forEach((file) => {
-        imagesRef.child(`${i}`).put(file).then((result) => {
-          console.log('get subido');
-        }).catch((error) => {
-          console.log('gg jg diff');
-          console.log(error);
+      await realbd.child(result.id).set({
+          nombre: nombreNegocio,
+          cliente,
+          direccion: direccionNegocio,
+          categoria: categorias,
+          noValoraciones: 0,
+          telefono: telefonoNegocio,
+          ubicacion: "corredor",
+          valoracion: 5.0
+      })
+      if (imagesChanged) {
+        for (let i = 1; i < noImagenes + 1; i++) {
+          await imagesRef.child(`${i}`).delete();
+        }
+        let i = 1;
+        files.forEach((file) => {
+          imagesRef.child(`${i}`).put(file).then((result) => {
+            console.log('get subido');
+          }).catch((error) => {
+            console.log('gg jg diff');
+            console.log(error);
+          });
+          i++;
         });
-        i++;
-      });
+      }
 
       Swal.fire({
         title: '¡Negocio actualizado exitosamente!',
@@ -262,6 +283,7 @@ const EditarNegocio = () => {
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
+      setImagesChanged(true);
       console.log(acceptedFiles);
       setFiles(acceptedFiles.map((file) => Object.assign(file, {
         preview: URL.createObjectURL(file)
@@ -342,7 +364,7 @@ const EditarNegocio = () => {
                           </div>
                           <br />
                           <div className="row">
-                            <div className="col-md-6 col-lg-6 col-12">
+                            <div className="col-md-4 col-lg-4 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Nombre del negocio</label>
                                 <input id="nombreNegocio" name="nombreNegocio" className="form-control" type="text" placeholder="Frutería Juan" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.nombreNegocio} />
@@ -353,7 +375,7 @@ const EditarNegocio = () => {
                                 }
                               </div>
                             </div>
-                            <div className="col-md-6 col-lg-6 col-12">
+                            <div className="col-md-4 col-lg-4 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Dirección del negocio</label>
                                 <input id="direccionNegocio" name="direccionNegocio" className="form-control" type="text" placeholder="Calle ejemplo #123" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.direccionNegocio} />
@@ -362,6 +384,17 @@ const EditarNegocio = () => {
                                     <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.direccionNegocio}</div>
                                   ) : null
                                 }
+                              </div>
+                            </div>
+                            <div className="col-md-4 col-lg-4 col-12">
+                              <div className="form-group mb-3">
+                                <label className="form-label">Teléfono del negocio</label>
+                                <input id="telefonoNegocio" name="telefonoNegocio" className="form-control" type="text" placeholder="6251231234" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.telefonoNegocio} />
+                              {
+                                props.touched.telefonoNegocio && props.errors.telefonoNegocio ? (
+                                  <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.telefonoNegocio}</div>
+                                ) : null
+                              }
                               </div>
                             </div>
                           </div>
@@ -486,6 +519,17 @@ const EditarNegocio = () => {
                                   </div>
                                 </div>
                               </div>
+                            </div>
+                          </div>
+                          <div className="row justify-content-center">
+                            <div className="col-md-8 col-lg-8 col-12">
+                              <label className="form-label">Descripción</label>
+                              <textarea id="descripcionNegocio" name="descripcionNegocio" className="form-control" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.descripcionNegocio}></textarea>
+                              {
+                                props.touched.descripcionNegocio && props.errors.descripcionNegocio ? (
+                                  <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.descripcionNegocio}</div>
+                                ) : null
+                              }
                             </div>
                           </div>
                           {mensaje && mostrarMensaje()}

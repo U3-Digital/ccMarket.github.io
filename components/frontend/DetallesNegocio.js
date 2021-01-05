@@ -19,7 +19,8 @@ const DetallesNegocio = () => {
 		categorias: '',
 		palabrasClave: '',
 		horarioApertura: '',
-		horarioCierre: ''
+		horarioCierre: '',
+		descripcionNegocio: ''
 	});
 	const [ loading, setLoading ] = useState(true);
 	const [ userActual, setUserActual ] = useState(false);
@@ -55,7 +56,9 @@ const DetallesNegocio = () => {
 						palabrasClave: document.data().palabrasClave,
 						horarioApertura: document.data().horarioApertura,
 						horarioCierre: document.data().horarioCierre,
-						noImagenes: document.data().noImagenes
+						noImagenes: document.data().noImagenes,
+						telefonoNegocio: document.data().telefonoNegocio,
+						descripcionNegocio: document.data().descripcionNegocio
 					};
 
 					setNegocioActual(negocio);
@@ -150,24 +153,22 @@ const DetallesNegocio = () => {
 											</li>
 										</ul>
 										<div className="rating-stars d-flex mr-5">
-											<StarRatings
-												rating={2.35}
-												starRatedColor="brown"
-												numberOfStars={5}
-												starSpacing ={1}
-												name='rating'
-												starDimension="15px"
-												style={{marginTop: '-40px !important'}}
-											/>
+											<div className="rating-stars-container mr-2">
+												<div className="rating-star sm">
+													<i className="fas fa-star"/>
+												</div>
+											</div>
 											2.35
 										</div>
 										<div className="rating-stars d-flex">
 											<div className="rating-stars-container mr-2">
 												<div className="rating-star sm">
-													<i className="fa fa-heart" />
+													<i className="fas fa-phone"/>
 												</div>
 											</div>
-											135
+											<a href={`tel:${negocioActual.telefonoNegocio}`}>
+												{negocioActual.telefonoNegocio}
+											</a>
 										</div>
 									</div>
 								</div>
@@ -189,83 +190,13 @@ const DetallesNegocio = () => {
 						</div>
 						<div className="card">
 							<div className="card-header">
-								<h3 className="card-title">Description</h3>
+								<h3 className="card-title">Descripción</h3>
 							</div>
 							<div className="card-body">
 								<div className="mb-4">
-									<p>
-										At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
-										praesentium voluptatum deleniti atcorrupti quos dolores et quas molestias
-										excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-										officia deserunt mollitia animi, id est laborum et dolorum fuga.
-									</p>
-									<p>
-										On the other hand, we denounce with righteous indignation and dislike men who
-										are so beguiled and demoraliz the charms of pleasure of the moment, so blinded
-										by desire, that they cannot foresee the pain and trouble thena bound to ensue;
-										and equal blame belongs to those who fail in their duty through weakness of
-										will, which is the same as saying through shrinking from toil and pain.
-									</p>
+									{negocioActual.descripcionNegocio}
 								</div>
-								<h4 className="mb-4">Specifications</h4>
-								<div className="row">
-									<div className="col-xl-12 col-md-12">
-										<div className="table-responsive">
-											<table className="table row table-borderless w-100 m-0 text-nowrap ">
-												<tbody className="col-lg-12 col-xl-6 p-0">
-													<tr>
-														<td>
-															<span className="font-weight-bold">Fuel Type :</span> Diesel
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Breaks :</span> Front ,
-															Rear
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Seating :</span> 5
-															members
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Colors :</span> Red ,
-															pink, Gray
-														</td>
-													</tr>
-												</tbody>
-												<tbody className="col-lg-12 col-xl-6 p-0">
-													<tr>
-														<td>
-															<span className="font-weight-bold">Air Bags :</span>{' '}
-															Available
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Colors :</span> Red ,
-															pink, Gray
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Engine :</span> F8D
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<span className="font-weight-bold">Power Windows :</span>
-															Available
-														</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
+								
 							</div>
 							<div className="pt-4 pb-4 pl-5 pr-5 border-top border-top">
 								<div className="list-id">

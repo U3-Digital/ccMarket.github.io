@@ -76,6 +76,7 @@ const NuevoNegocio = () => {
         initialValues: {
             nombreNegocio: '',
             direccionNegocio: '',
+            telefonoNegocio: '',
             nombreResponsable: '',
             numeroResponsable: '',
             emailResponsable: '',
@@ -83,26 +84,30 @@ const NuevoNegocio = () => {
             palabrasClave: '',
             horarioApertura: '',
             horarioCierre: '',
-            cliente: false
+            cliente: false,
+            descripcionNegocio: ''
         },
         validationSchema: Yup.object({
             nombreNegocio: Yup.string().required('El nombre es necesario'),
             direccionNegocio: Yup.string().required('La dirección es necesaria'),
+            telefonoNegocio: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono del negocio es necesario'),
             nombreResponsable: Yup.string().required('El nombre del responsable es necesario'),
-            numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono es necesario'),
+            numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono del responsable es necesario'),
             emailResponsable: Yup.string().email('El correo no es válido').required('El correo es necesario'),
             categorias: Yup.string().required('Seleccione al menos una categoría'),
             palabrasClave: Yup.string().required('Introduzca al menos una palabra clave'),
             horarioApertura: Yup.string().required('El horario de apertura es necesario'),
             horarioCierre: Yup.string().required('El horario de cierre es necesario'),
-            cliente: Yup.boolean()
+            cliente: Yup.boolean(),
+            descripcionNegocio: Yup.string().required('La descripción es necesaria')
         }),
         onSubmit: async valores => {
-            const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente } = valores;
+            const { nombreNegocio, direccionNegocio, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcionNegocio } = valores;
             console.log(valores);
             await database.add({
                 nombreNegocio,
                 direccionNegocio,
+                telefonoNegocio,
                 nombreResponsable,
                 numeroResponsable,
                 emailResponsable,
@@ -111,16 +116,18 @@ const NuevoNegocio = () => {
                 horarioApertura,
                 horarioCierre,
                 cliente,
+                descripcionNegocio,
                 noImagenes: files.length
             }, { merge: false }).then(async(result) => {
                 console.log(result.id);
-                let id = result.id
+                const id = result.id;
                 await realbd.child(result.id).set({
                     nombre: nombreNegocio,
                     cliente,
-                    direcicon: direccionNegocio,
+                    direccion: direccionNegocio,
                     categoria: categorias,
                     noValoraciones: 0,
+                    telefono: telefonoNegocio,
                     ubicacion: "corredor",
                     valoracion: 5.0
                 })
@@ -321,7 +328,7 @@ const NuevoNegocio = () => {
                                     </div>
                                     <br/>
                                     <div className="row">
-                                        <div className="col-md-6 col-lg-6 col-12">
+                                        <div className="col-md-4 col-lg-4 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Nombre del negocio</label>
                                                 <input id="nombreNegocio" name="nombreNegocio" className="form-control" type="text" placeholder="Frutería Juan" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.nombreNegocio}/>
@@ -332,13 +339,24 @@ const NuevoNegocio = () => {
                                                 }
                                             </div>
                                         </div>
-                                        <div className="col-md-6 col-lg-6 col-12">
+                                        <div className="col-md-4 col-lg-4 col-12">
                                             <div className="form-group mb-3">
                                                 <label className="form-label">Dirección del negocio</label>
                                                 <input id="direccionNegocio" name="direccionNegocio" className="form-control" type="text" placeholder="Calle ejemplo #123" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.direccionNegocio}/>
                                                 {
                                                     formikNuevoNegocio.touched.direccionNegocio && formikNuevoNegocio.errors.direccionNegocio ? (
                                                         <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.direccionNegocio}</div>
+                                                    ) : null
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4 col-lg-4 col-12">
+                                            <div className="form-group mb-3">
+                                                <label className="form-label">Teléfono del negocio</label>
+                                                <input id="telefonoNegocio" name="telefonoNegocio" className="form-control" type="text" placeholder="6251231234" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.telefonoNegocio}/>
+                                                {
+                                                    formikNuevoNegocio.touched.telefonoNegocio && formikNuevoNegocio.errors.telefonoNegocio ? (
+                                                        <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.telefonoNegocio}</div>
                                                     ) : null
                                                 }
                                             </div>
@@ -468,6 +486,19 @@ const NuevoNegocio = () => {
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className="row justify-content-center">
+                                        <div className="col-md-8 col-lg-8 col-12">
+                                            <div className="form-group mb-3">
+                                                <label className="form-label">Descripción</label>
+                                                <textarea id="descripcionNegocio" name="descripcionNegocio" className="form-control" onChange={formikNuevoNegocio.handleChange} onBlur={formikNuevoNegocio.handleBlur} value={formikNuevoNegocio.values.descripcionNegocio}></textarea>
+                                            </div>
+                                            {
+                                                formikNuevoNegocio.touched.descripcionNegocio && formikNuevoNegocio.errors.descripcionNegocio ? (
+                                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{formikNuevoNegocio.errors.descripcionNegocio}</div>
+                                                ) : null
+                                            }
                                         </div>
                                     </div>
                                     {mensaje && mostrarMensaje()}
