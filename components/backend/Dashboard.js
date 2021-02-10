@@ -1,7 +1,20 @@
 import React from 'react';
 import dashboard from '../../pages/controlPanel/dashboard';
+import {gql, useQuery} from '@apollo/client';
 
+const OBTENER_NEGOCIOS = gql`
+  query obtenerCategorias{
+    obtenerCategorias{
+      id
+      categoria
+    }
+  }
+`;
 const Dashboard = () => {
+
+    const {data,loading,error} = useQuery(OBTENER_NEGOCIOS);
+    if (loading) return 'Cargando';
+    console.log(data);
     return(
         <>
         <div className="container-fluid">

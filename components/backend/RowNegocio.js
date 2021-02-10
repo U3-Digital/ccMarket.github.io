@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
 import Swal from 'sweetalert2';
-
+import {useMutation, gql} from '@apollo/client';
 const RowNegocio = ({ negocio }) => {
 
     const negociosFirestore = firebase.firestore().collection('negocios');
@@ -10,7 +10,7 @@ const RowNegocio = ({ negocio }) => {
     const backendContext = useContext(BackEndContext);
     const { editaPantalla } = backendContext;
     const { id } = negocio;
-    const { nombreNegocio, direccionNegocio, nombreResponsable, numeroResponsable, emailResponsable } = negocio.data();
+    const { nombre, direccion, nombreResponsable, telefonoResponsable, emailResponsable } = negocio;
 
     const cambio = () => {
         const valores = {
@@ -48,13 +48,13 @@ const RowNegocio = ({ negocio }) => {
                 <div className="d-inline-block align-middle"><img className="img-40 m-r-15 rounded-circle align-top" src="https://via.placeholder.com/300" alt="" />
                     <div className="status-circle bg-primary"></div>
                     <div className="d-inline-block">
-                        <span>{nombreNegocio}</span>
-                        <p className="font-roboto">{direccionNegocio}</p>
+                        <span>{nombre}</span>
+                        <p className="font-roboto">{direccion}</p>
                     </div>
                 </div>
             </td>
             <td>{nombreResponsable}</td>
-            <td>{numeroResponsable}</td>
+            <td>{telefonoResponsable}</td>
             <td>{emailResponsable}</td>
             <td>
                 <div>

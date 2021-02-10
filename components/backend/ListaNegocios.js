@@ -1,10 +1,29 @@
 import React, { useState } from 'react';
 import firebase from '../firebase';
 import RowNegocio from './RowNegocio';
+import {useQuery,gql} from '@apollo/client';
 
+const OBTENER_NEGOCIOS = gql`
+    query obtenerNegocios{
+        obtenerNegocios{
+        id
+        nombre
+        direccion
+        telefonoNegocio
+        nombreResponsable
+        emailResponsable
+        }
+    }
+`;
 
 const ListaNegocios = () => {
 
+    const {data,loading:loadingmongo,error} = useQuery(OBTENER_NEGOCIOS);
+
+    if(loadingmongo) return 'cargando';
+
+    console.log(data);
+    /*
     const [loading, setLoading] = useState(true);
     const [negocios, setNegocios] = useState([]);
 
@@ -28,7 +47,9 @@ const ListaNegocios = () => {
             console.log(error);
         });
     }
+    */
 
+    const {obtenerNegocios} = data;
     return(
         <>
             <div className="container-fluid">
@@ -76,7 +97,7 @@ const ListaNegocios = () => {
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        negocios.map((negocio) => (
+                                                        obtenerNegocios.map((negocio) => (
                                                             <RowNegocio
                                                                 key={negocio.id}
                                                                 negocio={negocio}/>
