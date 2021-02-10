@@ -5,6 +5,16 @@ import firebase from '../firebase';
 import Swal from 'sweetalert2';
 import BackEndContext from '../../context/backend/BackEndContext';
 import ProgressBar from '@ramonak/react-progress-bar';
+import { useMutation, gql } from '@apollo/client';
+
+const AGREGAR_CATEGORIA = gql`
+mutation nuevaCategoria($input: CategoriaInput!) {
+  nuevaCategoria(input: $input) {
+    id
+    categoria
+  }
+}
+`;
 
 const NuevaCategoria = () => {
     const backendContext = useContext(BackEndContext);
@@ -13,8 +23,9 @@ const NuevaCategoria = () => {
     const [muestraProgressBar , setMuestraProgressBar] = useState(null)
     const [loadImage, setLoadImage] = useState("../backend/assets/images/avtar/7.jpg");
     const [image, setImage] = useState(null);
-    const database = firebase.firestore().collection('categorias');
     const storageRef = firebase.storage().ref('categorias');
+
+    const [agregarCategoria] = useMutation(AGREGAR_CATEGORIA);
 
     const formikNuevaCategoria = useFormik({
         initialValues: {
@@ -26,19 +37,29 @@ const NuevaCategoria = () => {
             photo: Yup.mixed()
         }),
         onSubmit: async valores => {
-            const {name} = valores;
+            const { name } = valores;
 
-            const referencia = await database.add({
-                nombre: name
+            const { data } = await agregarCategoria({
+              variables: {
+                input: {
+                  categoria: name
+                }
+              }
             });
 
-            let uploadTask =  storageRef.child(referencia.id).put(image);
+            console.log(data.nuevaCategoria.id);
+
+           /*  const referencia = await database.add({
+                nombre: name
+            }); */
+
+            let uploadTask =  storageRef.child(data.nuevaCategoria.id).put(image);
 
             // Register three observers:
             // 1. 'state_changed' observer, called any time the state changes
             // 2. Error observer, called on failure
             // 3. Completion observer, called on successful completion
-            uploadTask.on('state_changed', function(snapshot){
+            uploadTask.on('state_changed', function(snapshot) {
                 // Observe state change events such as progress, pause, and resume
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -52,6 +73,7 @@ const NuevaCategoria = () => {
                     break;
                 }
             }, function(error) {
+              console.log(error);
                 // Handle unsuccessful uploads
             }, function() {
                     formikNuevaCategoria.resetForm();

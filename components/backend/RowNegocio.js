@@ -3,10 +3,16 @@ import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
 import Swal from 'sweetalert2';
 import {useMutation, gql} from '@apollo/client';
+
+const ELIMINAR_NEGOCIO = gql`
+    mutation borrarNegocio($id: ID!){
+        borrarNegocio(id: $id)
+    }
+`
 const RowNegocio = ({ negocio }) => {
 
     const negociosFirestore = firebase.firestore().collection('negocios');
-
+    const [borrarNegocio] = useMutation(ELIMINAR_NEGOCIO);
     const backendContext = useContext(BackEndContext);
     const { editaPantalla } = backendContext;
     const { id } = negocio;
@@ -20,7 +26,7 @@ const RowNegocio = ({ negocio }) => {
         editaPantalla(valores);
     };
 
-    function borrarNegocio(id) {
+    const eliminarNegocio = async(id) => {
         Swal.fire({
             title: '¿Desea borrar el negocio?',
             text: 'Esta acción no podrá ser revertida',
@@ -31,12 +37,19 @@ const RowNegocio = ({ negocio }) => {
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#7366FF',
             reverseButtons: true
-        }).then((value) => {
+        }).then(async (value) => {
             if (value.isConfirmed) {
-                negociosFirestore.doc(id).delete().then(() => {
-                    console.log('borrado');
-                }).catch((error) => {
-                    console.log(error);
+                const resultado = await borrarNegocio({
+                    variables: {
+                        id
+                    }
+                })
+                Swal.fire({
+                    title: '¡Negocio eliminado exitosamente!',
+                    icon: 'success',
+                    iconColor: '#7366FF',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#7366FF'
                 });
             }
         });
@@ -59,7 +72,7 @@ const RowNegocio = ({ negocio }) => {
             <td>
                 <div>
                     <button className="btn btn-primary p-0 mr-2" style={{ width: '3em' }} onClick={() => cambio()}><i className="fas fa-pencil-alt"></i></button>
-                    <button className="btn btn-danger p-0" style={{ width: '3em' }} onClick={() => borrarNegocio(id)}><i className="fas fa-trash"></i></button>
+                    <button className="btn btn-danger p-0" style={{ width: '3em' }} onClick={() => eliminarNegocio(id)}><i className="fas fa-trash"></i></button>
                 </div>
             </td>
         </tr>

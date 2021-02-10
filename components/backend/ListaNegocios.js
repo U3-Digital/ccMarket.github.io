@@ -1,55 +1,9 @@
 import React, { useState } from 'react';
 import firebase from '../firebase';
-import RowNegocio from './RowNegocio';
-import {useQuery,gql} from '@apollo/client';
-
-const OBTENER_NEGOCIOS = gql`
-    query obtenerNegocios{
-        obtenerNegocios{
-        id
-        nombre
-        direccion
-        telefonoNegocio
-        nombreResponsable
-        emailResponsable
-        }
-    }
-`;
+import TablaNegocios from './TablaNegocios';
 
 const ListaNegocios = () => {
-
-    const {data,loading:loadingmongo,error} = useQuery(OBTENER_NEGOCIOS);
-
-    if(loadingmongo) return 'cargando';
-
-    console.log(data);
-    /*
-    const [loading, setLoading] = useState(true);
-    const [negocios, setNegocios] = useState([]);
-
-    const tempNegocios = [];
-
-    const negociosFirestore = firebase.firestore().collection('negocios');
-
-    if (loading) {
-        const cosa = negociosFirestore.orderBy('nombreNegocio').limit(10).get().then((snapshot) => {
-            if (snapshot.empty) {
-                console.log('No hay resultados para los negocios');
-                return;
-            }
-            snapshot.forEach((negocio) => {
-                tempNegocios.push(negocio);
-            });
-
-            setNegocios(tempNegocios);
-            setLoading(false);
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-    */
-
-    const {obtenerNegocios} = data;
+    const [busqueda, setBusqueda] = useState("")
     return(
         <>
             <div className="container-fluid">
@@ -70,49 +24,14 @@ const ListaNegocios = () => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-10">
-                        <input type="text" className="form-control"/>
+                        <input value = {busqueda} onChange={(cosa) => setBusqueda(cosa.target.value)} type="text" className="form-control"/>
                     </div>
                     <div className="col-2">
                         <button className="btn btn-block btn-primary"><i className="fas fa-search"></i></button>
                     </div>
                 </div>
             </div>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-12 mt-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="best-seller-table responsible-tbl">
-                                    <div className="item">
-                                        <div className="table-responsive product-list">
-                                            <table className="table table-bordernone">
-                                                <thead>
-                                                    <tr>
-                                                        <th className="f-22">Negocio</th>
-                                                        <th>Reponsable</th>
-                                                        <th>Número del responsable</th>
-                                                        <th>Correo del responsable</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        obtenerNegocios.map((negocio) => (
-                                                            <RowNegocio
-                                                                key={negocio.id}
-                                                                negocio={negocio}/>
-                                                        ))
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <TablaNegocios busqueda ={busqueda}/>
         </>
     )
 };

@@ -20,7 +20,7 @@ const dashboard = () => {
 
     const database = firebase.firestore().collection('usuarios');
 
-    firebase.auth().onAuthStateChanged(function (user) {
+    /*firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             if (user.providerData[0].providerId !== "google.com") {
                 const { uid } = user;
@@ -37,12 +37,10 @@ const dashboard = () => {
         } else {
             window.location.href = "/controlPanel"
         }
-    });
+    });*/
 
 
-    if (!loading) {
-        return (null);
-    }
+    
 
     return (
         <Layout>

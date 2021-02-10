@@ -5,11 +5,30 @@ import Label from './Label';
 import firebase from '../firebase';
 import Categoria from '../Categoria';
 import Swal from 'sweetalert2';
-
+import {useQuery,gql,useMutation} from '@apollo/client';
 import Dropzone, { useDropzone } from 'react-dropzone';
 
+const OBTENER_CATEGORIAS = gql`
+    query obtenerCategorias{
+        obtenerCategorias{
+            id
+            categoria
+        }
+    }
+`;
+
+const NUEVO_NEGOCIO = gql`
+    mutation nuevoNegocio($input:NegocioInput!){
+        nuevoNegocio(input: $input){
+            nombre
+            id
+            direccion
+        }
+    }
+`;
+
 const NuevoNegocio = () => {
-    const [loading, setLoading] = useState(true);
+    
     const [categoriasPrincipales, setCategoriasPrincipales] = useState([]);
     const database = firebase.firestore().collection('negocios');
     const categoriasDatabase = firebase.firestore().collection('categorias');
@@ -19,29 +38,20 @@ const NuevoNegocio = () => {
 
     const [categorias, setCategorias] = useState([]);
     const [palabras, setPalabras] = useState([]);
+    const [nuevoNegocio] = useMutation(NUEVO_NEGOCIO);
+    const {data,loading,error} = useQuery(OBTENER_CATEGORIAS);
+
+    if (loading) {
+        return 'Cargando...';
+    }
+
+    const {obtenerCategorias} = data;
+
 
     let tempCategorias = [];
     let tempCategoriasPrincipales = [];
     let tempPalabras = [];
 
-    if (loading) {
-        categoriasDatabase.get()
-        .then(snapshot => {
-          if (snapshot.empty) {
-            console.log('No matching documents.');
-            return;
-          }
-          snapshot.forEach(doc => {
-            tempCategoriasPrincipales.push(doc);
-          });
-          setCategoriasPrincipales(tempCategoriasPrincipales);
-          setLoading(false);
-        })
-        .catch(err => {
-          console.log('Error getting documents', err);
-        });
-
-    }
 
     const agregarCategoria = (event) => {
         const categoria = event.target.value;
@@ -103,8 +113,70 @@ const NuevoNegocio = () => {
         }),
         onSubmit: async valores => {
             const { nombreNegocio, direccionNegocio, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcionNegocio } = valores;
-            console.log(valores);
-            await database.add({
+            
+            let catArray = [];
+            
+            const tempCatArray = categorias.split('-');
+            tempCatArray.map(categoria => {
+                if (categoria !== ""){
+                    catArray.push({categoria : categoria});
+                }
+            });
+            let palArray = [];
+
+            const tempPalArray = palabrasClave.split('-');
+            tempPalArray.map(palabra => {
+                if (palabra !== ""){
+                    palArray.push({palabraClave: palabra});
+                }
+            })
+
+            console.log(palArray);
+            const resultado = await nuevoNegocio({
+                variables:{
+                    input:{
+                        nombre: nombreNegocio,
+                        direccion: direccionNegocio,
+                        telefonoNegocio,
+                        nombreResponsable,
+                        numeroResponsable,
+                        emailResponsable,
+                        categorias: catArray,
+                        palabrasClave: palArray,
+                        horarioApertura,
+                        horarioCierre,
+                        cliente,
+                        descripcion : descripcionNegocio
+                    }
+                }
+            })
+            const {id} = resultado.data.nuevoNegocio;
+            //ss
+            let i = 1;
+            await files.forEach((file) => {
+                storageRef.child(`${id}/${i}`).put(file).then((result) => {
+                console.log('get subido');
+            }).catch((error) => {
+                console.log('gg jg diff');
+                console.log(error);
+            });
+                i++;
+            });
+            setCategorias([]);
+            insertIntoInput([], 'categorias');
+
+            setPalabras([]);
+            insertIntoInput([], 'palabras');
+            setFiles([]);
+            formikNuevoNegocio.resetForm();
+            Swal.fire({
+                title: '¡Negocio agregado exitosamente!',
+                icon: 'success',
+                iconColor: '#7366FF',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#7366FF'
+            });
+            /*await database.add({
                 nombreNegocio,
                 direccionNegocio,
                 telefonoNegocio,
@@ -169,7 +241,7 @@ const NuevoNegocio = () => {
                 setTimeout(() => {
                     setMensaje(null);
                 }, 5000);
-            });
+            });*/
         }
     });
 
@@ -404,8 +476,8 @@ const NuevoNegocio = () => {
                                                 <select className="form-control" onChange={() => agregarCategoria(event)}>
                                                     <option value="">Seleccione una categoría</option>
                                                     {
-                                                        categoriasPrincipales.map((categoria) => (
-                                                            <option key={categoria.id} value={categoria.data().nombre}>{categoria.data().nombre}</option>
+                                                        obtenerCategorias.map((categoria) => (
+                                                            <option key={categoria.id} value={categoria.categoria}>{categoria.categoria}</option>
                                                         ))
                                                     }
                                                 </select>

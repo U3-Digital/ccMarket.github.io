@@ -9,18 +9,19 @@ const Topbar = () => {
   const [nombre, setNombre] = useState('Pedic');
   const [theme, setTheme] = useState(false);
 
-  usuarios.doc(usuario.uid).get().then((snapshot) => {
+  /*usuarios.doc(usuario.uid).get().then((snapshot) => {
     setNombre(snapshot.data().nombre);
   }).catch((error) => {
     console.log(error);
-  });
+  });*/
 
   if (!theme) {
-    setTheme(readLocalStorage());    
+    // setTheme(readLocalStorage());    
   }
 
   function readLocalStorage() {
-    const read = localStorage.getItem('theme');
+    
+    const read = 'light';
     let returnValue = '';
 
     if (read) {
