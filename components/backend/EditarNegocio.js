@@ -5,8 +5,33 @@ import BackEndContext from '../../context/backend/BackEndContext';
 import firebase from '../firebase';
 import Label from './Label';
 import Swal from 'sweetalert2';
-
+import {useQuery, gql, useMutation} from '@apollo/client';
 import Dropzone, { useDropzone } from 'react-dropzone';
+
+const OBTENER_NEGOCIO = gql`
+  query obtenerNegocio($id: ID!){
+    obtenerNegocio(id: $id){
+      id
+      nombre
+      direccion
+      telefonoNegocio
+      numeroResponsable
+      nombreResponsable
+      emailResponsable
+      categorias{
+        categoria
+      }
+      palabrasClave{
+        palabraClave
+      }
+      horarioApertura
+      horarioCierre
+      cliente
+      descripcion
+      ubicacion
+    }
+  }
+`;
 
 const EditarNegocio = () => {
 
@@ -32,9 +57,54 @@ const EditarNegocio = () => {
 
   const [imagesChanged, setImagesChanged] = useState(false);
   
+  const {data, loading: loadingMongo, error} = useQuery(OBTENER_NEGOCIO,{
+    variables:{
+      id: idEdita
+    }
+  });
+
+  useEffect(() => () => {
+    files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, [files]);
+
+  const {getRootProps, getInputProps} = useDropzone({
+    accept: 'image/*',
+    onDrop: (acceptedFiles) => {
+      setImagesChanged(true);
+      console.log(acceptedFiles);
+      setFiles(acceptedFiles.map((file) => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+    }
+  });
+
+  if(loadingMongo) return 'Cargando...';
   const tempImages = [];
 
-  if (imagesLoading) {
+  imagesRef.listAll().then(function(result) {
+    result.items.forEach(function(imageRef) {
+      imageRef.getDownloadURL().then(function(url) {
+        tempImages.push({
+          name: imagesRef.name,
+          preview: url
+        });
+      }).catch(function(error) {
+        // Handle any errors
+      });
+    });
+    if(files.length === 0){
+      setFiles(tempImages)
+    }
+  }).catch(function(error) {
+    // Handle any errors
+  });
+  
+
+
+  const {obtenerNegocio} = data;
+  
+
+  /*if (imagesLoading) {
     setImagesLoading(false);
     negocioQuery.get().then( async (document) => {
       if (!document.exists) {
@@ -55,7 +125,7 @@ const EditarNegocio = () => {
       }
     });
   }
-
+  */
   let tempCategorias = [];
   let tempPalabras = [];
 
@@ -142,7 +212,7 @@ const EditarNegocio = () => {
     cliente: Yup.boolean(),
     descripcionNegocio: Yup.string().required('La descripción es necesaria')
   });
-
+  /*
   if (loading) {
     negocioQuery.get().then((document) => {
       if (!document.exists) {
@@ -181,7 +251,7 @@ const EditarNegocio = () => {
       console.log(error);
     });
   }
-
+  */
   function actualizarInfoNegocio(valores) {
     const { nombreNegocio, direccionNegocio, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcionNegocio } = valores;
     negocioQuery.set({
@@ -280,16 +350,7 @@ const EditarNegocio = () => {
     height: '100%'
   };
 
-  const {getRootProps, getInputProps} = useDropzone({
-    accept: 'image/*',
-    onDrop: (acceptedFiles) => {
-      setImagesChanged(true);
-      console.log(acceptedFiles);
-      setFiles(acceptedFiles.map((file) => Object.assign(file, {
-        preview: URL.createObjectURL(file)
-      })));
-    }
-  });
+  
 
   const thubmnails = files.map((file) => (
     <div style={thumbnail} key={file.name}>
@@ -299,13 +360,7 @@ const EditarNegocio = () => {
     </div>
   ));
 
-  useEffect(() => () => {
-    files.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [files]);
-
-  if (loading) {
-    return null;
-  }
+  
 
   return (
     <>
@@ -335,7 +390,7 @@ const EditarNegocio = () => {
                 <Formik
                   validationSchema={schemaValidation}
                   emableReinitialize
-                  initialValues={negocioActual}
+                  initialValues={obtenerNegocio}
                   onSubmit={(valores, funciones) => {
                     actualizarInfoNegocio(valores)
                   }}>

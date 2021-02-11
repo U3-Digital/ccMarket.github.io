@@ -66,7 +66,7 @@ const RowCategoria = ({ id, categoria }) => {
     editaPantalla(valores);
   };
 
-  const eliminaAdmin = () => {
+  const eliminarCategoria = () => {
     Swal.fire({
       title: 'Eliminar categoría',
       text: '¿Está seguro de que quiere eliminar esta categoría?',
@@ -85,7 +85,18 @@ const RowCategoria = ({ id, categoria }) => {
           }
         });
 
-        console.log(resultado);
+        await storageRef.delete().then(() => {
+
+        }).catch((error) => {
+          // console.log(error);
+        });
+
+        Swal.fire({
+          title: 'Categoría eliminada ',
+          text: 'Categoría eliminada exitosamente',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
       }
     });
 
@@ -136,7 +147,7 @@ const RowCategoria = ({ id, categoria }) => {
       <td className="text-right">
         <div>
           <button onClick={() => cambio()} className="btn btn-primary p-0 mr-2" style={{ width: '3em' }}><i className="fas fa-pencil-alt"></i></button>
-          <button onClick={() => eliminaAdmin()} className="btn btn-danger p-0" style={{ width: '3em' }}><i className="fas fa-trash"></i></button>
+          <button onClick={() => eliminarCategoria()} className="btn btn-danger p-0" style={{ width: '3em' }}><i className="fas fa-trash"></i></button>
         </div>
       </td>
     </tr>

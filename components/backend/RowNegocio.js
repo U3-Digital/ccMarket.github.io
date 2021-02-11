@@ -16,7 +16,7 @@ const RowNegocio = ({ negocio }) => {
     const backendContext = useContext(BackEndContext);
     const { editaPantalla } = backendContext;
     const { id } = negocio;
-    const { nombre, direccion, nombreResponsable, telefonoResponsable, emailResponsable } = negocio;
+    const { nombre, direccion, nombreResponsable, numeroResponsable, emailResponsable } = negocio;
 
     const cambio = () => {
         const valores = {
@@ -67,7 +67,7 @@ const RowNegocio = ({ negocio }) => {
                 </div>
             </td>
             <td>{nombreResponsable}</td>
-            <td>{telefonoResponsable}</td>
+            <td>{numeroResponsable}</td>
             <td>{emailResponsable}</td>
             <td>
                 <div>

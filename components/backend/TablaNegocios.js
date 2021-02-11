@@ -9,6 +9,9 @@ const OBTENER_NEGOCIOS = gql`
         nombre
         direccion
         telefonoNegocio
+        numeroResponsable
+        nombreResponsable
+        emailResponsable
         }
     }
 `;
