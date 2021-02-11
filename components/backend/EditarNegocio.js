@@ -33,6 +33,16 @@ const OBTENER_NEGOCIO = gql`
   }
 `;
 
+const OBTENER_CATEGORIAS = gql`
+    query obtenerCategorias{
+        obtenerCategorias{
+            id
+            categoria
+        }
+    }
+`;
+
+
 const EditarNegocio = () => {
 
   const backendContext = useContext(BackEndContext);
@@ -40,7 +50,7 @@ const EditarNegocio = () => {
 
   const [mensaje, setMensaje] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [negocioActual, setNegocioActual] = useState({ nombreNegocio: '', direccionNegocio: '', nombreResponsable: '', numeroResponsable: '', emailResponsable: '', categorias: '', palabrasClave: '', horarioApertura: '', horarioCierre: '' })
+  const [negocioActual, setNegocioActual] = useState({ nombre: '', direccion: '', nombreResponsable: '', numeroResponsable: '', emailResponsable: '', categorias: '', palabrasClave: '', horarioApertura: '', horarioCierre: '' })
 
   const [categorias, setCategorias] = useState([]);
   const [palabras, setPalabras] = useState([]);
@@ -63,6 +73,9 @@ const EditarNegocio = () => {
     }
   });
 
+  const {data: dataCategoria, loading: loadingCategoria, error:errorCartegoria} = useQuery(OBTENER_CATEGORIAS);
+
+
   useEffect(() => () => {
     files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
@@ -78,14 +91,17 @@ const EditarNegocio = () => {
     }
   });
 
-  if(loadingMongo) return 'Cargando...';
-  const tempImages = [];
+  if(loadingMongo || loadingCategoria ) return 'Cargando...';
+  const {obtenerNegocio} = data;
 
+
+  const tempImages = [];
   imagesRef.listAll().then(function(result) {
     result.items.forEach(function(imageRef) {
       imageRef.getDownloadURL().then(function(url) {
+        console.log(imageRef);
         tempImages.push({
-          name: imagesRef.name,
+          name: imageRef.name,
           preview: url
         });
       }).catch(function(error) {
@@ -101,7 +117,7 @@ const EditarNegocio = () => {
   
 
 
-  const {obtenerNegocio} = data;
+  
   
 
   /*if (imagesLoading) {
@@ -129,7 +145,16 @@ const EditarNegocio = () => {
   let tempCategorias = [];
   let tempPalabras = [];
 
+  if(categorias.length === 0){
+    obtenerNegocio.categorias.map(unicaCategoria => {
+      agregarCategoria({target: {value: unicaCategoria.categoria}})
+    });
+    obtenerNegocio.palabrasClave.map(palabraClave => {
+      agregarPalabra({target: {value: palabraClave.palabraClave}, key: ","})
+    });
+  }
   function agregarCategoria(event) {
+
     const categoria = event.target.value;
     tempCategorias = categorias.slice();
     if (categoria && !categorias.includes(categoria)) {
@@ -199,8 +224,8 @@ const EditarNegocio = () => {
 
 
   const schemaValidation = Yup.object({
-    nombreNegocio: Yup.string().required('El nombre es necesario'),
-    direccionNegocio: Yup.string().required('La dirección es necesaria'),
+    nombre: Yup.string().required('El nombre es necesario'),
+    direccion: Yup.string().required('La dirección es necesaria'),
     telefonoNegocio: Yup.string().required('El número del negocio es necesario'),
     nombreResponsable: Yup.string().required('El nombre del responsable es necesario'),
     numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono es necesario'),
@@ -210,7 +235,7 @@ const EditarNegocio = () => {
     horarioApertura: Yup.string().required('El horario de apertura es necesario'),
     horarioCierre: Yup.string().required('El horario de cierre es necesario'),
     cliente: Yup.boolean(),
-    descripcionNegocio: Yup.string().required('La descripción es necesaria')
+    descripcion: Yup.string().required('La descripción es necesaria')
   });
   /*
   if (loading) {
@@ -219,8 +244,8 @@ const EditarNegocio = () => {
         console.log('No existe el documento con el id especificado');
       } else {
         const negocioObj = {
-          nombreNegocio: document.data().nombreNegocio,
-          direccionNegocio: document.data().direccionNegocio,
+          nombre: document.data().nombre,
+          direccion: document.data().direccion,
           telefonoNegocio: document.data().telefonoNegocio,
           nombreResponsable: document.data().nombreResponsable,
           numeroResponsable: document.data().numeroResponsable,
@@ -230,7 +255,7 @@ const EditarNegocio = () => {
           horarioApertura: document.data().horarioApertura,
           horarioCierre: document.data().horarioCierre,
           cliente: document.data().cliente,
-          descripcionNegocio: document.data().descripcionNegocio
+          descripcion: document.data().descripcion
         };
 
         tempCategorias = document.data().categorias.split('-').filter((element) => element != ''.trim());
@@ -253,26 +278,44 @@ const EditarNegocio = () => {
   }
   */
   function actualizarInfoNegocio(valores) {
-    const { nombreNegocio, direccionNegocio, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcionNegocio } = valores;
+    const { nombre, direccion, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcion } = valores;
+    let catArray = [];
+    const splitCatArray = categorias.split("-");
+    splitCatArray.map(categoria => {
+      if(categoria !== ""){
+        catArray.push({categoria: categoria});
+      }
+    });
+
+    let palArray = [];
+
+    const splitPalArray = palabrasClave.split('-');
+    splitPalArray.map(palabra => {
+      if(palabra !== ""){
+        palArray.push({palabraClave: palabra});
+      }
+    })
+    
+    
     negocioQuery.set({
-      nombreNegocio,
-      direccionNegocio,
+      nombre,
+      direccion,
       telefonoNegocio,
       nombreResponsable,
       numeroResponsable,
       emailResponsable,
-      categorias,
-      palabrasClave,
+      categorias: catArray,
+      palabrasClave: palArray,
       horarioApertura,
       horarioCierre,
       cliente,
-      descripcionNegocio,
+      descripcion,
       noImagenes: files.length
     }, { merge: false }).then( async (result) => {
       await realbd.child(result.id).set({
-          nombre: nombreNegocio,
+          nombre: nombre,
           cliente,
-          direccion: direccionNegocio,
+          direccion: direccion,
           categoria: categorias,
           noValoraciones: 0,
           telefono: telefonoNegocio,
@@ -422,10 +465,10 @@ const EditarNegocio = () => {
                             <div className="col-md-4 col-lg-4 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Nombre del negocio</label>
-                                <input id="nombreNegocio" name="nombreNegocio" className="form-control" type="text" placeholder="Frutería Juan" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.nombreNegocio} />
+                                <input id="nombre" name="nombre" className="form-control" type="text" placeholder="Frutería Juan" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.nombre} />
                                 {
-                                  props.touched.nombreNegocio && props.errors.nombreNegocio ? (
-                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.nombreNegocio}</div>
+                                  props.touched.nombre && props.errors.nombre ? (
+                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.nombre}</div>
                                   ) : null
                                 }
                               </div>
@@ -433,10 +476,10 @@ const EditarNegocio = () => {
                             <div className="col-md-4 col-lg-4 col-12">
                               <div className="form-group mb-3">
                                 <label className="form-label">Dirección del negocio</label>
-                                <input id="direccionNegocio" name="direccionNegocio" className="form-control" type="text" placeholder="Calle ejemplo #123" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.direccionNegocio} />
+                                <input id="direccion" name="direccion" className="form-control" type="text" placeholder="Calle ejemplo #123" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.direccion} />
                                 {
-                                  props.touched.direccionNegocio && props.errors.direccionNegocio ? (
-                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.direccionNegocio}</div>
+                                  props.touched.direccion && props.errors.direccion ? (
+                                    <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.direccion}</div>
                                   ) : null
                                 }
                               </div>
@@ -494,8 +537,10 @@ const EditarNegocio = () => {
                                 <label className="form-label">Categoría</label>
                                 <select className="form-control" onChange={() => agregarCategoria(event)}>
                                   <option value="">Seleccione una categoría</option>
-                                  <option value="ah">ah</option>
-                                  <option value="aha">aha</option>
+                                  {dataCategoria.obtenerCategorias.map(categoriaUnica => {
+                                    console.log(dataCategoria);
+                                    return(<option value={categoriaUnica.id}>{categoriaUnica.categoria}</option>)
+                                  })}
                                 </select>
                               </div>
                               {
@@ -507,7 +552,7 @@ const EditarNegocio = () => {
                                 {
                                   categorias.map((categoria) => (
                                     <Label
-                                      key={Math.random()}
+                                      key={categoria.id}
                                       texto={categoria}
                                       click={deleteCategoria} />
                                   ))
@@ -579,10 +624,10 @@ const EditarNegocio = () => {
                           <div className="row justify-content-center">
                             <div className="col-md-8 col-lg-8 col-12">
                               <label className="form-label">Descripción</label>
-                              <textarea id="descripcionNegocio" name="descripcionNegocio" className="form-control" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.descripcionNegocio}></textarea>
+                              <textarea id="descripcion" name="descripcion" className="form-control" onChange={props.handleChange} onBlur={props.handleBlur} value={props.values.descripcion}></textarea>
                               {
-                                props.touched.descripcionNegocio && props.errors.descripcionNegocio ? (
-                                  <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.descripcionNegocio}</div>
+                                props.touched.descripcion && props.errors.descripcion ? (
+                                  <div className="alert alert-secondary mt-3 p-2" role="alert">{props.errors.descripcion}</div>
                                 ) : null
                               }
                             </div>

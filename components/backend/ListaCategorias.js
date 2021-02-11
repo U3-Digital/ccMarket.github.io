@@ -17,26 +17,12 @@ const ListaCategorias = () => {
   const { data, loading, error } = useQuery(OBTENER_CATEGORIAS);
 
   const [consulta, setConsulta] = useState(false);
-  // const [loading, setLoading] = useState(true);
   const [categorias, setCategorias] = useState([]);
   const tempCategorias = [];
 
-  // const usuariosFirestore = firebase.firestore().collection('categorias');
   if (loading) {
     return 'Cargando...';
-    /* usuariosFirestore.get().then((snapshot) => {
-        if (snapshot.empty) {
-            console.log('No se encontraron Categorias');
-            return;
-        }
-        snapshot.forEach((categoria) => {
-            tempCategorias.push(categoria);
-        });
-        setCategorias(tempCategorias);
-        setLoading(false);
-    }).catch((error) => {
-        console.log(error);
-    }); */
+
   }
 
   const { obtenerCategorias } = data;

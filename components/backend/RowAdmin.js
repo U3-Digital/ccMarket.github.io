@@ -6,18 +6,10 @@ import Swal from 'sweetalert2';
 const RowAdmin = ({ admin }) => {
   const backendContext = useContext(BackEndContext);
   const { editaPantalla } = backendContext
-  const { nombre, correo, estado } = admin.data();
-  const id = admin.id
-  const usuariosFirestore = firebase.firestore().collection('usuarios');
+  const { nombre, email, estado } = admin;
+  const id = admin.id;
 
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger mr-2'
-    },
-    buttonsStyling: false
-  })
-
+ 
   const cambio = () => {
     const valores = {
       nombre: "EditAdmin",
@@ -25,7 +17,7 @@ const RowAdmin = ({ admin }) => {
     }
     editaPantalla(valores);
   };
-
+/* 
   const eliminaAdmin = () => {
     swalWithBootstrapButtons.fire({
       title: 'Eliminar usuario',
@@ -44,7 +36,7 @@ const RowAdmin = ({ admin }) => {
           'success'
         )
       } else if (
-        /* Read more about handling dismissals below */
+        /* Read more about handling dismissals below 
         result.dismiss === Swal.DismissReason.cancel
       ) {
 
@@ -52,6 +44,25 @@ const RowAdmin = ({ admin }) => {
     });
 
   }
+ */
+  const eliminarUsuario = () => {
+    Swal.fire({
+      title: 'Eliminar usuario',
+      text: '¿Está seguro de que quiere eliminar este usuario?',
+      icon: 'warning',
+      reverseButtons: true,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      cancelButtonColor: '#DC3545',
+      confirmButtonText: 'Eliminar',
+      confirmButtonColor: '#7366FF'
+    }).then((value) => {
+      if (value.isConfirmed) {
+        // const resultado = awai
+        console.log('asa');
+      }
+    });
+  };
 
   return (
     <tr>
@@ -64,12 +75,12 @@ const RowAdmin = ({ admin }) => {
           </div>
         </div>
       </td>
-      <td className="text-center">{correo}</td>
-      <td className="text-right"><i className="fa fa-check-circle"></i>{estado ? ('Activo') : ('Inactivo')}</td>
+      <td className="text-center">{email}</td>
+      <td className="text-right"><i className="fa fa-check-circle"></i>{estado === 'ACTIVO' ? ('Activo') : ('Inactivo')}</td>
       <td className="text-right">
         <div>
           <button onClick={() => cambio()} className="btn btn-primary p-0 mr-2" style={{ width: '3em' }}><i className="fas fa-pencil-alt"></i></button>
-          <button onClick={() => eliminaAdmin()} className="btn btn-danger p-0" style={{ width: '3em' }}><i className="fas fa-trash"></i></button>
+          <button onClick={() => eliminarUsuario()} className="btn btn-danger p-0" style={{ width: '3em' }}><i className="fas fa-trash"></i></button>
         </div>
       </td>
     </tr>
