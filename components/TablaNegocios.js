@@ -5,8 +5,37 @@ import Negocio from '../components/Negocio';
 /* Carousel */
 import Carousel from 'react-elastic-carousel';
 import Flecha from '../components/frontend/Flecha';
+import {gql,useQuery} from '@apollo/client';
 
+const OBTENER_NEGOCIOS = gql`
+	query obtenerNegociosClientes {
+	obtenerNegociosClientes {
+		id
+		nombre
+		direccion
+		telefonoNegocio
+		nombreResponsable
+		numeroResponsable
+		emailResponsable
+		categorias {
+		id
+		categoria
+		}
+		palabrasClave {
+		palabraClave
+		}
+		horarioApertura
+		horarioCierre
+		cliente
+		descripcion
+		ubicacion
+	}
+	}	
+`;
 const TablaNegocios = () => {
+
+	const {data,loading,error} = useQuery(OBTENER_NEGOCIOS);
+	/*
 	const [ consulta, setConsulta ] = useState(false);
 	const [ loading, setLoading ] = useState(true);
 	const [ negocios, setNegocios ] = useState([]);
@@ -28,16 +57,17 @@ const TablaNegocios = () => {
 			setConsulta(true);
 		});
 	}
-
+*/
 	if (loading) {
 		return (
 			<div className="row m-5">
         <div className="col-12 text-center">
-          <div className="spinner-border text-primary"></div>
+          <div className="spinner-border text-primary">Cargando...</div>
         </div>
       </div>
 		);
 	}
+	const {obtenerNegociosClientes} = data;
 	return (
 		<div>
 			<br />
@@ -65,7 +95,7 @@ const TablaNegocios = () => {
 						enableAutoPlay
 						autoPlaySpeed={10000}
 					>
-						{negocios.map((negocio) => <Negocio key={negocio.id} negocio={negocio} />)}
+						{obtenerNegociosClientes.map((negocio) => <Negocio key={negocio.id} negocio={negocio} />)}
 					</Carousel>
 				</div>
 			</div>

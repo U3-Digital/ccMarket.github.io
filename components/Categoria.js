@@ -5,8 +5,7 @@ const Categoria = ({ categoria }) => {
   const [loadphoto, setloadphoto] = useState(false);
   const [urlImage, seturlImage] = useState("../img/svgs/jobs/cooking.svg");
   const storage = firebase.storage();
-  const { id } = categoria;
-  const { nombre } = categoria.data();
+  const { id,nombre } = categoria;
 
 
   if (!loadphoto) {

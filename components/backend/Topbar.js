@@ -16,12 +16,14 @@ const Topbar = () => {
   });*/
 
   if (!theme) {
-    // setTheme(readLocalStorage());    
+    if (process.browser) {
+      setTheme(readLocalStorage());    
+    }
   }
 
   function readLocalStorage() {
     
-    const read = 'light';
+    const read = localStorage.getItem('theme');
     let returnValue = '';
 
     if (read) {

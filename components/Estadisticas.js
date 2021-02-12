@@ -4,11 +4,11 @@ import firebase from '../components/firebase';
 const Estadisticas = () => {
 
   const [consulta, setConsulta] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [negocios, setNegocios] = useState(0);
   const [visitas, setVisitas] = useState(0);
 
-  if (!consulta) {
+  /*if (!consulta) {
     const estadisticas = firebase.database().ref('estadisticas');
     estadisticas.on('value', (snapshot) => {
   
@@ -18,7 +18,7 @@ const Estadisticas = () => {
       setLoading(false);
       setConsulta(true);
     });
-  }
+  }*/
 
   if (loading) {
     return (
@@ -46,7 +46,7 @@ const Estadisticas = () => {
                     <i className="icon icon-people"></i>
                   </div>
                   <h5>Visitas</h5>
-                  <h2 className="counter mb-0">{visitas}</h2>
+                  <h2 className="counter mb-0">12</h2>
                 </div>
               </div>
               <div className="col-lg-3 col-md-6">
@@ -64,7 +64,7 @@ const Estadisticas = () => {
                     <i className="icon icon-docs"></i>
                   </div>
                   <h5>Negocios registrados</h5>
-                  <h2 className="counter mb-0">{negocios}</h2>
+                  <h2 className="counter mb-0">56</h2>
                 </div>
               </div>
               <div className="col-lg-3 col-md-6">

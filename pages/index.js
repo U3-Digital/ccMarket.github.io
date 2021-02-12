@@ -9,11 +9,14 @@ import Busquedas from '../components/frontend/Busquedas';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
 import firebase from '../components/firebase';
 import DetallesNegocio from '../components/frontend/DetallesNegocio';
+
 export default function Home() {
 	const busquedaContext = useContext(BusquedaContext);
 	const { nombre, busqueda, direccion, categoria, cargarNegocios, nombrePantalla } = busquedaContext;
 	const [ loading, setloading ] = useState(false);
 	const database = firebase.database();
+	
+
 	if (!loading) {
 		const negoTemp = [];
 		const negocios = database.ref('negocios2');

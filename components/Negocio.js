@@ -3,7 +3,7 @@ import firebase from '../components/firebase';
 
 const Negocio = ({ negocio }) => {
   const { id } = negocio;
-  const { nombre, direccion, telefono } = negocio.data();
+  const { nombre, direccion, telefono } = negocio;
   const [loadphoto, setloadphoto] = useState(false);
   const [image, setImage] = useState("../img/products/products/f1.jpg")
   const storage = firebase.storage();
@@ -22,11 +22,12 @@ const Negocio = ({ negocio }) => {
   }) */
 
   if (!loadphoto) {
-    const storageRef = storage.ref(`negocios/${id}/1.png`);
+    const storageRef = storage.ref(`negocios/${id}/1`);
     storageRef.getDownloadURL().then(function (url) {
       setImage(url);
     }).catch(function (error) {
       console.log(error.code);
+      
       switch (error.code) {
         case 'storage/object-not-found':
           // File doesn't exist

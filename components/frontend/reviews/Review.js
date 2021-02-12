@@ -29,7 +29,6 @@ const Review = ({comentario}) => {
                             rating={estrellas}
                             starRatedColor="#FFA22B"
                             numberOfStars={5}
-                            starSpacing ={2}
                             name='rating'
                             starDimension="15px"
                         />

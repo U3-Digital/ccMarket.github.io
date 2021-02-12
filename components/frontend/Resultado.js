@@ -4,7 +4,7 @@ import firebase from '../firebase';
 
 const Resultado = ({ negocio }) => {
   const id = negocio.id;
-  const { nombre, categoria, direccion, telefono } = negocio;
+  const { nombre, categorias, direccion, telefonoNegocio } = negocio;
   const [loadPhoto, setLoadPhoto] = useState(false);
   const [image, setImage] = useState('../img/products/products/f1.jpg');
   const storage = firebase.storage();
@@ -47,13 +47,13 @@ const Resultado = ({ negocio }) => {
         </div>
         <div className="card-body">
           <div className="item-card9">
-            <a >{categoria.substring(0, categoria.length - 1)}</a>
+            <a >{categorias[0].categoria}</a>
             <a onClick={() => mostrarDetalles()} className="text-dark mt-2"><h4 className="font-weight-semibold mt-1">{nombre}</h4></a>
             <div className="item-card9-desc">
               <a className="mr-4"><span className=""><i className="fas fa-map-marker-alt text-muted mr-1"></i> {direccion}</span></a>
             </div>
             <div className="item-card9-desc">
-              <a className="mr-4"><span><i className="fas fa-phone text-muted mr-1"></i>{telefono}</span> </a>
+              <a className="mr-4"><span><i className="fas fa-phone text-muted mr-1"></i>{telefonoNegocio}</span> </a>
             </div>
           </div>
           <div className="rating-stars block mt-3">

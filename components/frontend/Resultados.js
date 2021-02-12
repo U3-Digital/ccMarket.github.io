@@ -3,16 +3,46 @@ import Resultado from './Resultado';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
 import OtroResultado from './OtroResultado';
+import {gql,useQuery} from '@apollo/client';
+
+
+const OBTENER_NEGOCIOS = gql`
+    query buscarNegocios($busqueda: String!){
+        buscarNegocios(busqueda: $busqueda){
+        id
+        nombre
+        direccion
+        telefonoNegocio
+        numeroResponsable
+        nombreResponsable
+        emailResponsable
+        cliente
+        categorias{
+          categoria
+        }
+
+        }
+    }
+`;
 
 const Resultados = () => {
 
   const [consulta, setConsulta] = useState(false);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
   const [negociosFiltrados, setNegociosFiltrados] = useState([]);
   const busquedaContext = useContext(BusquedaContext);
   const { nombre, direccion, categoria, negocios, status, cambiaStatus, detallesPantalla } = busquedaContext;
   const tempNegocios = [];
   const tempNegociosnoCliente = [];
+
+
+  const {data,loading,error} = useQuery(OBTENER_NEGOCIOS,{
+    variables: {
+      busqueda: nombre
+    }
+  });
+
+  /*
   useEffect(() => {
     if (status === false) {
       setLoading(true);
@@ -53,15 +83,15 @@ const Resultados = () => {
           }
         });
         
-        */
+        
 
-      /* negocios.filter((doc) => doc.nombre.toLowerCase().includes(nombre.toLowerCase())).map((filteredName) => {
+       negocios.filter((doc) => doc.nombre.toLowerCase().includes(nombre.toLowerCase())).map((filteredName) => {
         if (filteredName.cliente){
           tempNegocios.push(filteredName);
         }else{
           tempNegociosnoCliente.push(filteredName);
         }
-      }); */
+      }); 
 
       tempNegociosnoCliente.map((negocio) => {
         tempNegocios.push(negocio);
@@ -72,7 +102,7 @@ const Resultados = () => {
       cambiaStatus(true);
     }
   }, [status]);
-
+*/
   if (loading) {
     return (
       <div className="row m-5">
@@ -82,7 +112,7 @@ const Resultados = () => {
       </div>
     );
   }
-
+  const {buscarNegocios} = data;
   
 
   return (
@@ -123,7 +153,7 @@ const Resultados = () => {
                     <div className="tab-pane active" id="tab-12">
                       <div className="row">
                         {
-                          negociosFiltrados.map((negocio) => (
+                          buscarNegocios.map((negocio) => (
                             negocio.cliente ? (
                               <Resultado
                               key = {negocio.id}
