@@ -205,27 +205,16 @@ const DetallesNegocio = () => {
                 </div>
 
               </div>
-              <div className="pt-4 pb-4 pl-5 pr-5 border-top border-top">
-                <div className="list-id">
-                  <div className="row">
-                    <div className="col">
-                      <a className="mb-0">Classified ID : #8256358</a>
-                    </div>
-                    <div className="col col-auto">
-                      Posted By <a className="mb-0 font-weight-bold">Individual</a> / 21st Dec
-											2018
-										</div>
-                  </div>
-                </div>
-              </div>
               <div className="card-footer">
                 <div className="icons">
                   <a href="#" className="btn btn-info icons">
                     <i className="icon icon-share mr-1" /> Share Ad
 									</a>
+                  &nbsp; 
                   <a href="#" className="btn btn-primary icons">
                     <i className="icon icon-heart  mr-1" /> 678
 									</a>
+                  &nbsp;
                   <a href="#" className="btn btn-secondary icons">
                     <i className="icon icon-printer  mr-1" /> Print
 									</a>
