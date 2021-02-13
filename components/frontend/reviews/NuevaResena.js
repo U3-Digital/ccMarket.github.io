@@ -4,14 +4,55 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import firebase from '../../firebase';
 import Swal from 'sweetalert2';
+import {gql, useMutation} from '@apollo/client';
 
-const NuevaResena = (id) => {
+const NUEVO_COMENTARIO = gql`
+    mutation nuevoComentario($input: ComentarioInput!){
+        nuevoComentario(input: $input){
+            id
+            comentario
+            email
+            estrellas
+            negocioId
+            nombre
+            foto
+        }
+    }
+`;
+
+const OBTENER_COMENTARIOS = gql`
+    query obtenerComentariosNegocio($id: ID!){
+        obtenerComentariosNegocio(id: $id){
+            id
+            comentario
+            email
+            estrellas
+            negocioId
+            nombre
+            foto
+        }
+    }
+`;
+
+const NuevaResena = ({id}) => {
     const [star, setStar] = useState(1)
     const [mensaje, setmensaje] = useState(null);
     const [usuario, setUsuario] = useState({displayName: '', email: ''})
     const [nombre, setnombre] = useState('');
     const [email, setEmail] = useState('');
     const [image, setImage] = useState(null);
+    const [nuevoComentario] = useMutation(NUEVO_COMENTARIO, {
+        update(cache, { data: { nuevoComentario } }) {
+          const { obtenerComentariosNegocio } = cache.readQuery({ query: OBTENER_COMENTARIOS, variables: {id}});
+          cache.writeQuery({
+            query: OBTENER_COMENTARIOS,
+            variables: {id},
+            data: {
+              obtenerComentariosNegocio: [...obtenerComentariosNegocio, nuevoComentario]
+            }
+          })
+        }
+      })
     const db = firebase.firestore().collection('comentarios');
 
 	const database = firebase.firestore().collection('usuarios')
@@ -39,7 +80,27 @@ const NuevaResena = (id) => {
             comentarioUsuario: Yup.string().required('El comentario es necesario')
         }),
         onSubmit: async valores => {
-            const {comentarioUsuario} = valores
+            const {comentarioUsuario} = valores;
+            try {
+                const respuesta = await nuevoComentario({
+                    variables:{
+                        input: {
+                            comentario: comentarioUsuario,
+                            email,
+                            estrellas: star,
+                            negocioId: id,
+                            nombre,
+                            foto: image
+                        }
+                    }
+                });
+                setStar(1);
+                formikResena.resetForm();
+
+            } catch (error) {
+                console.log(error);
+            }
+            /*const {comentarioUsuario} = valores
             const res = await db.add({
                 negocio: id.id,
                 nombre: nombre,
@@ -49,7 +110,7 @@ const NuevaResena = (id) => {
                 photo: image
             });
             setStar(1)
-            formikResena.resetForm();
+            formikResena.resetForm();*/
         }
     })
 

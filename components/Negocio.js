@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import firebase from '../components/firebase';
-
+import BusquedaContext from '../context/busqueda/BusquedaContext';
 const Negocio = ({ negocio }) => {
   const { id } = negocio;
   const { nombre, direccion, telefono } = negocio;
@@ -8,6 +8,8 @@ const Negocio = ({ negocio }) => {
   const [image, setImage] = useState("../img/products/products/f1.jpg")
   const storage = firebase.storage();
   const database = firebase.database();
+  const busquedaContext = useContext(BusquedaContext);
+  const { detallesPantalla } = busquedaContext;
   /*                 <div className="power-ribbon power-ribbon-top-left text-warning"><span className="bg-warning"><i className="fa fa-bolt"></i></span></div>
    */
 
@@ -50,11 +52,21 @@ const Negocio = ({ negocio }) => {
     setloadphoto(true);
   }
 
+  function mostrarDetalles () {
+
+    const valores = {
+      idDetalles: id,
+      nombrePantalla: 'detallesPantalla'
+    }
+
+    detallesPantalla(valores);
+  }
+
   return (
     <div className="item">
       <div className="card mb-0">
         <div className="item-card2-img">
-          <a href="classified.html"></a>
+          <a onClick={() => mostrarDetalles()}></a>
           <img src={image} alt="img" className="cover-image" style={{ height: '25vh' }} />
         </div>
 
@@ -62,7 +74,7 @@ const Negocio = ({ negocio }) => {
           <div className="item-card2">
             <div className="item-card2-desc">
               <div className="item-card2-text">
-                <a href="classified.html" className="text-dark"><h4 className="mb-0">{nombre}</h4></a>
+                <a  onClick={() => mostrarDetalles()} className="text-dark"><h4 className="mb-0">{nombre}</h4></a>
               </div>
               <div className="d-flex">
                 <a href="">

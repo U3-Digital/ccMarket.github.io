@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import StarRatings from 'react-star-ratings'; 
 const Review = ({comentario}) => {
-    const {comentario: comentarioUsuario, estrellas, nombre,photo} = comentario.data();
+    const {comentario: comentarioUsuario, estrellas, nombre,foto} = comentario;
     return(
         <div className="media p-5 border-top mt-0">
             <div className="d-flex mr-3">
@@ -9,7 +9,7 @@ const Review = ({comentario}) => {
                     <img
                         className="media-object brround"
                         alt="64x64"
-                        src={photo ? (photo) : ("../../../img/user.png")}
+                        src={foto ? (foto) : ("../../../img/user.png")}
                     />
                 </a>
             </div>
