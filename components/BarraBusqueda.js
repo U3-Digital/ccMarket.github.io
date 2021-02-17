@@ -19,7 +19,8 @@ const BarraBusqueda = () => {
       direccion: direccion,
       categoria: categoria,
       busqueda: true,
-      nombrePantalla: "busqueda"
+      nombrePantalla: "busqueda",
+      tipo: "TEXTO"
     }
     modificabusqueda(datos);
   }

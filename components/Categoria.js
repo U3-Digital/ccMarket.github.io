@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import firebase from './firebase';
+import BusquedaContext from '../context/busqueda/BusquedaContext';
 
 const Categoria = ({ categoria }) => {
   const [loadphoto, setloadphoto] = useState(false);
   const [urlImage, seturlImage] = useState("../img/svgs/jobs/cooking.svg");
   const storage = firebase.storage();
   const { id,categoria: nombre } = categoria;
-
+  const busquedaContext = useContext(BusquedaContext);
+  const { modificabusqueda } = busquedaContext;
 
   if (!loadphoto) {
     const storageRef = storage.ref(`categorias/${id}`);
@@ -36,12 +38,24 @@ const Categoria = ({ categoria }) => {
     setloadphoto(true);
   }
 
+  const buscar = () => {
+    const datos = {
+      nombre: nombre,
+      direccion: "",
+      categoria: "",
+      busqueda: true,
+      nombrePantalla: "busqueda",
+      tipo: "CATEGORIA"
+    }
+    modificabusqueda(datos);
+  }
+
   return (
-    <div className="item" style={{ width: '300px' }}>
+    <div className="item" onClick = {()=> buscar()} style={{ width: '300px' }}>
       <div className="card mb-0">
         <div className="card-body">
           <div className="cat-item text-center">
-            <a href="classifieds-list.html"></a>
+            <a onClick = {()=> buscar()}></a>
             <div className="cat-img">
               <img src={urlImage} alt="img" />
             </div>

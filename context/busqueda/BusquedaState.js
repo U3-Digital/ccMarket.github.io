@@ -18,7 +18,7 @@ const BusquedaState = ({children}) =>{
     const initialState = {
         nombre: "",
         direccion: "",
-        categoria: "",
+        tipo: "",
         busqueda: false,
         status: false,
         negocios: null,
@@ -62,7 +62,7 @@ const BusquedaState = ({children}) =>{
             value = {{
                 nombre: state.nombre,
                 direccion: state.direccion,
-                categoria: state.categoria,
+                tipo: state.tipo,
                 busqueda: state.busqueda,
                 negocios: state.negocios,
                 status: state.status,

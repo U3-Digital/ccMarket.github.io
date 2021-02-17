@@ -17,6 +17,7 @@ const BusquedaReducer = (state, action) => {
 				direccion: action.payload.direccion,
 				categoria: action.payload.categoria,
 				busqueda: action.payload.busqueda,
+				tipo: action.payload.tipo,
                 status: false,
                 nombrePantalla: action.payload.nombrePantalla
 			};

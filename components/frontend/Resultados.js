@@ -7,8 +7,8 @@ import {gql,useQuery} from '@apollo/client';
 
 
 const OBTENER_NEGOCIOS = gql`
-    query buscarNegocios($busqueda: String!){
-        buscarNegocios(busqueda: $busqueda){
+    query buscarNegocios($busqueda: String!, $tipo: TipoBusqueda){
+      buscarNegocios(busqueda: $busqueda,tipo: $tipo){
         id
         nombre
         direccion
@@ -31,14 +31,15 @@ const Resultados = () => {
   //const [loading, setLoading] = useState(true);
   const [negociosFiltrados, setNegociosFiltrados] = useState([]);
   const busquedaContext = useContext(BusquedaContext);
-  const { nombre, direccion, categoria, negocios, status, cambiaStatus, detallesPantalla } = busquedaContext;
+  const { nombre, tipo, negocios, status, cambiaStatus, detallesPantalla } = busquedaContext;
   const tempNegocios = [];
   const tempNegociosnoCliente = [];
 
 
   const {data,loading,error} = useQuery(OBTENER_NEGOCIOS,{
     variables: {
-      busqueda: nombre
+      busqueda: nombre,
+      tipo
     }
   });
 
@@ -126,7 +127,7 @@ const Resultados = () => {
                   <div className=" mb-0">
                     <div className="">
                       <div className="bg-white p-5 item2-gl-nav d-flex">
-                        <h6 className="mb-0 mt-2">Mostrando 1 a 10 de 30 resultados</h6>
+                        <h6 className="mb-0 mt-2">Mostrando {buscarNegocios.length} resultados</h6>
                         <ul className="nav item2-gl-menu ml-auto">
                           {/* <li className=""><a href="#tab-11" className="active show" data-toggle="tab" title="List style"><i className="fa fa-list"></i></a></li>
                           <li><a href="#tab-12" data-toggle="tab" className="" title="Grid"><i className="fa fa-th"></i></a></li> */}
