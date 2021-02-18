@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import firebase from '../../components/firebase';
 
 const OtroResultado = ({ negocio }) => {
-    const {nombre, categorias,id} = negocio;
+    const {nombre, categorias,direccion,telefonoNegocio,id} = negocio;
     const [image, setImage] = useState('../img/products/products/f1.jpg');
     const [loadPhoto, setLoadPhoto] = useState(false);
     const storage = firebase.storage();
@@ -25,9 +25,11 @@ const OtroResultado = ({ negocio }) => {
                         <img src={image} alt="img" className="w-8 h-8"/>
                         <div className="ml-4">
                             <h6 className="font-weight-bold mt-2">{nombre}</h6>
-                            <a >{categorias[0].categoria}</a>
+                            <a >{direccion}</a>
                         </div>
                     </div>
+                    
+                    {telefonoNegocio ? (<><br/><a href={`tel:${telefonoNegocio}`} className="mr-4"><span><i className="fas fa-phone text-muted mr-1"></i>{telefonoNegocio}</span> </a></>) : (null)}
                 </div>
             </div>
         </div>

@@ -51,7 +51,7 @@ const Categoria = ({ categoria }) => {
   }
 
   return (
-    <div className="item" onClick = {()=> buscar()} style={{ width: '300px' }}>
+    <div className="item" onClick = {()=> buscar()} style={{ width: '300px', cursor: 'pointer' }}>
       <div className="card mb-0">
         <div className="card-body">
           <div className="cat-item text-center">

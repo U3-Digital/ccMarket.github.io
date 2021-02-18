@@ -1,9 +1,12 @@
 import React, { useState, useContext } from 'react';
 import firebase from './firebase';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
+import {useRouter} from 'next/router';
+import { route } from 'next/dist/next-server/server/router';
 //password
 //google.com
 const Menu = () => {
+	const router = useRouter();
 	const [logeado, setlogeado] = useState(false);
 	const [nombre,setnombre] = useState(null);
 	const busquedaContext = useContext(BusquedaContext);
@@ -35,15 +38,21 @@ const Menu = () => {
 	}
 
 	const buscar = () =>{
-        const datos = {
-            nombre: "",
-            direccion: "",
-            categoria: "",
-			busqueda: false,
-			nombrePantalla: "index"	
-        }
-        modificabusqueda(datos);
-    }
+		if (router.pathname === '/contactanos' || router.pathname === '/acerca') {
+			router.push('/');
+		} else {
+			const datos = {
+				nombre: "",
+				direccion: "",
+				categoria: "",
+				busqueda: false,
+				nombrePantalla: "index"	
+			}
+			modificabusqueda(datos);
+		}
+        
+	}
+
 
     return(
 		<div>
@@ -62,7 +71,7 @@ const Menu = () => {
 				<div className="horizontal-main bg-dark-transparent clearfix">
 					<div className="horizontal-mainwrapper container clearfix">
 						<div className="desktoplogo">
-							<a onClick={()=> buscar()}><img src="../img/brand/logo1.png" alt=""/></a>
+							<a onClick={() => buscar()}><img src="../img/brand/logo1.png" alt=""/></a>
 						</div>
 						<div className="desktoplogo-1">
 							<a onClick={()=> buscar()}><img src="../img/brand/logo.png" alt=""/></a>
@@ -71,19 +80,11 @@ const Menu = () => {
 						<nav className="horizontalMenu clearfix d-md-flex">
 							<ul className="horizontalMenu-list">
 								<li aria-haspopup="true"><a onClick={()=> buscar()} className="active">Inicio</a></li>
-								<li aria-haspopup="true"><a href="#">Categorías&nbsp;&nbsp;<span className="fa fa-caret-down m-0"></span></a>
-									<ul className="sub-menu">
-										<li aria-haspopup="true"><a href="classNameified.html">Categoría 1</a></li>
-										<li aria-haspopup="true"><a href="classNameified-right.html">Categoría 2</a></li>
-										<li aria-haspopup="true"><a href="classNameified-right.html">Categoría 3</a></li>
-										<li aria-haspopup="true"><a href="classNameified-right.html">Categoría 4</a></li>
-									</ul>
-								</li>
-								<li aria-haspopup="true"><a href="contact.html">Contáctanos<span className="wsarrow"></span></a></li>
+								<li aria-haspopup="true"><a href="contactanos">Contáctanos<span className="wsarrow"></span></a></li>
 								<li aria-haspopup="false" className="d-lg-none mt-5 pb-5 mt-lg-0">
 									<span><a className="btn btn-orange" href="ad-posts.html">Anúnciate aquí</a></span>
 								</li>
-								<li aria-haspopup="false"><a href="about.html">Acerca de</a></li>
+								<li aria-haspopup="false"><a href="acerca">Acerca de</a></li>
 							</ul>
 							<ul className="mb-0">
 								{(logeado) ? (<li aria-haspopup="false" className="mt-5 d-none d-lg-block">
