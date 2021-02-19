@@ -8,18 +8,13 @@ const OtroResultado = ({ negocio }) => {
     const storage = firebase.storage();
 
     if (!loadPhoto) {
-        try {
-            const storageRef = storage.ref(`negocios/${id}/1`);
-            storageRef.getDownloadURL().then((url) =>{
-              setImage(url);
-            }).catch((error) => {
-              console.log(error.code);
-            });
-        } catch (error) {
-            
-        }
-        
-        setLoadPhoto(true); 
+        const storageRef = storage.ref(`negocios/${id}/1`);
+        storageRef.getDownloadURL().then((url) =>{
+          setImage(url);
+        }).catch((error) => {
+          console.log(error.code);
+        });
+        setLoadPhoto(true);
     }
 
     return (
@@ -34,7 +29,7 @@ const OtroResultado = ({ negocio }) => {
                         </div>
                     </div>
                     
-                    {telefonoNegocio ? (<><br/><a href={`tel:${telefonoNegocio}`}><i className="fa fa-phone mr-2 "></i>{telefonoNegocio}</a></>) : (null)}
+                    {telefonoNegocio ? (<><br/><a href={`tel:${telefonoNegocio}`} className="mr-4"><span><i className="fas fa-phone text-muted mr-1"></i>{telefonoNegocio}</span> </a></>) : (null)}
                 </div>
             </div>
         </div>

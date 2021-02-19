@@ -88,7 +88,7 @@ const Menu = () => {
 							</ul>
 							<ul className="mb-0">
 								{(logeado) ? (<li aria-haspopup="false" className="mt-5 d-none d-lg-block">
-										<span><a className="btn"><span style={{ color: '#EC296B', fontWeight: 'bolder'}} >{nombre}</span>&nbsp;&nbsp;<button style={{padding: '0', color: '#EC296B', background: 'none', outline: 'none', border: 'none'}} onClick={() => logout()}><i className="fas fa-sign-out-alt"></i></button></a></span>
+										<span><a className="btn">{nombre}&nbsp;&nbsp;<button style={{padding: '0', color: 'white', background: 'none', outline: 'none', border: 'none'}} className="icon icon-logout" onClick={() => logout()}></button></a></span>
 									</li>) : (
 									<li aria-haspopup="false" className="mt-5 d-none d-lg-block ">
 										<span><a className="btn btn-orange ad-post " href="login">Inicia Sesión</a></span>
