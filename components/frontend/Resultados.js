@@ -4,7 +4,7 @@ import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
 import OtroResultado from './OtroResultado';
 import {gql,useQuery} from '@apollo/client';
-
+import Patrocinados from './Patrocinados';
 
 const OBTENER_NEGOCIOS = gql`
     query buscarNegocios($busqueda: String!, $tipo: TipoBusqueda){
@@ -163,19 +163,7 @@ const Resultados = () => {
                     </div>
                   </div>
                 </div>
-                <div className="center-block text-center">
-                  <ul className="pagination mb-5">
-                    <li className="page-item page-prev disabled">
-                      <a className="page-link" href="#" tabIndex="-1">Prev</a>
-                    </li>
-                    <li className="page-item active"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item page-next">
-                      <a className="page-link" href="#">Next</a>
-                    </li>
-                  </ul>
-                </div>
+                
               </div>
             </div>
           </div>
@@ -186,115 +174,7 @@ const Resultados = () => {
               <div className="card-header">
                 <h3 className="card-title">Patrocinados</h3>
               </div>
-              <div className="card-body">
-                <div className="" id="container">
-                  <div className="filter-product-checkboxs">
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox1" value="option1" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Computer<span className="label label-secondary float-right">14</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox2" value="option2" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Services<span className="label label-secondary float-right">22</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox3" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Jobs<span className="label label-secondary float-right">78</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox4" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">RealEstates<span className="label label-secondary float-right">35</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox5" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Clothing<span className="label label-secondary float-right">23</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox6" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Home & Garden<span className="label label-secondary float-right">14</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Beauty & Spa<span className="label label-secondary float-right">45</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Restaurant<span className="label label-secondary float-right">34</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Travel<span className="label label-secondary float-right">12</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Event<span className="label label-secondary float-right">18</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Health & fitness<span className="label label-secondary float-right">02</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Electronics<span className="label label-secondary float-right">15</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Mobile<span className="label label-secondary float-right">32</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Vehicle<span className="label label-secondary float-right">23</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Education<span className="label label-secondary float-right">19</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Constructions<span className="label label-secondary float-right">12</span></a>
-                      </span>
-                    </label>
-                    <label className="custom-control custom-checkbox mb-3">
-                      <input type="checkbox" className="custom-control-input" name="checkbox7" value="option3" />
-                      <span className="custom-control-label">
-                        <a href="#" className="text-dark">Pets y Animals<span className="label label-secondary float-right">05</span></a>
-                      </span>
-                    </label>
-                  </div>
-
-                </div>
-              </div>
+              <Patrocinados/>
             </div>
             
           </div>

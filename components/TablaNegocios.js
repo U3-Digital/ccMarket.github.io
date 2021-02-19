@@ -35,36 +35,14 @@ const OBTENER_NEGOCIOS = gql`
 const TablaNegocios = () => {
 
 	const {data,loading,error} = useQuery(OBTENER_NEGOCIOS);
-	/*
-	const [ consulta, setConsulta ] = useState(false);
-	const [ loading, setLoading ] = useState(true);
-	const [ negocios, setNegocios ] = useState([]);
 
-	const tempNegocios = [];
-	const database = firebase.firestore().collection('negocios');
-
-	if (!consulta) {
-		database.where('cliente', '==', 1).limit(6).get().then((snapshot) => {
-			if (snapshot.empty) {
-				console.log('La colección está vacía');
-			}
-
-			snapshot.forEach((negocio) => {
-				tempNegocios.push(negocio);
-			});
-			setNegocios(tempNegocios);
-			setLoading(false);
-			setConsulta(true);
-		});
-	}
-*/
 	if (loading) {
 		return (
 			<div className="row m-5">
-        <div className="col-12 text-center">
-          <div className="spinner-border text-primary">Cargando...</div>
-        </div>
-      </div>
+				<div className="col-12 text-center">
+					<div className="spinner-border text-primary"></div>
+				</div>
+			</div>
 		);
 	}
 	console.log(error);
@@ -77,7 +55,6 @@ const TablaNegocios = () => {
 			<div className="row justify-content-center">
 				<div className="col-md-6 col-12 text-center">
 					<h2>Negocios populares</h2>
-					<p>Un texto de placeholder</p>
 				</div>
 			</div>
 			<div className="row justify-content-center">

@@ -23,7 +23,13 @@ const BarraBusqueda = () => {
       tipo: "TEXTO"
     }
     modificabusqueda(datos);
-  }
+  };
+
+  const enEnter = (event) => {
+    if (event.key === 'Enter') {
+      buscar();
+    }
+  };
 
 
   return (
@@ -32,14 +38,13 @@ const BarraBusqueda = () => {
         <div className="container">
           <div className="text-center text-white mb-7">
             <h1 className="mb-1">Encuentra tu mejor opción</h1>
-            <p>It is a long established fact that a reader will be distracted by the readable.</p>
           </div>
           <div className="row">
             <div className="col-xl-10 col-lg-12 col-md-12 d-block mx-auto">
               <div className="search-background bg-transparent">
                 <div className="form row no-gutters ">
                   <div className="form-group col-xl-10 col-lg-9 col-md-12 mb-0 bg-white">
-                    <input onChange={value => { setnombre(value.target.value) }} type="text" className="form-control input-lg br-tr-md-0 br-br-md-0" id="text4" placeholder="Busque algo" />
+                    <input onKeyDown={(event) => enEnter(event)} onChange={value => { setnombre(value.target.value) }} type="text" className="form-control input-lg br-tr-md-0 br-br-md-0" id="text4" placeholder="Busque algo" />
                   </div>
 
                   <div className="col-xl-2 col-lg-3 col-md-12 mb-0">

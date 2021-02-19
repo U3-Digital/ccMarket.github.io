@@ -13,12 +13,16 @@ const Resultado = ({ negocio }) => {
 
 
   if (!loadPhoto) {
-    const storageRef = storage.ref(`negocios/${id}/1`);
-    storageRef.getDownloadURL().then((url) =>{
-      setImage(url);
-    }).catch((error) => {
-      console.log(error.code);
-    });
+    try {
+      const storageRef = storage.ref(`negocios/${id}/1`);
+      storageRef.getDownloadURL().then((url) =>{
+        setImage(url);
+      }).catch((error) => {
+        console.log(error.code);
+      });
+    } catch (error) {
+
+    }
     setLoadPhoto(true);
   }
   
@@ -29,7 +33,7 @@ const Resultado = ({ negocio }) => {
       nombrePantalla: 'detallesPantalla'
     }
 
-    detallesPantalla(valores  );
+    detallesPantalla(valores);
   }
 
   return (
@@ -53,27 +57,7 @@ const Resultado = ({ negocio }) => {
               <a className="mr-4"><span className=""><i className="fas fa-map-marker-alt text-muted mr-1"></i> {direccion}</span></a>
             </div>
             <div className="item-card9-desc">
-              <a className="mr-4"><span><i className="fas fa-phone text-muted mr-1"></i>{telefonoNegocio}</span> </a>
-            </div>
-          </div>
-          <div className="rating-stars block mt-3">
-            <input type="number" readOnly className="rating-value star" name="rating-stars-value" value="3" />
-            <div className="rating-stars-container">
-              <div className="rating-star sm">
-                <i className="fa fa-star"></i>
-              </div>
-              <div className="rating-star sm">
-                <i className="fa fa-star"></i>
-              </div>
-              <div className="rating-star sm">
-                <i className="fa fa-star"></i>
-              </div>
-              <div className="rating-star sm">
-                <i className="fa fa-star"></i>
-              </div>
-              <div className="rating-star sm">
-                <i className="fa fa-star"></i>
-              </div>
+              <a href={`tel:${telefonoNegocio}`}><i className="fa fa-phone mr-2 "></i>{telefonoNegocio}</a>
             </div>
           </div>
         </div>
