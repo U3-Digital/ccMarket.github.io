@@ -61,9 +61,7 @@ const Categoria = ({ categoria }) => {
             </div>
             <div className="cat-desc">
               <h5 className="mb-1">{nombre}</h5>
-              <small className="badge badge-pill badge-primary mr-2">
-                {Math.floor(Math.random() * 100)}
-              </small>
+              
               <span className="text-muted">Negocios disponibles</span>
             </div>
           </div>

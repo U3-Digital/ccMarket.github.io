@@ -28,6 +28,8 @@ const Menu = () => {
 		  console.log('No hay usuario brodersonia');
 		}
 	});
+
+	
 	  
 	function logout() {
 		firebase.auth().signOut().then(function() {

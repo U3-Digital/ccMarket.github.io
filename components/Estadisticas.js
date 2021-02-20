@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import firebase from '../components/firebase';
+import {useQuery, gql} from '@apollo/client';
 
+
+const OBTENER_ESTADISITCAS = gql`
+  query obtenerEstadisticas{
+    obtenerEstadisticas
+  }
+`;
 const Estadisticas = () => {
 
   const [consulta, setConsulta] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [negocios, setNegocios] = useState(0);
   const [visitas, setVisitas] = useState(0);
+
+  const {data,loading,error} = useQuery(OBTENER_ESTADISITCAS);
 
   /*if (!consulta) {
     const estadisticas = firebase.database().ref('estadisticas');
@@ -29,6 +37,8 @@ const Estadisticas = () => {
       </div>
     );
   }
+  
+  const {obtenerEstadisticas} = data;
 
   
 
@@ -41,39 +51,12 @@ const Estadisticas = () => {
           <div className="container">
             <div className="row text-center">
               <div className="col-lg-3 col-md-6">
-                <div className="counter-status md-mb-0">
-                  <div className="counter-icon">
-                    <i className="icon icon-people"></i>
-                  </div>
-                  <h5>Visitas</h5>
-                  <h2 className="counter mb-0">12</h2>
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-6">
-                <div className="counter-status status-1 md-mb-0">
-                  <div className="counter-icon text-warning">
-                    <i className="icon icon-rocket"></i>
-                  </div>
-                  <h5>Ventas</h5>
-                  <h2 className="counter mb-0">{Math.floor(Math.random() * 1000)}</h2>
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-6">
                 <div className="counter-status status md-mb-0">
                   <div className="counter-icon text-primary">
                     <i className="icon icon-docs"></i>
                   </div>
                   <h5>Negocios registrados</h5>
-                  <h2 className="counter mb-0">56</h2>
-                </div>
-              </div>
-              <div className="col-lg-3 col-md-6">
-                <div className="counter-status status">
-                  <div className="counter-icon text-success">
-                    <i className="icon icon-emotsmile"></i>
-                  </div>
-                  <h5>Clientes satisfechos</h5>
-                  <h2 className="counter">{Math.floor(Math.random() * 1000)}</h2>
+                  <h2 className="counter mb-0">{obtenerEstadisticas}</h2>
                 </div>
               </div>
             </div>

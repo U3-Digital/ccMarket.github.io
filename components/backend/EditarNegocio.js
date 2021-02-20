@@ -160,7 +160,6 @@ const EditarNegocio = () => {
     if (categoria && !categorias.includes(categoria)) {
       tempCategorias.push(categoria);
     }
-
     setCategorias(tempCategorias);
     insertIntoInput(tempCategorias, 'categorias');
   }
@@ -227,11 +226,11 @@ const EditarNegocio = () => {
     nombre: Yup.string().required('El nombre es necesario'),
     direccion: Yup.string().required('La dirección es necesaria'),
     telefonoNegocio: Yup.string().required('El número del negocio es necesario'),
-    nombreResponsable: Yup.string().required('El nombre del responsable es necesario'),
-    numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos').required('El teléfono es necesario'),
-    emailResponsable: Yup.string().email('El correo no es válido').required('El correo es necesario'),
-    categorias: Yup.string().required('Seleccione al menos una categoría'),
-    palabrasClave: Yup.string().required('Introduzca al menos una palabra clave'),
+    nombreResponsable: Yup.string(),
+    numeroResponsable: Yup.string().min(10, 'El número de teléfono debe de tener 10 dígitos').max(10, 'El número de teléfono debe de tener 10 dígitos'),
+    emailResponsable: Yup.string().email('El correo no es válido') ,
+    categorias: Yup.array().required('Seleccione al menos una categoría'),
+    palabrasClave: Yup.array().required('Introduzca al menos una palabra clave'),
     horarioApertura: Yup.string().required('El horario de apertura es necesario'),
     horarioCierre: Yup.string().required('El horario de cierre es necesario'),
     cliente: Yup.boolean(),
@@ -279,6 +278,8 @@ const EditarNegocio = () => {
   */
   function actualizarInfoNegocio(valores) {
     const { nombre, direccion, telefonoNegocio, nombreResponsable, numeroResponsable, emailResponsable, categorias, palabrasClave, horarioApertura, horarioCierre, cliente, descripcion } = valores;
+    console.log(categorias);
+    console.log(palabrasClave);
     let catArray = [];
     const splitCatArray = categorias.split("-");
     splitCatArray.map(categoria => {
@@ -439,6 +440,8 @@ const EditarNegocio = () => {
                   }}>
 
                   {props => {
+                    
+                    
                     return (
                       <form id="editarNegocio" onSubmit={props.handleSubmit}>
                         <div className="card-body">
@@ -538,8 +541,7 @@ const EditarNegocio = () => {
                                 <select className="form-control" onChange={() => agregarCategoria(event)}>
                                   <option value="">Seleccione una categoría</option>
                                   {dataCategoria.obtenerCategorias.map(categoriaUnica => {
-                                    console.log(dataCategoria);
-                                    return(<option value={categoriaUnica.id}>{categoriaUnica.categoria}</option>)
+                                    return(<option value={categoriaUnica.categoria}>{categoriaUnica.categoria}</option>)
                                   })}
                                 </select>
                               </div>
@@ -574,7 +576,7 @@ const EditarNegocio = () => {
                                 {
                                   palabras.map((palabra) => (
                                     <Label
-                                      key={Math.random()}
+                                      key={palabra}
                                       texto={palabra}
                                       click={deletePalabra} />
                                   ))
