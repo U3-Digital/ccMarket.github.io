@@ -15,3 +15,4 @@ const EditNegocio = () => {
         </Layout>
     );
 }
+export default EditNegocio;

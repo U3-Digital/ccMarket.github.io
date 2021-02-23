@@ -1,10 +1,10 @@
 import React from 'react';
 import Resultados from './Resultados';
 
-const Busquedas = () => {
+const Busquedas = ({busqueda,tipo}) => {
     return (
         <div>
-            <Resultados/>
+            <Resultados busqueda = {busqueda} tipo = {tipo}/>
         </div>
     );
 };

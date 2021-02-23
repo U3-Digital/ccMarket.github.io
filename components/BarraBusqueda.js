@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import TablaSelectCategorias from '../components/frontend/TablaSelectCategorias';
 import firebase from '../components/firebase';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
+import {useRouter} from 'next/router';
 const BarraBusqueda = () => {
+  const router = useRouter();
   const [nombre, setnombre] = useState("");
   const [direccion, setdireccion] = useState("");
   const [categoria, setcategoria] = useState("");
@@ -25,9 +27,17 @@ const BarraBusqueda = () => {
     modificabusqueda(datos);
   };
 
+  const buscarInfo = () => {
+    router.push({
+        pathname:"/busqueda/[id]",
+        query: {textobusqueda: nombre, tipo:"T"}
+    })
+  }
+
+
   const enEnter = (event) => {
     if (event.key === 'Enter') {
-      buscar();
+      buscarInfo();
     }
   };
 
@@ -48,7 +58,7 @@ const BarraBusqueda = () => {
                   </div>
 
                   <div className="col-xl-2 col-lg-3 col-md-12 mb-0">
-                    <a onClick={() => buscar()} href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0"><i className="fas fa-search"></i> Buscar</a>
+                    <a onClick={() => buscarInfo()} href="#" className="btn btn-lg btn-block btn-primary br-tl-md-0 br-bl-md-0"><i className="fas fa-search"></i> Buscar</a>
                   </div>
                 </div>
               </div>

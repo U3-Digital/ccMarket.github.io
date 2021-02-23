@@ -13,10 +13,10 @@ const firebaseConfig = {
 
 
 
-if (typeof window !== 'undefined' && !firebase.apps.length) {
+if ( !firebase.apps.length) {
+  
   firebase.initializeApp(firebaseConfig); 
   if ('measurementId' in firebaseConfig)
     firebase.analytics();
 }
-
 export default firebase;

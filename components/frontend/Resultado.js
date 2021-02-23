@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import BusquedaContext from '../../context/busqueda/BusquedaContext';
 import firebase from '../firebase';
-
+import {useRouter} from 'next/router';
 const Resultado = ({ negocio }) => {
+  const router = useRouter();
   const id = negocio.id;
   const { nombre, categorias, direccion, telefonoNegocio } = negocio;
   const [loadPhoto, setLoadPhoto] = useState(false);
@@ -26,7 +27,7 @@ const Resultado = ({ negocio }) => {
     setLoadPhoto(true);
   }
   
-  function mostrarDetalles () {
+  /*function mostrarDetalles () {
 
     const valores = {
       idDetalles: id,
@@ -34,6 +35,14 @@ const Resultado = ({ negocio }) => {
     }
 
     detallesPantalla(valores);
+  }*/
+
+
+  const mostrarDetalles = () => {
+    router.push({
+        pathname:"/detallesNegocio/[id]",
+        query: {id}
+    });
   }
 
   return (

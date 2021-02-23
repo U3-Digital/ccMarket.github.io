@@ -1,7 +1,10 @@
 import React, { useState, useContext } from 'react';
 import firebase from '../components/firebase';
 import BusquedaContext from '../context/busqueda/BusquedaContext';
+import {useRouter} from 'next/router';
 const Negocio = ({ negocio }) => {
+  
+  const router = useRouter();
   const { id } = negocio;
   const { nombre, direccion, telefonoNegocio, horarioApertura, horarioCierre } = negocio;
   const [loadphoto, setloadphoto] = useState(false);
@@ -24,6 +27,8 @@ const Negocio = ({ negocio }) => {
   }) */
 
   if (!loadphoto) {
+    
+    const router = useRouter();
     const storageRef = storage.ref(`negocios/${id}/1`);
     try {
       storageRef.getDownloadURL().then(function (url) {
@@ -57,15 +62,13 @@ const Negocio = ({ negocio }) => {
     setloadphoto(true);
   }
 
-  function mostrarDetalles () {
-
-    const valores = {
-      idDetalles: id,
-      nombrePantalla: 'detallesPantalla'
-    }
-
-    detallesPantalla(valores);
+  const mostrarDetalles = () => {
+    router.push({
+        pathname:"/detallesNegocio/[id]",
+        query: {id}
+    });
   }
+
 
   return (
     <div className="item" style={{ width: '100%' }}>

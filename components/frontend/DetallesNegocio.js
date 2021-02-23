@@ -31,7 +31,7 @@ query obtenerNegocio($id: ID!) {
   }
 }`;
 
-const DetallesNegocio = () => {
+const DetallesNegocio = ({id}) => {
   const busquedaContext = useContext(BusquedaContext);
   const { idDetalles } = busquedaContext;
   const [negocioActual, setNegocioActual] = useState({
@@ -49,7 +49,7 @@ const DetallesNegocio = () => {
 
   const { data, loading, error } = useQuery(OBTENER_NEGOCIO, {
     variables: {
-      id: idDetalles
+      id: id
     }
   });
 
@@ -59,9 +59,8 @@ const DetallesNegocio = () => {
   const [imagenActual, setImagenActual] = useState('');
   const [imagesLoading, setImagesLoading] = useState(true);
 
-  const imagesRef = firebase.storage().ref(`negocios/${idDetalles}`);
+ 
 
-  const negocioQuery = firebase.firestore().collection('negocios').doc(idDetalles);
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       setUserActual(true);
@@ -69,7 +68,7 @@ const DetallesNegocio = () => {
       setUserActual(false);
     }
   });
-
+  const imagesRef = firebase.storage().ref(`negocios/${id}/`);
   if (loading) {
     return (
       <div className="row m-5">
@@ -223,8 +222,8 @@ const DetallesNegocio = () => {
             </div>
             <h3 className="mb-5 mt-4">Reseñas</h3>
 
-            <TablaReviews id={idDetalles} />
-            {userActual ? <NuevaResena key={idDetalles} id={idDetalles} /> : null}
+            <TablaReviews id={id} />
+            {userActual ? <NuevaResena key={id} id={id} /> : null}
           </div>
 
           <div className="col-xl-4 col-lg-4 col-md-12">

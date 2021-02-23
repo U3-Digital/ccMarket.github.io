@@ -25,20 +25,17 @@ const OBTENER_NEGOCIOS = gql`
     }
 `;
 
-const Resultados = () => {
+const Resultados = ({busqueda,tipo}) => {
 
   const [consulta, setConsulta] = useState(false);
   //const [loading, setLoading] = useState(true);
   const [negociosFiltrados, setNegociosFiltrados] = useState([]);
-  const busquedaContext = useContext(BusquedaContext);
-  const { nombre, tipo, negocios, status, cambiaStatus, detallesPantalla } = busquedaContext;
   const tempNegocios = [];
   const tempNegociosnoCliente = [];
 
-
   const {data,loading,error} = useQuery(OBTENER_NEGOCIOS,{
     variables: {
-      busqueda: nombre,
+      busqueda,
       tipo
     }
   });
@@ -113,6 +110,8 @@ const Resultados = () => {
       </div>
     );
   }
+
+  if(!data) return "ijole"
   const {buscarNegocios} = data;
   
 

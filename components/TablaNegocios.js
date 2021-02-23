@@ -45,7 +45,6 @@ const TablaNegocios = () => {
 			</div>
 		);
 	}
-	console.log(error);
 	const {obtenerNegociosClientes} = data;
 	return (
 		<div>
