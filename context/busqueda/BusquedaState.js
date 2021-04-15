@@ -9,7 +9,8 @@ import {
     MODIFICAR_CATEGORIA,
     MODIFICAR_DATOS,
     CARGAR_EMPRESAS,
-    SET_STATUS
+    SET_STATUS,
+    DETALLES_PANTALLA
 } from '../../types';
 
 const BusquedaState = ({children}) =>{
@@ -17,10 +18,12 @@ const BusquedaState = ({children}) =>{
     const initialState = {
         nombre: "",
         direccion: "",
-        categoria: "",
+        tipo: "",
         busqueda: false,
         status: false,
-        negocios: null
+        negocios: null,
+        nombrePantalla: "index",
+        idDetalles : null
     }
 
     const [state, dispatch ] = useReducer(BusquedaReducer , initialState);
@@ -47,18 +50,28 @@ const BusquedaState = ({children}) =>{
         })
     }
 
+    const detallesPantalla = valores => {
+        dispatch({
+            type: DETALLES_PANTALLA,
+            payload: valores
+        })
+    }
+
     return(
         <BusquedaContext.Provider
             value = {{
                 nombre: state.nombre,
                 direccion: state.direccion,
-                categoria: state.categoria,
+                tipo: state.tipo,
                 busqueda: state.busqueda,
                 negocios: state.negocios,
                 status: state.status,
+                nombrePantalla: state.nombrePantalla,
+                idDetalles : state.idDetalles,
                 modificabusqueda,
                 cargarNegocios,
-                cambiaStatus
+                cambiaStatus,
+                detallesPantalla
             }}
         >
             {children}

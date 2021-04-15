@@ -22,6 +22,7 @@ const HeadFrontEnd = () =>{
             <link href="../stylesheets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" />
             <link href="../stylesheets/plugins/scroll-bar/jquery.mCustomScrollbar.css" rel="stylesheet" />
             <link id="theme" rel="stylesheet" type="text/css" media="all" href="../stylesheets/webslidemenu/color-skins/color10.css" />
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous"/>
             <script src="https://kit.fontawesome.com/292d4e8440.js" crossorigin="anonymous"></script>
         </Head>
     );

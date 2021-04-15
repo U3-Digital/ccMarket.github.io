@@ -3,7 +3,7 @@ import TablaCategorias from '../TablaCategorias';
 import TablaNegocios from '../TablaNegocios';
 import Estadisticas from '../Estadisticas';
 import Localizaciones from '../Localizaciones';
-const IndexPrinipal = () =>{
+const IndexPrincipal = () =>{
     return(
         <>
             <TablaCategorias/>
@@ -14,4 +14,4 @@ const IndexPrinipal = () =>{
     );
 } 
 
-export default IndexPrinipal;
+export default IndexPrincipal;

@@ -1,13 +1,10 @@
 import React from 'react';
-import ResultadosBusqueda from './ResultadosBusqueda';
-import OtrosResultados from './OtrosResultados';
+import Resultados from './Resultados';
 
-const Busquedas = () => {
+const Busquedas = ({busqueda,tipo}) => {
     return (
         <div>
-            <br/>
-            <ResultadosBusqueda/>
-            <OtrosResultados/>
+            <Resultados busqueda = {busqueda} tipo = {tipo}/>
         </div>
     );
 };

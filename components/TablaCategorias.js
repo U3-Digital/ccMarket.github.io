@@ -1,20 +1,27 @@
 import React,{useState} from 'react'
 import firebase from './firebase';
 import Categoria from './Categoria';
-
+import {gql,useQuery} from '@apollo/client';
 /* Carousel */
 
 import Carousel from 'react-elastic-carousel';
 import Flecha from '../components/frontend/Flecha';
 
 
+const OBTENER_CATEGORIAS = gql`
+    query obtenerCategorias {
+        obtenerCategorias {
+            id
+            categoria
+        }
+    }
+`
+
 const TablaCategorias = () =>{
-    const [consulta, setconsulta] = useState(false);
-    const [loading, setloading] = useState(true);
-    const [categorias, setcategorias] = useState([]);
+    const {data,loading,error} = useQuery(OBTENER_CATEGORIAS);
 
     const tempCategorias = [];
-    
+    /*
     const database = firebase.firestore().collection('categorias');
     if (!consulta) {
         database.get().then(snapshot => {
@@ -28,7 +35,7 @@ const TablaCategorias = () =>{
             setloading(false);
             setconsulta(true);
         });
-    }
+    }*/
     if (loading) {
         return (
             <div className="row">
@@ -36,6 +43,8 @@ const TablaCategorias = () =>{
             </div>
         );
     }
+
+    const {obtenerCategorias} = data;
     return(
         <div className="row justify-content-center">
             <div className="col-md-8 col-12">
@@ -54,7 +63,7 @@ const TablaCategorias = () =>{
                 autoPlaySpeed={1500}
                 renderArrow = {Flecha}>
                 {
-                    categorias.map(categoria => (
+                    obtenerCategorias.map(categoria => (
                         <Categoria
                             key = {categoria.id}
                             categoria = {categoria}/>

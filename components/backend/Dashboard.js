@@ -1,7 +1,20 @@
 import React from 'react';
 import dashboard from '../../pages/controlPanel/dashboard';
+import {gql, useQuery} from '@apollo/client';
 
+const OBTENER_NEGOCIOS = gql`
+  query obtenerCategorias{
+    obtenerCategorias{
+      id
+      categoria
+    }
+  }
+`;
 const Dashboard = () => {
+
+    const {data,loading,error} = useQuery(OBTENER_NEGOCIOS);
+    if (loading) return 'Cargando';
+    console.log(data);
     return(
         <>
         <div className="container-fluid">
@@ -233,7 +246,7 @@ const Dashboard = () => {
                         <h4>$95,900<span className="new-box">Hot</span></h4><span>Purchase Order Value</span>
                       </div>
                       <div className="knob-block text-center">
-                        <input className="knob1" data-width="10" data-height="70" data-thickness=".3" data-angleoffset="0" data-linecap="round" data-fgcolor="#7366ff" data-bgcolor="#eef5fb" value="60"/>
+                        <input className="knob1" data-width="10" data-height="70" data-thickness=".3" data-angleoffset="0" data-linecap="round" data-fgcolor="#7366ff" data-bgcolor="#eef5fb" value="60" readOnly/>
                       </div>
                     </div>
                   </div>
@@ -247,7 +260,7 @@ const Dashboard = () => {
                         <h4>$95,000<span className="new-box">New</span></h4><span>Product Order Value</span>
                       </div>
                       <div className="knob-block text-center">
-                        <input className="knob1" data-width="50" data-height="70" data-thickness=".3" data-fgcolor="#7366ff" data-linecap="round" data-angleoffset="0" value="60"/>
+                        <input className="knob1" data-width="50" data-height="70" data-thickness=".3" data-fgcolor="#7366ff" data-linecap="round" data-angleoffset="0" value="60" readOnly/>
                       </div>
                     </div>
                   </div>

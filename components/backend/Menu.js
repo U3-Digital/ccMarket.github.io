@@ -1,4 +1,4 @@
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import BackEndContext from '../../context/backend/BackEndContext';
 
 const Menu = () => {
@@ -44,11 +44,24 @@ const Menu = () => {
                                         <p className="lan-9">Manejo de negocios</p>
                                     </div>
                                 </li>
-                                <li className="dropdown"><a className="nav-link menu-title" href="#"><i data-feather="box"></i><span>Negocios
+                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="box"></i><span>Negocios
                                     </span></a>
                                     <ul className="nav-submenu menu-content">
                                         <li><a onClick={() => cambio("NuevoNegocio")}>Nuevo negocio</a></li>
-                                        <li><a href="projectcreate.html">Listado de negocios</a></li>
+                                        <li><a onClick={() => cambio("ListaNegocios")}>Listado de negocios</a></li>
+                                    </ul>
+                                </li>
+                                <li className="sidebar-title">
+                                    <div>
+                                        <h6 className="lan-8">Categorias</h6>
+                                        <p className="lan-9">Manejo de categorias</p>
+                                    </div>
+                                </li>
+                                <li className="dropdown"><a className="nav-link menu-title"><i data-feather="layers"></i><span>categorias
+                                    </span></a>
+                                    <ul className="nav-submenu menu-content">
+                                        <li><a onClick={() => cambio("NuevaCategoria")}>Nueva categoria</a></li>
+                                        <li><a onClick={() => cambio("ListaCategoria")}>Listado de categorias</a></li>
                                     </ul>
                                 </li>
                             </ul>
